@@ -1,0 +1,30 @@
+
+.bar{
+    width: 35px;
+    height: 5px;
+    background-color: #3c8ce4;
+    margin: 0.2rem 0;
+}
+
+.containbar{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+   
+}
+
+.logoimg{
+    max-width: 200px !important;
+}
+
+@media screen and (min-width : 992px){
+    .bar{
+        display: none;
+    }
+}
+
+@media screen and (max-width : 992px){
+    .nav-bar{
+        display: none;
+    } 
+}
