@@ -19,7 +19,7 @@ router.get("/me", async (req, res) => {
     const customer = await Customer.findById(verify.id);
     res.send(customer);
   } catch (e) {
-    res.status(404).send(e.message);
+    res.status(404).send({ message: e.message });
   }
 });
 
