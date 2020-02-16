@@ -6,8 +6,16 @@ const jwtverify = require("../middleware/jwtverify");
 const { Admin, schemaValidationAdmin } = require("../models/adminModel");
 const bcrypt = require("bcrypt");
 
-router.get("/", jwtverify, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
+    const verify = jwt.verify(
+      req.header("x-auth-token"),
+      process.env.PRIVATE_KEY
+    );
+
+    if (verify.adminLevel !== "superadmin")
+      return res.status(401).send({ error: true, message: "Not authorized !" });
+      
     const admin = await Admin.find();
     res.send(admin);
   } catch (e) {
