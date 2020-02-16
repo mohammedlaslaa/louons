@@ -7,7 +7,8 @@ mongoose
   .connect(dblink, {
     useCreateIndex: true, 
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify:false
   })
   .then(() => {
     console.log(`Connected to the database ${dblink}`);
