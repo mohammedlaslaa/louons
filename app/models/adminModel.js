@@ -58,7 +58,7 @@ const adminSchema = new mongoose.Schema({
 
   adminLevel: {
     type: String,
-    enum: ["user", "admin", "superadmin"],
+    enum: ["admin", "superadmin"],
     default: "user",
     required : true
   },

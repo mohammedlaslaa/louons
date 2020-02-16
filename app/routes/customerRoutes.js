@@ -11,7 +11,7 @@ const {
 } = require("../models/customerModel");
 const bcrypt = require("bcrypt");
 
-// Self with token !
+// customer access with token !
 
 router.get("/me", async (req, res) => {
   try {
@@ -28,18 +28,7 @@ router.get("/me", async (req, res) => {
   }
 });
 
-// Only the admin can CRUD in all the users !
-
-router.get("/", jwtverify, async (req, res) => {
-  try {
-    const allCustomers = await Customer.find();
-    res.send(allCustomers);
-  } catch (e) {
-    return res.status(404).send({ error: true, message: e.message });
-  }
-});
-
-router.post("/", jwtverify, async (req, res) => {
+router.post("/", async (req, res) => {
   const { error } = schemaValidationCustomer.validate(req.body);
   if (error)
     return res.status(400).send({ error: true, message: error.message });
@@ -82,6 +71,17 @@ router.post("/", jwtverify, async (req, res) => {
   }
 });
 
+// Only the admins can CRUD in all the customers !
+
+router.get("/", jwtverify, async (req, res) => {
+  try {
+    const allCustomers = await Customer.find();
+    res.send(allCustomers);
+  } catch (e) {
+    return res.status(404).send({ error: true, message: e.message });
+  }
+});
+
 router.get("/:id", [objectvalid, jwtverify], async (req, res) => {
   try {
     const customer = await Customer.findById(req.params.id).select(
@@ -110,15 +110,24 @@ router.put("/:id", [objectvalid, jwtverify], async (req, res) => {
     });
 
     const customer = await Customer.findById(req.params.id);
-    if (!customer) return res.status(400).send({ error: true, message: "Bad request Id" });
+    if (!customer)
+      return res.status(400).send({ error: true, message: "Bad request Id" });
     return res.send(customer);
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
 });
 
-router.delete("/:id", [objectvalid, jwtverify], async (req, res) => {
+router.delete("/:id", objectvalid, async (req, res) => {
   try {
+    const verify = jwt.verify(
+      req.header("x-auth-token"),
+      process.env.PRIVATE_KEY
+    );
+
+    if (verify.adminLevel !== "superadmin")
+      return res.status(401).send({ error: true, message: "Not authorized !" });
+
     const customer = await Customer.findByIdAndRemove(req.params.id);
     if (!customer)
       return res
