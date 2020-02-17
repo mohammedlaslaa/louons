@@ -10,6 +10,8 @@ const admin = require("./routes/adminRoutes");
 
 require("./startup/database.js");
 
+// Morgan send many informations of the request status.
+
 (process.env.NODE_ENV == 'dev') ? app.use(morgan("tiny")) : "";
 
 app.use(helmet());

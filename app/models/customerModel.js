@@ -101,6 +101,8 @@ customerSchema.methods.generateToken = function() {
   return token;
 };
 
+// Validator with the required fields.
+
 const schemaValidationCustomer = Joi.object({
   lastName: Joi.string()
     .alphanum()
@@ -148,6 +150,8 @@ const schemaValidationCustomer = Joi.object({
     )
     .required()
 });
+
+// Validator without the required fields, more especially to send update requests.
 
 const schemaPutValidationCustomer = Joi.object({
   lastName: Joi.string()

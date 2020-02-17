@@ -80,6 +80,8 @@ adminSchema.methods.generateToken = function() {
   return token;
 };
 
+// Validator with the required fields.
+
 const schemaValidationAdmin = Joi.object({
   lastName: Joi.string()
     .alphanum()

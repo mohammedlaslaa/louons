@@ -4,9 +4,11 @@ const Joi = require("@hapi/joi");
 const { Customer } = require("../models/customerModel");
 const bcrypt = require("bcrypt");
 
+// Customer authentification, if everything is going well, send back token.
+
 router.post("/", async (req, res) => {
   try {
-    const { error } = schemaValidationMail.validate(req.body);
+    const { error } = schemaValidationPwdMail.validate(req.body);
     if (error)
       return res.status(400).send({ error: true, message: error.message });
 
@@ -26,7 +28,9 @@ router.post("/", async (req, res) => {
   }
 });
 
-const schemaValidationMail = Joi.object({
+// Validator of password (one letter uppercase and one special character minimum. One password mut be have one number minimum and this its length must be at least 8 characters ) and valid email.
+
+const schemaValidationPwdMail = Joi.object({
   email: Joi.string()
     .email({ minDomainSegments: 2 })
     .required()

@@ -11,7 +11,7 @@ const {
 } = require("../models/customerModel");
 const bcrypt = require("bcrypt");
 
-// customer access with token !
+// Customers access get and put routes to their data only with token.
 
 router.get("/me", async (req, res) => {
   try {
@@ -27,6 +27,10 @@ router.get("/me", async (req, res) => {
     return res.status(404).send({ error: true, message: e.message });
   }
 });
+
+router.put("/me", async (req, res) => {})
+
+// Customer inscription
 
 router.post("/", async (req, res) => {
   const { error } = schemaValidationCustomer.validate(req.body);
@@ -71,7 +75,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Only the admins can CRUD in all the customers !
+// Only the admins can CRUD in all the customers ! The jwtverify middleware comes to ensure that the client is an admin.
 
 router.get("/", jwtverify, async (req, res) => {
   try {
@@ -117,6 +121,8 @@ router.put("/:id", [objectvalid, jwtverify], async (req, res) => {
     return res.status(404).send({ error: true, message: e.message });
   }
 });
+
+// Only the superadmin can delete customers
 
 router.delete("/:id", objectvalid, async (req, res) => {
   try {

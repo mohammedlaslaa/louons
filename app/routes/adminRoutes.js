@@ -6,6 +6,9 @@ const jwtverify = require("../middleware/jwtverify");
 const { Admin, schemaValidationAdmin } = require("../models/adminModel");
 const bcrypt = require("bcrypt");
 
+
+// Send get all admins, post, put and delete one admin by id. Only the superadmin can access to this route.
+
 router.get("/", async (req, res) => {
   try {
     const verify = jwt.verify(
@@ -22,6 +25,7 @@ router.get("/", async (req, res) => {
     return res.status(404).send({ error: true, message: e.message });
   }
 });
+
 
 router.post("/", async (req, res) => {
   const { error } = schemaValidationAdmin.validate(req.body);
@@ -68,6 +72,13 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.get("/:id", objectvalid, async (req, res) => {});
+router.delete("/:id", objectvalid, async (req, res) => {});
 router.put("/:id", objectvalid, async (req, res) => {});
+
+// Get and put self to the admin. The admin can not delete itself. However, he will can update the isactive field and send a delete  request by mail to the superadmin.
+
+router.get("/me", objectvalid, async (req, res) => {});
+router.put("/me", objectvalid, async (req, res) => {});
 
 module.exports = router;
