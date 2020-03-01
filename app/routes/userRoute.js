@@ -4,14 +4,15 @@ const jwt = require("jsonwebtoken");
 const objectvalid = require("../middleware/objectidvalid");
 const jwtverify = require("../middleware/jwtverify");
 const moment = require("moment");
+const userController = require('../controllers/userController');
 const {
-  Customer,
-  schemaValidationCustomer,
-  schemaPutValidationCustomer
-} = require("../models/customerModel");
+  User,
+  schemaValidationUser,
+  schemaPutValidationUser
+} = require("../models/userModel");
 const bcrypt = require("bcrypt");
 
-// Customers access get and put routes to their data only with token.
+// Users access get and put routes to their data only with token.
 
 router.get("/me", async (req, res) => {
   try {
@@ -19,10 +20,10 @@ router.get("/me", async (req, res) => {
       req.header("x-auth-token"),
       process.env.PRIVATE_KEY
     );
-    const customer = await Customer.findById(verify.id);
-    if (!customer)
+    const user = await User.findById(verify.id);
+    if (!user)
       return res.status(400).send({ error: true, message: "Bad request !" });
-    res.send(customer);
+    res.send(user);
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -30,10 +31,10 @@ router.get("/me", async (req, res) => {
 
 router.put("/me", async (req, res) => {})
 
-// Customer inscription
+// User inscription
 
 router.post("/", async (req, res) => {
-  const { error } = schemaValidationCustomer.validate(req.body);
+  const { error } = schemaValidationUser.validate(req.body);
   if (error)
     return res.status(400).send({ error: true, message: error.message });
 
@@ -43,7 +44,7 @@ router.post("/", async (req, res) => {
       parseInt(process.env.SALT)
     );
 
-    const maxId = await Customer.find()
+    const maxId = await User.find()
       .sort({ clientId: -1 })
       .limit(1)
       .select("clientId");
@@ -52,7 +53,7 @@ router.post("/", async (req, res) => {
 
     maxId.length == 0 ? (valueId = 1) : (valueId = maxId[0].clientId + 1);
 
-    const customer = new Customer({
+    const user = new User({
       clientId: valueId,
       lastName: req.body.lastName,
       firstName: req.body.firstName,
@@ -64,23 +65,23 @@ router.post("/", async (req, res) => {
       country: req.body.country
     });
 
-    await customer.save();
+    await user.save();
 
     return res
       .status(201)
-      .header("x-auth-token", customer.generateToken())
-      .send(customer);
+      .header("x-auth-token", user.generateToken())
+      .send(user);
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
 });
 
-// Only the admins can CRUD in all the customers ! The jwtverify middleware comes to ensure that the client is an admin.
+// Only the admins can CRUD in all the users ! The jwtverify middleware comes to ensure that the client is an admin.
 
 router.get("/", jwtverify, async (req, res) => {
   try {
-    const allCustomers = await Customer.find();
-    res.send(allCustomers);
+    const allUsers = await User.find();
+    res.send(allUsers);
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -88,17 +89,17 @@ router.get("/", jwtverify, async (req, res) => {
 
 router.get("/:id", [objectvalid, jwtverify], async (req, res) => {
   try {
-    const customer = await Customer.findById(req.params.id).select(
+    const user = await User.findById(req.params.id).select(
       "clientId firstName lastName email dateBirth"
     );
-    return res.send(customer);
+    return res.send(user);
   } catch (e) {
     return res.status(404).send(e.message);
   }
 });
 
 router.put("/:id", [objectvalid, jwtverify], async (req, res) => {
-  const { error } = schemaPutValidationCustomer.validate(req.body);
+  const { error } = schemaPutValidationUser.validate(req.body);
   if (error) return res.status(400).send(error.message);
   if (req.body.password) {
     req.body.password = await bcrypt.hash(
@@ -108,21 +109,21 @@ router.put("/:id", [objectvalid, jwtverify], async (req, res) => {
   }
 
   try {
-    await Customer.findByIdAndUpdate(req.params.id, {
+    await User.findByIdAndUpdate(req.params.id, {
       $set: req.body,
       date_update: Date.now()
     });
 
-    const customer = await Customer.findById(req.params.id);
-    if (!customer)
+    const user = await User.findById(req.params.id);
+    if (!user)
       return res.status(400).send({ error: true, message: "Bad request Id" });
-    return res.send(customer);
+    return res.send(user);
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
 });
 
-// Only the superadmin can delete customers
+// Only the superadmin can delete users
 
 router.delete("/:id", objectvalid, async (req, res) => {
   try {
@@ -134,13 +135,13 @@ router.delete("/:id", objectvalid, async (req, res) => {
     if (verify.adminLevel !== "superadmin")
       return res.status(401).send({ error: true, message: "Not authorized !" });
 
-    const customer = await Customer.findByIdAndRemove(req.params.id);
-    if (!customer)
+    const user = await User.findByIdAndRemove(req.params.id);
+    if (!user)
       return res
         .status(400)
-        .send({ message: "There are not customer with the id provided" });
+        .send({ message: "There are not user with the id provided" });
     return res.send(
-      `Customer ${customer.lastName} has been removed with success !`
+      `User ${user.lastName} has been removed with success !`
     );
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });

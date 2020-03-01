@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const Joi = require("@hapi/joi");
 
-const customerSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   clientId: {
     type: Number
   },
@@ -23,34 +23,6 @@ const customerSchema = new mongoose.Schema({
 
   dateBirth: {
     type: Date,
-    default: null
-  },
-
-  address: {
-    type: String,
-    minlength: 20,
-    maxlength: 200,
-    default: null
-  },
-
-  zipCode: {
-    type: String,
-    minlength: 4,
-    maxlength: 30,
-    default: null
-  },
-
-  city: {
-    type: String,
-    minlength: 10,
-    maxlength: 80,
-    default: null
-  },
-
-  country: {
-    type: String,
-    minlength: 4,
-    maxlength: 80,
     default: null
   },
 
@@ -94,7 +66,7 @@ const customerSchema = new mongoose.Schema({
   }
 });
 
-customerSchema.methods.generateToken = function() {
+userSchema.methods.generateToken = function() {
   const token = jwt.sign({ id: this._id }, process.env.PRIVATE_KEY, {
     expiresIn: 32659200
   });
@@ -103,7 +75,7 @@ customerSchema.methods.generateToken = function() {
 
 // Validator with the required fields.
 
-const schemaValidationCustomer = Joi.object({
+const schemaValidationUser = Joi.object({
   lastName: Joi.string()
     .alphanum()
     .min(6)
@@ -117,25 +89,6 @@ const schemaValidationCustomer = Joi.object({
     .required(),
 
   dateBirth: Joi.date().iso(),
-
-  address: Joi.string()
-    .alphanum()
-    .min(20)
-    .max(200),
-
-  zipcode: Joi.number()
-    .min(4)
-    .max(30),
-
-  city: Joi.string()
-    .alphanum()
-    .min(10)
-    .max(80),
-
-  country: Joi.string()
-    .alphanum()
-    .min(4)
-    .max(80),
 
   email: Joi.string()
     .email({ minDomainSegments: 2 })
@@ -153,7 +106,7 @@ const schemaValidationCustomer = Joi.object({
 
 // Validator without the required fields, more especially to send update requests.
 
-const schemaPutValidationCustomer = Joi.object({
+const schemaPutValidationUser = Joi.object({
   lastName: Joi.string()
     .alphanum()
     .min(6)
@@ -196,8 +149,8 @@ const schemaPutValidationCustomer = Joi.object({
   )
 });
 
-const Customer = mongoose.model("Customer", customerSchema);
+const User = mongoose.model("User", userSchema);
 
-module.exports.Customer = Customer;
-module.exports.schemaValidationCustomer = schemaValidationCustomer;
-module.exports.schemaPutValidationCustomer = schemaPutValidationCustomer;
+module.exports.User = User;
+module.exports.schemaValidationUser = schemaValidationUser;
+module.exports.schemaPutValidationUser = schemaPutValidationUser;

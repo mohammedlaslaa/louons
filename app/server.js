@@ -4,9 +4,10 @@ const app = express();
 const morgan = require("morgan");
 const port = process.env.PORT || 5000;
 const helmet = require("helmet");
-const customers = require("./routes/customerRoutes");
+const user = require("./routes/userRoute");
 const authUser = require("./routes/authentificationUserRoute");
-const admin = require("./routes/adminRoutes");
+const authAdmin = require("./routes/authentificationAdminRoute");
+const admin = require("./routes/adminRoute");
 
 require("./startup/database.js");
 
@@ -16,8 +17,9 @@ require("./startup/database.js");
 
 app.use(helmet());
 app.use(express.json());
-app.use("/louons/api/v1/customers", customers);
-app.use("/louons/api/v1/authentification", authUser);
+app.use("/louons/api/v1/user", user);
+app.use("/louons/api/v1/authentificationuser", authUser);
+app.use("/louons/api/v1/authentificationadmin", authAdmin);
 app.use("/louons/api/v1/admin", admin);
 
 app.listen(port, () => {

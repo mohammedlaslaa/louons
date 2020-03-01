@@ -3,6 +3,7 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const objectvalid = require("../middleware/objectidvalid");
 const jwtverify = require("../middleware/jwtverify");
+const adminController = require('../controllers/adminController');
 const { Admin, schemaValidationAdmin } = require("../models/adminModel");
 const bcrypt = require("bcrypt");
 
