@@ -3,10 +3,9 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const objectvalid = require("../middleware/objectidvalid");
 const jwtverify = require("../middleware/jwtverify");
-const adminController = require('../controllers/adminController');
+const adminController = require("../controllers/adminController");
 const { Admin, schemaValidationAdmin } = require("../models/adminModel");
 const bcrypt = require("bcrypt");
-
 
 // Send get all admins, post, put and delete one admin by id. Only the superadmin can access to this route.
 
@@ -19,14 +18,13 @@ router.get("/", async (req, res) => {
 
     if (verify.adminLevel !== "superadmin")
       return res.status(401).send({ error: true, message: "Not authorized !" });
-      
+
     const admin = await Admin.find();
-    res.send(admin);
+    return res.send(admin);
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
 });
-
 
 router.post("/", async (req, res) => {
   const { error } = schemaValidationAdmin.validate(req.body);
@@ -73,8 +71,56 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/:id", objectvalid, async (req, res) => {});
-router.delete("/:id", objectvalid, async (req, res) => {});
+router.get("/:id", objectvalid, async (req, res) => {
+  try {
+    const verify = jwt.verify(
+      req.header("x-auth-token"),
+      process.env.PRIVATE_KEY
+    );
+
+    if (verify.adminLevel !== "superadmin")
+      return res.status(401).send({ error: true, message: "Not authorized !" });
+
+    const admin = await Admin.findById(req.params.id);
+    if (!admin)
+      return res
+        .status(400)
+        .send({
+          error: true,
+          message: "There are not admin with the id provided"
+        });
+
+    res.send(admin);
+  } catch (e) {
+    return res.status(404).send({ error: true, message: e.message });
+  }
+});
+
+router.delete("/:id", objectvalid, async (req, res) => {
+  try {
+    const verify = jwt.verify(
+      req.header("x-auth-token"),
+      process.env.PRIVATE_KEY
+    );
+
+    if (verify.adminLevel !== "superadmin")
+      return res.status(401).send({ error: true, message: "Not authorized !" });
+
+    const admin = await Admin.findByIdAndRemove(req.params.id);
+    if (!admin)
+      return res
+        .status(400)
+        .send({
+          error: true,
+          message: "There are not admin with the id provided"
+        });
+
+    return res.send(`Admin ${admin.lastName} has been removed with success !`);
+  } catch (e) {
+    return res.status(404).send({ error: true, message: e.message });
+  }
+});
+
 router.put("/:id", objectvalid, async (req, res) => {});
 
 // Get and put self to the admin. The admin can not delete itself. However, he will can update the isactive field and send a delete  request by mail to the superadmin.
