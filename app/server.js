@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const morgan = require("morgan");
 const port = process.env.PORT || 5000;
 const helmet = require("helmet");
@@ -9,11 +10,13 @@ const authUser = require("./routes/authentificationUserRoute");
 const authAdmin = require("./routes/authentificationAdminRoute");
 const admin = require("./routes/adminRoute");
 
+app.use(cors());
+
 require("./startup/database.js");
 
 // Morgan send many informations of the request status.
 
-(process.env.NODE_ENV == 'dev') ? app.use(morgan("tiny")) : "";
+process.env.NODE_ENV == "dev" ? app.use(morgan("tiny")) : "";
 
 app.use(helmet());
 app.use(express.json());

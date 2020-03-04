@@ -123,7 +123,7 @@ router.delete("/:id", objectvalid, async (req, res) => {
 
 router.put("/:id", objectvalid, async (req, res) => {});
 
-// Get and put self to the admin. The admin can not delete itself. However, he will can update the isactive field and send a delete  request by mail to the superadmin.
+// Get and put self to the admin. The admin can not delete itself. However, he will can update the isactive field and send a delete request by mail to the superadmin.
 
 router.get("/me", objectvalid, async (req, res) => {});
 router.put("/me", objectvalid, async (req, res) => {});
