@@ -11,14 +11,14 @@ const adminSchema = new mongoose.Schema({
   lastName: {
     type: String,
     required: true,
-    minlength: 6,
+    minlength: 3,
     maxlength: 50
   },
 
   firstName: {
     type: String,
     required: true,
-    minlength: 6,
+    minlength: 3,
     maxlength: 50
   },
 
@@ -85,13 +85,13 @@ adminSchema.methods.generateToken = function() {
 const schemaValidationAdmin = Joi.object({
   lastName: Joi.string()
     .alphanum()
-    .min(6)
+    .min(3)
     .max(50)
     .required(),
 
   firstName: Joi.string()
     .alphanum()
-    .min(6)
+    .min(3)
     .max(50)
     .required(),
 
@@ -113,7 +113,37 @@ const schemaValidationAdmin = Joi.object({
   adminLevel: Joi.string().required() 
 });
 
+// Validator put with the required fields.
+
+const schemaPutValidationAdmin = Joi.object({
+  lastName: Joi.string()
+    .alphanum()
+    .min(3)
+    .max(50),
+
+  firstName: Joi.string()
+    .alphanum()
+    .min(3)
+    .max(50),
+
+  dateBirth: Joi.date().iso(),
+
+  email: Joi.string()
+    .email({ minDomainSegments: 2 })
+    .pattern(new RegExp(/^[a-z]*([.]|\w)[a-z]*\d*[@][a-z]*[.]\w{2,5}/)),
+
+  password: Joi.string()
+    .pattern(
+      new RegExp(
+        /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[#$%^&*()+=!?\-';,.\/{}|:<>?~]).{8,20})/
+      )
+    ),
+
+  adminLevel: Joi.string()
+});
+
 const Admin = mongoose.model("Admin", adminSchema);
 
 module.exports.Admin = Admin;
 module.exports.schemaValidationAdmin = schemaValidationAdmin;
+module.exports.schemaPutValidationAdmin = schemaPutValidationAdmin;

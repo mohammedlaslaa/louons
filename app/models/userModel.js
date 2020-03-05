@@ -10,14 +10,14 @@ const userSchema = new mongoose.Schema({
   lastName: {
     type: String,
     required: true,
-    minlength: 6,
+    minlength: 3,
     maxlength: 50
   },
 
   firstName: {
     type: String,
     required: true,
-    minlength: 6,
+    minlength: 3,
     maxlength: 50
   },
 
@@ -78,13 +78,13 @@ userSchema.methods.generateToken = function() {
 const schemaValidationUser = Joi.object({
   lastName: Joi.string()
     .alphanum()
-    .min(6)
+    .min(3)
     .max(50)
     .required(),
 
   firstName: Joi.string()
     .alphanum()
-    .min(6)
+    .min(3)
     .max(50)
     .required(),
 
@@ -109,12 +109,12 @@ const schemaValidationUser = Joi.object({
 const schemaPutValidationUser = Joi.object({
   lastName: Joi.string()
     .alphanum()
-    .min(6)
+    .min(3)
     .max(50),
 
   firstName: Joi.string()
     .alphanum()
-    .min(6)
+    .min(3)
     .max(50),
 
   dateBirth: Joi.date().iso(),
