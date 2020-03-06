@@ -5,6 +5,7 @@ const {
   schemaValidationUser,
   schemaPutValidationUser
 } = require("../models/userModel");
+const { Admin } = require("../models/adminModel");
 const bcrypt = require("bcrypt");
 
 exports.getSelf = async (req, res) => {
@@ -13,9 +14,11 @@ exports.getSelf = async (req, res) => {
       req.header("x-auth-token"),
       process.env.PRIVATE_KEY
     );
+
     const user = await User.findById(verify.id);
     if (!user)
-      return res.status(400).send({ error: true, message: "Bad request !" });
+      return res.status(400).send({ error: true, message: "Bad request" });
+
     return res.send(user);
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
@@ -30,35 +33,38 @@ exports.putSelf = async (req, res) => {
   const { error } = schemaPutValidationUser.validate(req.body);
   if (error) return res.status(400).send(error.message);
 
-  if (req.body.lastName)
-    req.body.lastName = req.body.lastName.replace(/[0-9]/g, "");
-
-  if (req.body.firstName)
-    req.body.firstName = req.body.firstName.replace(/[0-9]/g, "");
-
-  if (req.body.password) {
-    req.body.password = await bcrypt.hash(
-      req.body.password,
-      parseInt(process.env.SALT)
-    );
-  }
-
   try {
+    if (req.body.lastName)
+      req.body.lastName = req.body.lastName.replace(/[0-9]/g, "");
+
+    if (req.body.firstName)
+      req.body.firstName = req.body.firstName.replace(/[0-9]/g, "");
+
+    if (req.body.password) {
+      req.body.password = await bcrypt.hash(
+        req.body.password,
+        parseInt(process.env.SALT)
+      );
+    }
+
     const verify = jwt.verify(
       req.header("x-auth-token"),
       process.env.PRIVATE_KEY
     );
 
-    await User.findByIdAndUpdate(verify.id, {
+    let user = await User.findByIdAndUpdate(verify.id, {
       $set: req.body,
       date_update: Date.now()
     });
 
-    const user = await User.findById(verify.id);
     if (!user)
-      return res.status(400).send({ error: true, message: "Bad request !" });
+      return res.status(400).send({ error: true, message: "Bad request" });
 
-    return res.send(user);
+    return res.send({
+      error: false,
+      modified: true,
+      message: "Modified with success"
+    });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -101,7 +107,7 @@ exports.postInscription = async (req, res) => {
     return res
       .status(201)
       .header("x-auth-token", user.generateToken())
-      .send(user);
+      .send(`The ${user.lastName} user count has been created`);
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -110,7 +116,7 @@ exports.postInscription = async (req, res) => {
 exports.getAll = async (req, res) => {
   try {
     const allUsers = await User.find();
-    res.send(allUsers);
+    return res.send(allUsers);
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -138,32 +144,36 @@ exports.putUserById = async (req, res) => {
   if (Object.keys(req.body).length == 0) {
     return res.status(204).send({ message: "There are nothing to update" });
   }
+
   const { error } = schemaPutValidationUser.validate(req.body);
   if (error) return res.status(400).send(error.message);
 
-  if (req.body.password) {
-    req.body.password = await bcrypt.hash(
-      req.body.password,
-      parseInt(process.env.SALT)
-    );
-  }
-
   try {
+    if (req.body.password) {
+      req.body.password = await bcrypt.hash(
+        req.body.password,
+        parseInt(process.env.SALT)
+      );
+    }
+
     if (req.body.lastName)
       req.body.lastName = req.body.lastName.replace(/[0-9]/g, "");
 
     if (req.body.firstName)
       req.body.firstName = req.body.firstName.replace(/[0-9]/g, "");
 
-    await User.findByIdAndUpdate(req.params.id, {
+    const user = await User.findByIdAndUpdate(req.params.id, {
       $set: req.body,
       date_update: Date.now()
     });
-
-    const user = await User.findById(req.params.id);
     if (!user)
       return res.status(400).send({ error: true, message: "Bad request Id" });
-    return res.send(user);
+
+    return res.send({
+      error: false,
+      modified: true,
+      message: "User modified with success"
+    });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -176,15 +186,26 @@ exports.deleteUserById = async (req, res) => {
       process.env.PRIVATE_KEY
     );
 
-    if (verify.adminLevel !== "superadmin")
-      return res.status(401).send({ error: true, message: "Not authorized !" });
+    if (!verify.adminLevel || verify.adminLevel !== "superadmin")
+      return res.status(401).send({ error: true, message: "Not authorized" });
+
+    let admin = await Admin.findById(verify.id);
+
+    if (!admin)
+      return res
+        .status(400)
+        .send({
+          error: true,
+          message: "There are not existing admin with the JWT id provided"
+        });
 
     const user = await User.findByIdAndRemove(req.params.id);
     if (!user)
       return res
         .status(400)
         .send({ message: "There are not user with the id provided" });
-    return res.send(`User ${user.lastName} has been removed with success !`);
+
+    return res.send(`User ${user.lastName} has been removed with success`);
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }

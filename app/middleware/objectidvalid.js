@@ -8,6 +8,6 @@ module.exports = function(req, res, next) {
   } else {
     return res
       .status(404)
-      .send({ message: "Error, the id must to be a valid objectId !" });
+      .send({ error : true, message: "Error, the id must to be a valid objectId !" });
   }
 };

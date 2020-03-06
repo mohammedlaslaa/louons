@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
 const Joi = require("@hapi/joi");
 
 const addressSchema = new mongoose.Schema({
