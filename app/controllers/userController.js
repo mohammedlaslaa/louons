@@ -30,6 +30,12 @@ exports.putSelf = async (req, res) => {
   const { error } = schemaPutValidationUser.validate(req.body);
   if (error) return res.status(400).send(error.message);
 
+  if (req.body.lastName)
+    req.body.lastName = req.body.lastName.replace(/[0-9]/g, "");
+
+  if (req.body.firstName)
+    req.body.firstName = req.body.firstName.replace(/[0-9]/g, "");
+
   if (req.body.password) {
     req.body.password = await bcrypt.hash(
       req.body.password,
@@ -80,8 +86,8 @@ exports.postInscription = async (req, res) => {
 
     const user = new User({
       clientId: valueId,
-      lastName: req.body.lastName,
-      firstName: req.body.firstName,
+      lastName: req.body.lastName.replace(/[0-9]/g, ""),
+      firstName: req.body.firstName.replace(/[0-9]/g, ""),
       email: req.body.email,
       password: hashPwd,
       dateBirth: moment(req.body.dateBirth, "DD-MM-YYYY").format("YYYY-MM-DD"),
@@ -115,6 +121,13 @@ exports.getUserById = async (req, res) => {
     const user = await User.findById(req.params.id).select(
       "clientId firstName lastName email dateBirth"
     );
+
+    if (!user)
+      return res.status(400).send({
+        error: true,
+        message: "There are not admin with the id provided"
+      });
+
     return res.send(user);
   } catch (e) {
     return res.status(404).send(e.message);
@@ -136,6 +149,12 @@ exports.putUserById = async (req, res) => {
   }
 
   try {
+    if (req.body.lastName)
+      req.body.lastName = req.body.lastName.replace(/[0-9]/g, "");
+
+    if (req.body.firstName)
+      req.body.firstName = req.body.firstName.replace(/[0-9]/g, "");
+
     await User.findByIdAndUpdate(req.params.id, {
       $set: req.body,
       date_update: Date.now()

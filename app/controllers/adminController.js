@@ -12,9 +12,11 @@ exports.getSelf = async (req, res) => {
       req.header("x-auth-token"),
       process.env.PRIVATE_KEY
     );
+
     const admin = await Admin.findById(verify.id);
     if (!admin)
       return res.status(400).send({ error: true, message: "Bad request !" });
+
     return res.send(admin);
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
@@ -28,6 +30,12 @@ exports.putSelf = async (req, res) => {
 
   const { error } = schemaPutValidationAdmin.validate(req.body);
   if (error) return res.status(400).send(error.message);
+
+  if (req.body.lastName)
+    req.body.lastName = req.body.lastName.replace(/[0-9]/g, "");
+
+  if (req.body.firstName)
+    req.body.firstName = req.body.firstName.replace(/[0-9]/g, "");
 
   if (req.body.password) {
     req.body.password = await bcrypt.hash(
@@ -67,6 +75,9 @@ exports.getAllAdmins = async (req, res) => {
       return res.status(401).send({ error: true, message: "Not authorized !" });
 
     const admin = await Admin.find();
+    if (!admin)
+      return res.status(204).send({ error: true, message: "Bad request !" });
+
     return res.send(admin);
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
@@ -102,8 +113,8 @@ exports.postNewAdmin = async (req, res) => {
     maxId.length == 0 ? (valueId = 1) : (valueId = maxId[0].adminId + 1);
 
     const admin = new Admin({
-      lastName: req.body.lastName,
-      firstName: req.body.firstName,
+      lastName: req.body.lastName.replace(/[0-9]/g, ""),
+      firstName: req.body.firstName.replace(/[0-9]/g, ""),
       email: req.body.email,
       password: hashPwd,
       adminLevel: req.body.adminLevel,
@@ -149,6 +160,12 @@ exports.putAdminById = async (req, res) => {
   const { error } = schemaPutValidationAdmin.validate(req.body);
   if (error)
     return res.status(400).send({ error: true, message: error.message });
+
+  if (req.body.lastName)
+    req.body.lastName = req.body.lastName.replace(/[0-9]/g, "");
+
+  if (req.body.firstName)
+    req.body.firstName = req.body.firstName.replace(/[0-9]/g, "");
 
   if (req.body.password) {
     req.body.password = await bcrypt.hash(

@@ -2,8 +2,7 @@ const Joi = require("@hapi/joi");
 const { Admin } = require("../models/adminModel");
 const bcrypt = require("bcrypt");
 
-
- exports.postAuthAdmin = async (req, res) => {
+exports.postAuthAdmin = async (req, res) => {
   try {
     const { error } = schemaValidationMailPwd.validate(req.body);
     if (error)

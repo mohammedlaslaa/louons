@@ -101,7 +101,9 @@ const schemaValidationUser = Joi.object({
         /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[#$%^&*()+=!?\-';,.\/{}|:<>?~]).{8,20})/
       )
     )
-    .required()
+    .required(),
+
+  isActive: Joi.boolean()
 });
 
 // Validator without the required fields, more especially to send update requests.
@@ -146,7 +148,9 @@ const schemaPutValidationUser = Joi.object({
     new RegExp(
       /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[#$%^&*()+=!?\-';,.\/{}|:<>?~]).{8,20})/
     )
-  )
+  ),
+
+  isActive: Joi.boolean()
 });
 
 const User = mongoose.model("User", userSchema);

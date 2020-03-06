@@ -5,7 +5,7 @@ const Joi = require("@hapi/joi");
 const adminSchema = new mongoose.Schema({
   adminId: {
     type: Number,
-    default : 1
+    default: 1
   },
 
   lastName: {
@@ -60,7 +60,7 @@ const adminSchema = new mongoose.Schema({
     type: String,
     enum: ["admin", "superadmin"],
     default: "user",
-    required : true
+    required: true
   },
 
   isActive: {
@@ -110,7 +110,9 @@ const schemaValidationAdmin = Joi.object({
     )
     .required(),
 
-  adminLevel: Joi.string().required() 
+  adminLevel: Joi.string().required(),
+
+  isActive: Joi.boolean()
 });
 
 // Validator put with the required fields.
@@ -132,14 +134,15 @@ const schemaPutValidationAdmin = Joi.object({
     .email({ minDomainSegments: 2 })
     .pattern(new RegExp(/^[a-z]*([.]|\w)[a-z]*\d*[@][a-z]*[.]\w{2,5}/)),
 
-  password: Joi.string()
-    .pattern(
-      new RegExp(
-        /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[#$%^&*()+=!?\-';,.\/{}|:<>?~]).{8,20})/
-      )
-    ),
+  password: Joi.string().pattern(
+    new RegExp(
+      /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[#$%^&*()+=!?\-';,.\/{}|:<>?~]).{8,20})/
+    )
+  ),
 
-  adminLevel: Joi.string()
+  adminLevel: Joi.string(),
+
+  isActive: Joi.boolean()
 });
 
 const Admin = mongoose.model("Admin", adminSchema);
