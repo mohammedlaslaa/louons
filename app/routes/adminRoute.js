@@ -1,11 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const objectvalid = require("../middleware/objectidvalid");
+const jwtverify = require("../middleware/jwtVerify");
+const jwtsuperadmin = require("../middleware/jwtSuperAdmin");
 const adminController = require("../controllers/adminController");
 
 // Get and put self to the admin. The admin can not delete itself. However, he will can update the isactive field and send a delete request by mail to the superadmin.
 
-router.get("/me", adminController.getSelf);
+router.get("/me", jwtverify, adminController.getSelf);
 
 router.put("/me", adminController.putSelf);
 
@@ -13,12 +15,12 @@ router.put("/me", adminController.putSelf);
 
 router.get("/", adminController.getAllAdmins);
 
-router.post("/", adminController.postNewAdmin);
+router.post("/", jwtsuperadmin, adminController.postNewAdmin);
 
-router.get("/:id", objectvalid, adminController.getAdminById);
+router.get("/:id", [objectvalid, jwtsuperadmin], adminController.getAdminById);
 
-router.put("/:id", objectvalid, adminController.putAdminById);
+router.put("/:id", [objectvalid, jwtsuperadmin], adminController.putAdminById);
 
-router.delete("/:id", objectvalid, adminController.deleteAdminById);
+router.delete("/:id", [objectvalid, jwtsuperadmin], adminController.deleteAdminById);
 
 module.exports = router;

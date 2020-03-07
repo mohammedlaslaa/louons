@@ -30,7 +30,7 @@ const schemaValidationMailPwd = Joi.object({
   email: Joi.string()
     .email({ minDomainSegments: 2 })
     .required()
-    .pattern(new RegExp(/^[a-z]*([.]|\w)[a-z]*\d*[@][a-z]*[.]\w{2,5}/)),
+    .pattern(new RegExp(/^\w*([.|-]){0,1}\w*([.|-]){0,1}\w*[@][a-z]*[.]\w{2,5}/)),
 
   password: Joi.string()
     .required()

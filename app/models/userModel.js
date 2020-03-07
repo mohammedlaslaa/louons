@@ -77,13 +77,13 @@ userSchema.methods.generateToken = function() {
 
 const schemaValidationUser = Joi.object({
   lastName: Joi.string()
-    .alphanum()
+    .pattern(new RegExp(/[a-zA-Z\séùàüäîçïèêôö-]+$/))
     .min(3)
     .max(50)
     .required(),
 
   firstName: Joi.string()
-    .alphanum()
+    .pattern(new RegExp(/[a-zA-Z\séùàüäîçïèêôö-]+$/))
     .min(3)
     .max(50)
     .required(),
@@ -92,7 +92,9 @@ const schemaValidationUser = Joi.object({
 
   email: Joi.string()
     .email({ minDomainSegments: 2 })
-    .pattern(new RegExp(/^[a-z]*([.]|\w)[a-z]*\d*[@][a-z]*[.]\w{2,5}/))
+    .pattern(
+      new RegExp(/^\w*([.|-]){0,1}\w*([.|-]){0,1}\w*[@][a-z]*[.]\w{2,5}/)
+    )
     .required(),
 
   password: Joi.string()
@@ -110,39 +112,22 @@ const schemaValidationUser = Joi.object({
 
 const schemaPutValidationUser = Joi.object({
   lastName: Joi.string()
-    .alphanum()
+    .pattern(new RegExp(/[a-zA-Z\séùàüäîçïèêôö-]+$/))
     .min(3)
     .max(50),
 
   firstName: Joi.string()
-    .alphanum()
+    .pattern(new RegExp(/[a-zA-Z\séùàüäîçïèêôö-]+$/))
     .min(3)
     .max(50),
 
   dateBirth: Joi.date().iso(),
 
-  address: Joi.string()
-    .alphanum()
-    .min(20)
-    .max(200),
-
-  zipcode: Joi.number()
-    .min(4)
-    .max(30),
-
-  city: Joi.string()
-    .alphanum()
-    .min(10)
-    .max(80),
-
-  country: Joi.string()
-    .alphanum()
-    .min(4)
-    .max(80),
-
   email: Joi.string()
     .email({ minDomainSegments: 2 })
-    .pattern(new RegExp(/^[a-z]*([.]|\w)[a-z]*\d*[@][a-z]*[.]\w{2,5}/)),
+    .pattern(
+      new RegExp(/^\w*([.|-]){0,1}\w*([.|-]){0,1}\w*[@][a-z]*[.]\w{2,5}/)
+    ),
 
   password: Joi.string().pattern(
     new RegExp(

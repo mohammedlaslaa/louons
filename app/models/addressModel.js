@@ -2,13 +2,21 @@ const mongoose = require("mongoose");
 const Joi = require("@hapi/joi");
 
 const addressSchema = new mongoose.Schema({
-  id_user: {
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
+    ref: "User",
+    required: true
   },
 
   addressId: {
     type: Number
+  },
+
+  title: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 30
   },
 
   address: {
@@ -63,26 +71,34 @@ const addressSchema = new mongoose.Schema({
 // Validator with the required fields.
 
 const schemaValidationAddress = Joi.object({
+  userId: Joi.string(),
+
+  title: Joi.string()
+    .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
+    .min(5)
+    .max(30)
+    .required(),
+
   address: Joi.string()
-    .alphanum()
+    .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
     .min(10)
     .max(80)
     .required(),
 
   zipcode: Joi.string()
-    .alphanum()
+    .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
     .min(3)
     .max(10)
     .required(),
 
   city: Joi.string()
-    .alphanum()
+    .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
     .min(3)
     .max(20)
     .required(),
 
   country: Joi.string()
-    .alphanum()
+    .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
     .min(3)
     .max(20)
     .required(),
@@ -93,29 +109,33 @@ const schemaValidationAddress = Joi.object({
 // Validator put with the required fields.
 
 const schemaPutValidationAddress = Joi.object({
-  lastName: Joi.string()
-    .alphanum()
+  userId: Joi.string(),
+  title: Joi.string()
+    .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
+    .min(5)
+    .max(30),
+
+  address: Joi.string()
+    .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
+    .min(10)
+    .max(80),
+
+  zipcode: Joi.string()
+    .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
     .min(3)
-    .max(50),
+    .max(10),
 
-  firstName: Joi.string()
-    .alphanum()
+  city: Joi.string()
+    .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
     .min(3)
-    .max(50),
+    .max(20),
 
-  dateBirth: Joi.date().iso(),
+  country: Joi.string()
+    .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
+    .min(3)
+    .max(20),
 
-  email: Joi.string()
-    .email({ minDomainSegments: 2 })
-    .pattern(new RegExp(/^[a-z]*([.]|\w)[a-z]*\d*[@][a-z]*[.]\w{2,5}/)),
-
-  password: Joi.string().pattern(
-    new RegExp(
-      /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[#$%^&*()+=!?\-';,.\/{}|:<>?~]).{8,20})/
-    )
-  ),
-
-  adminLevel: Joi.string()
+  isActive: Joi.boolean()
 });
 
 const Address = mongoose.model("Address", addressSchema);

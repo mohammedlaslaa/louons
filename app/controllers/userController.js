@@ -31,14 +31,13 @@ exports.putSelf = async (req, res) => {
   }
 
   const { error } = schemaPutValidationUser.validate(req.body);
-  if (error) return res.status(400).send(error.message);
+  if (error)
+    return res.status(400).send({ error: true, message: error.message });
 
   try {
-    if (req.body.lastName)
-      req.body.lastName = req.body.lastName.replace(/[0-9]/g, "");
+    if (req.body.lastName) req.body.lastName = req.body.lastName;
 
-    if (req.body.firstName)
-      req.body.firstName = req.body.firstName.replace(/[0-9]/g, "");
+    if (req.body.firstName) req.body.firstName = req.body.firstName;
 
     if (req.body.password) {
       req.body.password = await bcrypt.hash(
@@ -52,7 +51,7 @@ exports.putSelf = async (req, res) => {
       process.env.PRIVATE_KEY
     );
 
-    let user = await User.findByIdAndUpdate(verify.id, {
+    const user = await User.findByIdAndUpdate(verify.id, {
       $set: req.body,
       date_update: Date.now()
     });
@@ -92,8 +91,8 @@ exports.postInscription = async (req, res) => {
 
     const user = new User({
       clientId: valueId,
-      lastName: req.body.lastName.replace(/[0-9]/g, ""),
-      firstName: req.body.firstName.replace(/[0-9]/g, ""),
+      lastName: req.body.lastName,
+      firstName: req.body.firstName,
       email: req.body.email,
       password: hashPwd,
       dateBirth: moment(req.body.dateBirth, "DD-MM-YYYY").format("YYYY-MM-DD"),
@@ -113,7 +112,7 @@ exports.postInscription = async (req, res) => {
   }
 };
 
-exports.getAll = async (req, res) => {
+exports.getAllUsers = async (req, res) => {
   try {
     const allUsers = await User.find();
     return res.send(allUsers);
@@ -131,7 +130,7 @@ exports.getUserById = async (req, res) => {
     if (!user)
       return res.status(400).send({
         error: true,
-        message: "There are not admin with the id provided"
+        message: "There are not user with the id provided"
       });
 
     return res.send(user);
@@ -146,7 +145,8 @@ exports.putUserById = async (req, res) => {
   }
 
   const { error } = schemaPutValidationUser.validate(req.body);
-  if (error) return res.status(400).send(error.message);
+  if (error)
+    return res.status(400).send({ error: true, message: error.message });
 
   try {
     if (req.body.password) {
@@ -156,11 +156,9 @@ exports.putUserById = async (req, res) => {
       );
     }
 
-    if (req.body.lastName)
-      req.body.lastName = req.body.lastName.replace(/[0-9]/g, "");
+    if (req.body.lastName) req.body.lastName = req.body.lastName;
 
-    if (req.body.firstName)
-      req.body.firstName = req.body.firstName.replace(/[0-9]/g, "");
+    if (req.body.firstName) req.body.firstName = req.body.firstName;
 
     const user = await User.findByIdAndUpdate(req.params.id, {
       $set: req.body,
@@ -192,12 +190,10 @@ exports.deleteUserById = async (req, res) => {
     let admin = await Admin.findById(verify.id);
 
     if (!admin)
-      return res
-        .status(400)
-        .send({
-          error: true,
-          message: "There are not existing admin with the JWT id provided"
-        });
+      return res.status(400).send({
+        error: true,
+        message: "There are not existing admin with the JWT id provided"
+      });
 
     const user = await User.findByIdAndRemove(req.params.id);
     if (!user)

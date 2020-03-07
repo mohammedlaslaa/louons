@@ -8,18 +8,12 @@ module.exports = function(req, res, next) {
     req.header("x-auth-token"),
     process.env.PRIVATE_KEY,
     async function(err, decode) {
-      let admin = true;
-      if (!err) {
-        admin = await Admin.findById(decode.id);
-      }
-      if (
-        err ||
-        !admin ||
-        (decode.adminLevel !== "admin" && decode.adminLevel !== "superadmin")
-      ) {
-        return res.status(401).send({ error: true, message: "Not Authorized" });
+      if (err || !decode.adminLevel || decode.adminLevel !== "superadmin") {
+        return res
+          .status(401)
+          .send({ error: true, message: "Not authorized admin level" });
       } else {
-        res.locals.admin = admin;
+        res.locals.verify = decode;
         next();
       }
     }

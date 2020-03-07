@@ -8,19 +8,7 @@ const bcrypt = require("bcrypt");
 
 exports.getSelf = async (req, res) => {
   try {
-    const verify = jwt.verify(
-      req.header("x-auth-token"),
-      process.env.PRIVATE_KEY
-    );
-
-    const admin = await Admin.findById(verify.id);
-    if (!admin)
-      return res.status(400).send({
-        error: true,
-        message: "There are not existing admin with the JWT id provided"
-      });
-
-    return res.send(admin);
+    return res.send(res.locals.admin);
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -32,14 +20,13 @@ exports.putSelf = async (req, res) => {
   }
 
   const { error } = schemaPutValidationAdmin.validate(req.body);
-  if (error) return res.status(400).send(error.message);
+  if (error)
+    return res.status(400).send({ error: true, message: error.message });
 
   try {
-    if (req.body.lastName)
-      req.body.lastName = req.body.lastName.replace(/[0-9]/g, "");
+    if (req.body.lastName) req.body.lastName = req.body.lastName;
 
-    if (req.body.firstName)
-      req.body.firstName = req.body.firstName.replace(/[0-9]/g, "");
+    if (req.body.firstName) req.body.firstName = req.body.firstName;
 
     if (req.body.password) {
       req.body.password = await bcrypt.hash(
@@ -59,9 +46,9 @@ exports.putSelf = async (req, res) => {
     });
 
     if (!admin)
-      return res.status(400).send({
+      return res.status(401).send({
         error: true,
-        message: "There are not existing admin with the JWT id provided"
+        message: "Not Authorized"
       });
 
     return res.send({
@@ -88,13 +75,11 @@ exports.getAllAdmins = async (req, res) => {
 
     let admin = await Admin.findById(verify.id);
     if (!admin)
-      return res
-        .status(401)
-        .send({ error: true, message: "There are not existing admin with the JWT id provided" });
+      return res.status(401).send({ error: true, message: "Not authorized" });
 
     admin = await Admin.find();
     if (!admin)
-      return res.status(204).send({ error: true, message: "Bad request" });
+      return res.status(200).send({ error: true, message: "Bad request" });
 
     return res.send(admin);
   } catch (e) {
@@ -108,19 +93,12 @@ exports.postNewAdmin = async (req, res) => {
     return res.status(400).send({ error: true, message: error.message });
 
   try {
-    const verify = jwt.verify(
-      req.header("x-auth-token"),
-      process.env.PRIVATE_KEY
-    );
-
-    if (!verify.adminLevel || verify.adminLevel !== "superadmin")
-      return res.status(401).send({ error: true, message: "Not authorized" });
-
-    let admin = await Admin.findById(verify.id);
+    let admin = await Admin.findById(res.locals.verify.id);
     if (!admin)
-      return res
-        .status(404)
-        .send({ error: true, message: "There are not existing admin with the JWT id provided" });
+      return res.status(404).send({
+        error: true,
+        message: "There are not existing admin with the JWT Id provided"
+      });
 
     const hashPwd = await bcrypt.hash(
       req.body.password,
@@ -137,8 +115,8 @@ exports.postNewAdmin = async (req, res) => {
     maxId.length == 0 ? (valueId = 1) : (valueId = maxId[0].adminId + 1);
 
     admin = new Admin({
-      lastName: req.body.lastName.replace(/[0-9]/g, ""),
-      firstName: req.body.firstName.replace(/[0-9]/g, ""),
+      lastName: req.body.lastName,
+      firstName: req.body.firstName,
       email: req.body.email,
       password: hashPwd,
       adminLevel: req.body.adminLevel,
@@ -157,15 +135,7 @@ exports.postNewAdmin = async (req, res) => {
 
 exports.getAdminById = async (req, res) => {
   try {
-    const verify = jwt.verify(
-      req.header("x-auth-token"),
-      process.env.PRIVATE_KEY
-    );
-
-    if (!verify.adminLevel || verify.adminLevel !== "superadmin")
-      return res.status(401).send({ error: true, message: "Not authorized" });
-
-    let admin = await Admin.findById(verify.id);
+    let admin = await Admin.findById(res.locals.verify.id);
     if (!admin)
       return res.status(404).send({
         error: true,
@@ -194,11 +164,9 @@ exports.putAdminById = async (req, res) => {
   if (error)
     return res.status(400).send({ error: true, message: error.message });
   try {
-    if (req.body.lastName)
-      req.body.lastName = req.body.lastName.replace(/[0-9]/g, "");
+    if (req.body.lastName) req.body.lastName = req.body.lastName;
 
-    if (req.body.firstName)
-      req.body.firstName = req.body.firstName.replace(/[0-9]/g, "");
+    if (req.body.firstName) req.body.firstName = req.body.firstName;
 
     if (req.body.password) {
       req.body.password = await bcrypt.hash(
@@ -207,15 +175,7 @@ exports.putAdminById = async (req, res) => {
       );
     }
 
-    const verify = jwt.verify(
-      req.header("x-auth-token"),
-      process.env.PRIVATE_KEY
-    );
-
-    if (!verify.adminLevel || verify.adminLevel !== "superadmin")
-      return res.status(401).send({ error: true, message: "Not authorized" });
-
-    let admin = await Admin.findById(verify.id);
+    let admin = await Admin.findById(res.locals.verify.id);
     if (!admin)
       return res.status(404).send({
         error: true,
@@ -239,15 +199,7 @@ exports.putAdminById = async (req, res) => {
 
 exports.deleteAdminById = async (req, res) => {
   try {
-    const verify = jwt.verify(
-      req.header("x-auth-token"),
-      process.env.PRIVATE_KEY
-    );
-
-    if (!verify.adminLevel || verify.adminLevel !== "superadmin")
-      return res.status(401).send({ error: true, message: "Not authorized" });
-
-    let admin = await Admin.findById(verify.id);
+    let admin = await Admin.findById(res.locals.verify.id);
     if (!admin)
       return res.status(404).send({
         error: true,
