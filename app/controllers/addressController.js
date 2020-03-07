@@ -19,7 +19,14 @@ exports.getAllAddresses = async (req, res) => {
 
 exports.getAllSelfAddresses = async (req, res) => {
   try {
+    if(res.locals.owner.adminLevel)
+    return res
+        .status(400)
+        .send({ error: true, message: "An admin do not have address" });
+
     const selfaddress = await Address.find({ userId: res.locals.owner.id });
+
+
     if (!selfaddress || selfaddress == "")
       return res
         .status(200)
