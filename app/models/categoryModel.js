@@ -16,7 +16,8 @@ const categorySchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 3,
-    maxlength: 30
+    maxlength: 30,
+    unique: true
   },
 
   description: {
@@ -43,7 +44,7 @@ const categorySchema = new mongoose.Schema({
 
   isActive: {
     type: Boolean,
-    default: true
+    default: false
   }
 });
 
@@ -75,14 +76,12 @@ const schemaPutValidationCategory = Joi.object({
   title: Joi.string()
     .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
     .min(3)
-    .max(30)
-    .required(),
+    .max(30),
 
   description: Joi.string()
     .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
     .min(20)
-    .max(255)
-    .required(),
+    .max(255),
 
   isActive: Joi.boolean()
 });

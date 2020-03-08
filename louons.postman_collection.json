@@ -1,0 +1,995 @@
+{
+	"info": {
+		"_postman_id": "c9571767-eb5b-4a38-98a4-e023ba02d8d9",
+		"name": "louons",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "Register user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNDk3NTAxODI3ZmQ0NGE3YzNkZTg1MiIsImFkbWluTGV2ZWwiOiJzdXBlcmFkbWluIiwiaWF0IjoxNTgxODcyMzg1LCJleHAiOjE1ODI0NzcxODV9.aQMnQYGtC1-9bcy2OMkQyYvHoqFcudClpnjini0dFVQ",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"lastName\" : \"lacsla5a\",\n    \"firstName\" : \"mohammedé\",\n    \"password\": \"Coufs2cc!\",\n    \"dateBirth\": \"2019-02-15\",\n    \"email\": \"mohad6k2g.laf5@gksbmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/user",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"user"
+							],
+							"query": [
+								{
+									"key": "x-auth-token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNDk3NTAxODI3ZmQ0NGE3YzNkZTg1MiIsImFkbWluTGV2ZWwiOiJzdXBlcmFkbWluIiwiaWF0IjoxNTgxODcyMzg1LCJleHAiOjE1ODI0NzcxODV9.aQMnQYGtC1-9bcy2OMkQyYvHoqFcudClpnjini0dFVQ",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRjYzhlYzI3Y2I0NGZjOGI2NGY4YSIsImFkbWluTGV2ZWwiOiJzdXBlcmFkbWluIiwiaWF0IjoxNTgzNjc0OTAxLCJleHAiOjE1ODQyNzk3MDF9.qWbFhV4RrWLY8AiiOkVaf5UeZ94mrbJ0x-Sc-Huxq34",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/user",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjJjNThiZmJhNDM2MzNhMGI5ODc5MyIsImFkbWluTGV2ZWwiOiJzdXBlcmFkbWluIiwiaWF0IjoxNTgzNTMyNDE1LCJleHAiOjE1ODQxMzcyMTV9.i-rfOb6jq2E7X_ZyxlJRL6UpllBEbuFI-TMEY4-Tvw0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/user/5e62b87f899e5957ec6eb352",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"user",
+								"5e62b87f899e5957ec6eb352"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "x-auth-token",
+								"type": "text",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRjYzhlYzI3Y2I0NGZjOGI2NGY4YSIsImFkbWluTGV2ZWwiOiJzdXBlcmFkbWluIiwiaWF0IjoxNTgzNjc0OTAxLCJleHAiOjE1ODQyNzk3MDF9.qWbFhV4RrWLY8AiiOkVaf5UeZ94mrbJ0x-Sc-Huxq34"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"lastName\": \"Lanslaa\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/user/5e64f63d2ba637503ce77600",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"user",
+								"5e64f63d2ba637503ce77600"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRjYzhlYzI3Y2I0NGZjOGI2NGY4YSIsImFkbWluTGV2ZWwiOiJzdXBlcmFkbWluIiwiaWF0IjoxNTgzNjc0OTAxLCJleHAiOjE1ODQyNzk3MDF9.qWbFhV4RrWLY8AiiOkVaf5UeZ94mrbJ0x-Sc-Huxq34",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/user/5e64f63d2ba637503ce77600",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"user",
+								"5e64f63d2ba637503ce77600"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get me",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRmNjNkMmJhNjM3NTAzY2U3NzYwMCIsImlhdCI6MTU4MzY3NTA1NywiZXhwIjoxNjE2MzM0MjU3fQ.WGlfcunVU_Qmad-dVvv1sFIr5_rDZ7s0Ka5uk81AlcU",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/user/me",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"user",
+								"me"
+							],
+							"query": [
+								{
+									"key": "x-auth-token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRmNjNkMmJhNjM3NTAzY2U3NzYwMCIsImlhdCI6MTU4MzY3NTA1NywiZXhwIjoxNjE2MzM0MjU3fQ.WGlfcunVU_Qmad-dVvv1sFIr5_rDZ7s0Ka5uk81AlcU",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "put me",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRmNjNkMmJhNjM3NTAzY2U3NzYwMCIsImlhdCI6MTU4MzY3NTA1NywiZXhwIjoxNjE2MzM0MjU3fQ.WGlfcunVU_Qmad-dVvv1sFIr5_rDZ7s0Ka5uk81AlcU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"lastName\": \"Mohgammed\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/user/me",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"user",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "authentification",
+			"item": [
+				{
+					"name": "post auth user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"email\" : \"mohad6k2g.laf5@gksbmail.com\",\n\"password\" : \"Coufs2cc!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/authentificationuser",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"authentificationuser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post auth admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"password\": \"Cou6fff2cc!\",\n    \"email\": \"mohamroed612@cegmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/authentificationadmin",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"authentificationadmin"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "get all admins",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRjYzhlYzI3Y2I0NGZjOGI2NGY4YSIsImFkbWluTGV2ZWwiOiJzdXBlcmFkbWluIiwiaWF0IjoxNTgzNjY0Njg5LCJleHAiOjE1ODQyNjk0ODl9.iFn46DqZo7v_dsjHhw-04IK8RqZe_etxRMWbGzlrqUU",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/admin",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post new admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRjYzhlYzI3Y2I0NGZjOGI2NGY4YSIsImFkbWluTGV2ZWwiOiJzdXBlcmFkbWluIiwiaWF0IjoxNTgzNjY0Njg5LCJleHAiOjE1ODQyNjk0ODl9.iFn46DqZo7v_dsjHhw-04IK8RqZe_etxRMWbGzlrqUU",
+								"type": "text"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjJiNDNiMzAyNmQ0NTU3YzM5ZGQwMyIsImFkbWluTGV2ZWwiOiJzdXBlcmFkbWluIiwiaWF0IjoxNTgzNTI3MDA0LCJleHAiOjE1ODQxMzE4MDR9.SWKYzvlQT6f4azodAjcw5c-fKM2Hk97qztnmBBeiBaQ",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"lastName\" : \"laslaad\",\n    \"firstName\" : \"mohammed\",\n    \"password\": \"Cou6fff2cc!\",\n    \"email\": \"moh2@ce.com\",\n    \"adminLevel\" : \"superadmin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/admin",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get admin by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRjYzhlYzI3Y2I0NGZjOGI2NGY4YSIsImFkbWluTGV2ZWwiOiJzdXBlcmFkbWluIiwiaWF0IjoxNTgzNjY0Njg5LCJleHAiOjE1ODQyNjk0ODl9.iFn46DqZo7v_dsjHhw-04IK8RqZe_etxRMWbGzlrqUU",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/admin/5e64ce713530825868b6b98f",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"admin",
+								"5e64ce713530825868b6b98f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete admin by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRjYzhlYzI3Y2I0NGZjOGI2NGY4YSIsImFkbWluTGV2ZWwiOiJzdXBlcmFkbWluIiwiaWF0IjoxNTgzNjY0Njg5LCJleHAiOjE1ODQyNjk0ODl9.iFn46DqZo7v_dsjHhw-04IK8RqZe_etxRMWbGzlrqUU",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/admin/5e64cc8ec27cb44fc8b64f8a",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"admin",
+								"5e64cc8ec27cb44fc8b64f8a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "put admin by id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRjYzhlYzI3Y2I0NGZjOGI2NGY4YSIsImFkbWluTGV2ZWwiOiJzdXBlcmFkbWluIiwiaWF0IjoxNTgzNjY0Njg5LCJleHAiOjE1ODQyNjk0ODl9.iFn46DqZo7v_dsjHhw-04IK8RqZe_etxRMWbGzlrqUU",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"lastName\" : \"Laslaa\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/admin/5e64ce713530825868b6b98f",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"admin",
+								"5e64ce713530825868b6b98f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get me",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRjYzhlYzI3Y2I0NGZjOGI2NGY4YSIsImFkbWluTGV2ZWwiOiJzdXBlcmFkbWluIiwiaWF0IjoxNTgzNjY0Njg5LCJleHAiOjE1ODQyNjk0ODl9.iFn46DqZo7v_dsjHhw-04IK8RqZe_etxRMWbGzlrqUU",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/admin/me",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"admin",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "put me",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRjYzhlYzI3Y2I0NGZjOGI2NGY4YSIsImFkbWluTGV2ZWwiOiJhZG1pbiIsImlhdCI6MTU4MzY4MTQyNywiZXhwIjoxNTg0Mjg2MjI3fQ.g64kIEQmSsHiIYbRatM3tWV872T00zBT-ChYQPQC308",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"lastName\" : \"Lass\",\n\"firstName\" : \"Heyyyy\",\n\"adminLevel\" : \"superadmin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/admin/me",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"admin",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "address",
+			"item": [
+				{
+					"name": "Post address",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRmZGE1Y2NhZTI5MjljMDFmMTJlZCIsImlhdCI6MTU4MzY3Nzg4NiwiZXhwIjoxNjE2MzM3MDg2fQ.1sRo2cyW_DxLkpHYQfk9dXdPK7qu9FonG20P34kVrKo",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Firs3fd5\",\n    \"address\": \"13 résidence la brasserie\",\n    \"zipcode\": \"62950\",\n    \"city\": \"Noyelles-Godault\",\n    \"country\": \"France\",\n    \"id_user\": \"5e624f0fd14bb04b344abd0a\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/address",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"address"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all adresses",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRjYzhlYzI3Y2I0NGZjOGI2NGY4YSIsImFkbWluTGV2ZWwiOiJzdXBlcmFkbWluIiwiaWF0IjoxNTgzNjc0OTAxLCJleHAiOjE1ODQyNzk3MDF9.qWbFhV4RrWLY8AiiOkVaf5UeZ94mrbJ0x-Sc-Huxq34",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/address",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"address"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get self address",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRmZGE1Y2NhZTI5MjljMDFmMTJlZCIsImlhdCI6MTU4MzY3Nzg4NiwiZXhwIjoxNjE2MzM3MDg2fQ.1sRo2cyW_DxLkpHYQfk9dXdPK7qu9FonG20P34kVrKo",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/address/allself",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"address",
+								"allself"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get address by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRmZGE1Y2NhZTI5MjljMDFmMTJlZCIsImlhdCI6MTU4MzY3Nzg4NiwiZXhwIjoxNjE2MzM3MDg2fQ.1sRo2cyW_DxLkpHYQfk9dXdPK7qu9FonG20P34kVrKo",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/address/5e65029d76ac57310049cbc5",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"address",
+								"5e65029d76ac57310049cbc5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "put address by id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRmZGE1Y2NhZTI5MjljMDFmMTJlZCIsImlhdCI6MTU4MzY3Nzg4NiwiZXhwIjoxNjE2MzM3MDg2fQ.1sRo2cyW_DxLkpHYQfk9dXdPK7qu9FonG20P34kVrKo",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\": \"Firs3fd5\",\n    \"address\": \"25 rue des peupliers\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/address/5e651fbd89800e3560feebe7",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"address",
+								"5e651fbd89800e3560feebe7"
+							],
+							"query": [
+								{
+									"key": "x-auth-token",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete address by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRjYzhlYzI3Y2I0NGZjOGI2NGY4YSIsImFkbWluTGV2ZWwiOiJzdXBlcmFkbWluIiwiaWF0IjoxNTgzNjc0OTAxLCJleHAiOjE1ODQyNzk3MDF9.qWbFhV4RrWLY8AiiOkVaf5UeZ94mrbJ0x-Sc-Huxq34",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/address/5e65030a76ac57310049cbc5",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"address",
+								"5e65030a76ac57310049cbc5"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "category",
+			"item": [
+				{
+					"name": "get all category",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRjYzhlYzI3Y2I0NGZjOGI2NGY4YSIsImFkbWluTGV2ZWwiOiJhZG1pbiIsImlhdCI6MTU4MzY4NDg4MywiZXhwIjoxNTg0Mjg5NjgzfQ.B3nZbPFUjk-RnSSSFwgJ73nGWkON-iBBVSUjCS-q0jc",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/category",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get category by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRjYzhlYzI3Y2I0NGZjOGI2NGY4YSIsImFkbWluTGV2ZWwiOiJhZG1pbiIsImlhdCI6MTU4MzY4NDg4MywiZXhwIjoxNTg0Mjg5NjgzfQ.B3nZbPFUjk-RnSSSFwgJ73nGWkON-iBBVSUjCS-q0jc",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/category/5e64fe8ceb0a813ed0d1fe8d",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"category",
+								"5e64fe8ceb0a813ed0d1fe8d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRjYzhlYzI3Y2I0NGZjOGI2NGY4YSIsImFkbWluTGV2ZWwiOiJhZG1pbiIsImlhdCI6MTU4MzY4MDkyNSwiZXhwIjoxNTg0Mjg1NzI1fQ.LUN1fkcoprARAsf9UeoMWIha1csk2EuxWGVV13tRZyg",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\" : \"CAtégorie 3\",\n\t\"description\" : \"Ceci est une courte description d'une nouvelle catégorie\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/category",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "put category by id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjRjYzhlYzI3Y2I0NGZjOGI2NGY4YSIsImFkbWluTGV2ZWwiOiJhZG1pbiIsImlhdCI6MTU4MzY4NjAyOCwiZXhwIjoxNTg0MjkwODI4fQ.__9do3DHA_crEYfvFyzvbP204BD7jIOaGFeMPkP0Q0c",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\" : \"Catégorie 3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/category/5e6523beba834c39d45ed049",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"category",
+								"5e6523beba834c39d45ed049"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete category by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNjJiNDJhMzAyNmQ0NTU3YzM5ZGQwMCIsImFkbWluTGV2ZWwiOiJzdXBlcmFkbWluIiwiaWF0IjoxNTgzNjg4NDQzLCJleHAiOjE1ODQyOTMyNDN9.Se_vWPQfn42Gd49826Cw9otp95HEiVLcjPyhC1rkHL0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:5000/louons/api/v1/category/5e6529f23f851e4768e1083a",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"louons",
+								"api",
+								"v1",
+								"category",
+								"5e6529f23f851e4768e1083a"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

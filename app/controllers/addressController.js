@@ -15,13 +15,12 @@ exports.getAllAddresses = async (req, res) => {
 
 exports.getAllSelfAddresses = async (req, res) => {
   try {
-    if(res.locals.owner.adminLevel)
-    return res
+    if (res.locals.owner.adminLevel)
+      return res
         .status(400)
         .send({ error: true, message: "An admin do not have address" });
 
     const selfaddress = await Address.findOne({ id_user: res.locals.owner.id });
-
 
     if (!selfaddress)
       return res
@@ -65,9 +64,21 @@ exports.putAddressById = async (req, res) => {
     });
 
     if (!isOwner && !res.locals.owner.adminLevel)
+      return res.status(200).send({
+        error: true,
+        message:
+          "Empty list, you are not the owner of the address or you do not have admin rights"
+      });
+
+    const isTitleExist = await Address.findOne({
+      title: {'$regex': req.body.title, $options:'i'},
+      id_user: res.locals.owner.id
+    });
+
+    if (isTitleExist)
       return res
-        .status(200)
-        .send({ error: true, message: "Empty list, you are not the owner of the address or you do not have admin rights" });
+        .status(400)
+        .send({ error: true, message: "Error duplicating address title" });
 
     await Address.findByIdAndUpdate(req.params.id, {
       $set: req.body,
@@ -92,9 +103,11 @@ exports.deleteAddressById = async (req, res) => {
     });
 
     if (!isOwner && !res.locals.owner.adminLevel)
-      return res
-        .status(200)
-        .send({ error: true, message: "Empty list, you are not the owner of the address or you do not have admin rights" });
+      return res.status(200).send({
+        error: true,
+        message:
+          "Empty list, you are not the owner of the address or you do not have admin rights"
+      });
 
     const address = await Address.findByIdAndRemove(req.params.id);
     if (!address)
@@ -123,16 +136,14 @@ exports.postAddress = async (req, res) => {
       : res.locals.owner.id;
 
     const isTitleExist = await Address.findOne({
-      title: req.body.title,
+      title: {'$regex': req.body.title, $options:'i'},
       id_user: ownerId
     });
-
-    console.log(isTitleExist)
 
     if (isTitleExist)
       return res
         .status(400)
-        .send({ error: true, message: "Error duplicating title" });
+        .send({ error: true, message: "Error duplicating address title" });
 
     const maxId = await Address.find()
       .sort({ addressId: -1 })
