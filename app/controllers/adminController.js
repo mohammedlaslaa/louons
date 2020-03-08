@@ -20,10 +20,6 @@ exports.putSelf = async (req, res) => {
     return res.status(400).send({ error: true, message: error.message });
 
   try {
-    if (req.body.lastName) req.body.lastName = req.body.lastName;
-
-    if (req.body.firstName) req.body.firstName = req.body.firstName;
-
     if (req.body.password) {
       req.body.password = await bcrypt.hash(
         req.body.password,
@@ -149,10 +145,6 @@ exports.putAdminById = async (req, res) => {
   if (error)
     return res.status(400).send({ error: true, message: error.message });
   try {
-    if (req.body.lastName) req.body.lastName = req.body.lastName;
-
-    if (req.body.firstName) req.body.firstName = req.body.firstName;
-
     if (req.body.password) {
       req.body.password = await bcrypt.hash(
         req.body.password,

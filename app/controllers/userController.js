@@ -31,10 +31,6 @@ exports.putSelf = async (req, res) => {
     return res.status(400).send({ error: true, message: error.message });
 
   try {
-    if (req.body.lastName) req.body.lastName = req.body.lastName;
-
-    if (req.body.firstName) req.body.firstName = req.body.firstName;
-
     if (req.body.password) {
       req.body.password = await bcrypt.hash(
         req.body.password,
@@ -144,10 +140,6 @@ exports.putUserById = async (req, res) => {
         parseInt(process.env.SALT)
       );
     }
-
-    if (req.body.lastName) req.body.lastName = req.body.lastName;
-
-    if (req.body.firstName) req.body.firstName = req.body.firstName;
 
     const user = await User.findByIdAndUpdate(req.params.id, {
       $set: req.body,
