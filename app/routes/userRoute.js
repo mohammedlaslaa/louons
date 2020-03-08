@@ -2,17 +2,18 @@ const express = require("express");
 const router = express.Router();
 const objectvalid = require("../middleware/objectIdValid");
 const jwtverify = require("../middleware/jwtVerify");
+const isemptybody = require("../middleware/isEmptyBody");
 const userController = require("../controllers/userController");
 
 // Users access get and put routes to their data only with token.
 
 router.get("/me", userController.getSelf);
 
-router.put("/me", userController.putSelf);
+router.put("/me", isemptybody, userController.putSelf);
 
 // User inscription
 
-router.post("/", userController.postInscription);
+router.post("/", isemptybody, userController.postInscription);
 
 // Only the admins can get or update in all the users ! The jwtverify middleware comes to ensure that the client is an admin.
 
@@ -20,7 +21,7 @@ router.get("/", jwtverify, userController.getAllUsers);
 
 router.get("/:id", [objectvalid, jwtverify], userController.getUserById);
 
-router.put("/:id", [objectvalid, jwtverify], userController.putUserById);
+router.put("/:id", [isemptybody, objectvalid, jwtverify], userController.putUserById);
 
 // Only the superadmin can delete users
 

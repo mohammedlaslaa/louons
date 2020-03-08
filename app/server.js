@@ -10,6 +10,7 @@ const authUser = require("./routes/authentificationUserRoute");
 const authAdmin = require("./routes/authentificationAdminRoute");
 const admin = require("./routes/adminRoute");
 const address = require("./routes/addressRoute");
+const category = require("./routes/categoryRoute");
 
 app.use(cors());
 
@@ -26,6 +27,7 @@ app.use("/louons/api/v1/authentificationuser", authUser);
 app.use("/louons/api/v1/authentificationadmin", authAdmin);
 app.use("/louons/api/v1/admin", admin);
 app.use("/louons/api/v1/address", address);
+app.use("/louons/api/v1/category", category);
 
 app.listen(port, () => {
   console.log(`App listening to the port ${port}`);

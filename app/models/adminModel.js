@@ -31,7 +31,7 @@ const adminSchema = new mongoose.Schema({
     type: String,
     unique: true,
     required: true,
-    minlength: 13,
+    minlength: 10,
     maxlength: 50
   },
 
@@ -112,7 +112,7 @@ const schemaValidationAdmin = Joi.object({
     )
     .required(),
 
-  adminLevel: Joi.string().required(),
+  adminLevel: Joi.string().valid('admin','superadmin').required(),
 
   isActive: Joi.boolean()
 });
@@ -144,7 +144,7 @@ const schemaPutValidationAdmin = Joi.object({
     )
   ),
 
-  adminLevel: Joi.string(),
+  adminLevel: Joi.string().valid('admin','superadmin'),
 
   isActive: Joi.boolean()
 });

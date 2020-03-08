@@ -1,12 +1,8 @@
-const jwt = require("jsonwebtoken");
 const {
   Address,
   schemaValidationAddress,
   schemaPutValidationAddress
 } = require("../models/addressModel");
-const { User } = require("../models/userModel");
-const { Admin } = require("../models/adminModel");
-const bcrypt = require("bcrypt");
 
 exports.getAllAddresses = async (req, res) => {
   try {
@@ -24,10 +20,10 @@ exports.getAllSelfAddresses = async (req, res) => {
         .status(400)
         .send({ error: true, message: "An admin do not have address" });
 
-    const selfaddress = await Address.find({ userId: res.locals.owner.id });
+    const selfaddress = await Address.findOne({ id_user: res.locals.owner.id });
 
 
-    if (!selfaddress || selfaddress == "")
+    if (!selfaddress)
       return res
         .status(200)
         .send({ error: true, message: "Empty list, not address found" });
@@ -40,14 +36,14 @@ exports.getAllSelfAddresses = async (req, res) => {
 exports.getAddressById = async (req, res) => {
   try {
     const address = res.locals.owner.adminLevel
-      ? await Address.find({
+      ? await Address.findOne({
           _id: req.params.id
         })
-      : await Address.find({
+      : await Address.findOne({
           _id: req.params.id,
-          userId: res.locals.owner.id
+          id_user: res.locals.owner.id
         });
-    if (!address || address == "")
+    if (!address)
       return res
         .status(200)
         .send({ error: true, message: "Empty list, not address found" });
@@ -59,23 +55,19 @@ exports.getAddressById = async (req, res) => {
 };
 
 exports.putAddressById = async (req, res) => {
-  if (Object.keys(req.body).length == 0) {
-    return res.status(400).send({ message: "There are nothing to update" });
-  }
-
   const { error } = schemaPutValidationAddress.validate(req.body);
   if (error) return res.status(400).send(error.message);
 
   try {
-    const isOwner = await Address.find({
+    const isOwner = await Address.findOne({
       _id: req.params.id,
-      userId: res.locals.owner.id
+      id_user: res.locals.owner.id
     });
 
-    if (isOwner == "" && !res.locals.owner.adminLevel)
+    if (!isOwner && !res.locals.owner.adminLevel)
       return res
         .status(200)
-        .send({ error: true, message: "Empty list, not address found" });
+        .send({ error: true, message: "Empty list, you are not the owner of the address or you do not have admin rights" });
 
     await Address.findByIdAndUpdate(req.params.id, {
       $set: req.body,
@@ -94,15 +86,15 @@ exports.putAddressById = async (req, res) => {
 
 exports.deleteAddressById = async (req, res) => {
   try {
-    const isOwner = await Address.find({
+    const isOwner = await Address.findOne({
       _id: req.params.id,
-      userId: res.locals.owner.id
+      id_user: res.locals.owner.id
     });
 
-    if (isOwner == "" && !res.locals.owner.adminLevel)
+    if (!isOwner && !res.locals.owner.adminLevel)
       return res
         .status(200)
-        .send({ error: true, message: "Empty list, not address found" });
+        .send({ error: true, message: "Empty list, you are not the owner of the address or you do not have admin rights" });
 
     const address = await Address.findByIdAndRemove(req.params.id);
     if (!address)
@@ -127,13 +119,15 @@ exports.postAddress = async (req, res) => {
 
   try {
     let ownerId = res.locals.owner.adminLevel
-      ? req.body.userId
+      ? req.body.id_user
       : res.locals.owner.id;
 
     const isTitleExist = await Address.findOne({
       title: req.body.title,
-      userId: ownerId
+      id_user: ownerId
     });
+
+    console.log(isTitleExist)
 
     if (isTitleExist)
       return res
@@ -151,7 +145,7 @@ exports.postAddress = async (req, res) => {
 
     const address = new Address({
       addressId: valueId,
-      userId: ownerId,
+      id_user: ownerId,
       title: req.body.title,
       address: req.body.address,
       zipcode: req.body.zipcode,

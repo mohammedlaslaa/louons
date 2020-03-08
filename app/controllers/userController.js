@@ -26,10 +26,6 @@ exports.getSelf = async (req, res) => {
 };
 
 exports.putSelf = async (req, res) => {
-  if (Object.keys(req.body).length == 0) {
-    return res.status(204).send({ message: "There are nothing to update" });
-  }
-
   const { error } = schemaPutValidationUser.validate(req.body);
   if (error)
     return res.status(400).send({ error: true, message: error.message });
@@ -95,10 +91,7 @@ exports.postInscription = async (req, res) => {
       firstName: req.body.firstName,
       email: req.body.email,
       password: hashPwd,
-      dateBirth: moment(req.body.dateBirth, "DD-MM-YYYY").format("YYYY-MM-DD"),
-      address: req.body.address,
-      zipCode: req.body.zipCode,
-      country: req.body.country
+      dateBirth: moment(req.body.dateBirth, "DD-MM-YYYY").format("YYYY-MM-DD")
     });
 
     await user.save();
@@ -140,10 +133,6 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.putUserById = async (req, res) => {
-  if (Object.keys(req.body).length == 0) {
-    return res.status(204).send({ message: "There are nothing to update" });
-  }
-
   const { error } = schemaPutValidationUser.validate(req.body);
   if (error)
     return res.status(400).send({ error: true, message: error.message });

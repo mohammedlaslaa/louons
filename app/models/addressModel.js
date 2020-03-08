@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Joi = require("@hapi/joi");
 
 const addressSchema = new mongoose.Schema({
-  userId: {
+  id_user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true
@@ -71,7 +71,7 @@ const addressSchema = new mongoose.Schema({
 // Validator with the required fields.
 
 const schemaValidationAddress = Joi.object({
-  userId: Joi.string(),
+  id_user: Joi.string(),
 
   title: Joi.string()
     .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
@@ -109,7 +109,7 @@ const schemaValidationAddress = Joi.object({
 // Validator put with the required fields.
 
 const schemaPutValidationAddress = Joi.object({
-  userId: Joi.string(),
+  id_user: Joi.string(),
   title: Joi.string()
     .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
     .min(5)

@@ -15,10 +15,6 @@ exports.getSelf = async (req, res) => {
 };
 
 exports.putSelf = async (req, res) => {
-  if (Object.keys(req.body).length == 0) {
-    return res.status(204).send({ message: "There are nothing to update" });
-  }
-
   const { error } = schemaPutValidationAdmin.validate(req.body);
   if (error)
     return res.status(400).send({ error: true, message: error.message });
@@ -39,6 +35,13 @@ exports.putSelf = async (req, res) => {
       req.header("x-auth-token"),
       process.env.PRIVATE_KEY
     );
+
+    console.log(verify)
+    if (verify.adminLevel !== "superadmin" && req.body.adminLevel)
+      return res.status(400).send({
+        error: true,
+        message: "Only the superadmin can do this action"
+      });
 
     let admin = await Admin.findByIdAndUpdate(verify.id, {
       $set: req.body,
@@ -93,13 +96,6 @@ exports.postNewAdmin = async (req, res) => {
     return res.status(400).send({ error: true, message: error.message });
 
   try {
-    let admin = await Admin.findById(res.locals.verify.id);
-    if (!admin)
-      return res.status(404).send({
-        error: true,
-        message: "There are not existing admin with the JWT Id provided"
-      });
-
     const hashPwd = await bcrypt.hash(
       req.body.password,
       parseInt(process.env.SALT)
@@ -135,13 +131,6 @@ exports.postNewAdmin = async (req, res) => {
 
 exports.getAdminById = async (req, res) => {
   try {
-    let admin = await Admin.findById(res.locals.verify.id);
-    if (!admin)
-      return res.status(404).send({
-        error: true,
-        message: "There are not existing admin with the JWT id provided"
-      });
-
     admin = await Admin.findById(req.params.id);
     if (!admin)
       return res.status(400).send({
@@ -156,10 +145,6 @@ exports.getAdminById = async (req, res) => {
 };
 
 exports.putAdminById = async (req, res) => {
-  if (Object.keys(req.body).length == 0) {
-    return res.status(400).send({ message: "There are nothing to update" });
-  }
-
   const { error } = schemaPutValidationAdmin.validate(req.body);
   if (error)
     return res.status(400).send({ error: true, message: error.message });
@@ -174,13 +159,6 @@ exports.putAdminById = async (req, res) => {
         parseInt(process.env.SALT)
       );
     }
-
-    let admin = await Admin.findById(res.locals.verify.id);
-    if (!admin)
-      return res.status(404).send({
-        error: true,
-        message: "There are not existing admin with the JWT id provided"
-      });
 
     await Admin.findByIdAndUpdate(req.params.id, {
       $set: req.body,
@@ -199,11 +177,10 @@ exports.putAdminById = async (req, res) => {
 
 exports.deleteAdminById = async (req, res) => {
   try {
-    let admin = await Admin.findById(res.locals.verify.id);
-    if (!admin)
-      return res.status(404).send({
+    if (req.params.id == res.locals.verify.id)
+      return res.status(400).send({
         error: true,
-        message: "There are not existing admin with the JWT id provided"
+        message: "You can not delete yourself, please contact support"
       });
 
     admin = await Admin.findByIdAndRemove(req.params.id);
