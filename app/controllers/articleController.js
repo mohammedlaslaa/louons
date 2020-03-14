@@ -16,7 +16,7 @@ exports.getAllArticle = async function(req, res) {
 exports.getArticleById = async function(req, res) {
   try {
     const article = await Article.findById(req.params.id).select(
-      "id_admin title description price delay_delivery path_picture"
+      "id_user title description price pictures"
     );
 
     if (!article)
@@ -83,10 +83,10 @@ exports.putArticleById = async function(req, res) {
     return res.status(400).send({ error: true, message: error.message });
 
   try {
-    if (req.body.id_admin)
+    if (req.body.id_user)
       return res.status(400).send({
         error: true,
-        message: "Error your are not authorized to modify admin ID"
+        message: "Error your are not authorized to modify user ID"
       });
 
     const isTitleExist = await Article.findOne({
@@ -99,7 +99,15 @@ exports.putArticleById = async function(req, res) {
         message: "Error duplicating article title or no change detected"
       });
 
-    let article = await Article.findByIdAndUpdate(req.params.id, {
+    let article = await Article.findOne({ _id: req.params.id });
+
+    if (article.id_user.toString() !== res.locals.owner.id && !res.locals.owner.adminLevel)
+      return res.status(400).send({
+        error: true,
+        message: "Error you don't have the permission to modify this article"
+      });
+
+    article = await Article.findByIdAndUpdate(req.params.id, {
       $set: req.body,
       date_update: Date.now()
     });

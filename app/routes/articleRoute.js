@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const objectvalid = require("../middleware/objectidvalid");
-const jwtverify = require("../middleware/jwtVerify");
 const ifexistadminuser = require("../middleware/ifExistAdminUser");
 const jwtsuperadmin = require("../middleware/jwtSuperAdmin");
 const isemptybody = require("../middleware/isEmptyBody");
@@ -27,11 +26,11 @@ router.put(
   articleController.putArticleById
 );
 
-// Only the admin can delete one article, but the user can desactivate his article by update if he want
+// Only the superadmin can delete one article, but the user can desactivate his article by update if he want
 
 router.delete(
   "/:id",
-  [objectvalid, jwtverify],
+  [objectvalid, jwtsuperadmin],
   articleController.deleteArticleById
 );
 

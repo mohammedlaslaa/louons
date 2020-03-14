@@ -160,14 +160,6 @@ exports.putUserById = async (req, res) => {
 
 exports.deleteUserById = async (req, res) => {
   try {
-    const verify = jwt.verify(
-      req.header("x-auth-token"),
-      process.env.PRIVATE_KEY
-    );
-
-    if (!verify.adminLevel || verify.adminLevel !== "superadmin")
-      return res.status(401).send({ error: true, message: "Not authorized" });
-
     let admin = await Admin.findById(verify.id);
 
     if (!admin)

@@ -88,12 +88,10 @@ exports.putPaymentById = async function(req, res) {
     });
 
     if (isTitleExist)
-      return res
-        .status(400)
-        .send({
-          error: true,
-          message: "Error duplicating payment title or no change detected"
-        });
+      return res.status(400).send({
+        error: true,
+        message: "Error duplicating payment title or no change detected"
+      });
 
     let payment = await Payment.findByIdAndUpdate(req.params.id, {
       $set: req.body,

@@ -6,9 +6,9 @@ const jwtsuperadmin = require("../middleware/jwtSuperAdmin");
 const isemptybody = require("../middleware/isEmptyBody");
 const paymentController = require("../controllers/paymentController");
 
-// Only the admin can, post or update a payment.
+// Only the admin can post or update a payment.
 
-router.get("/", jwtverify, paymentController.getAllPayment);
+router.get("/", paymentController.getAllPayment);
 
 router.post("/", [isemptybody, jwtverify], paymentController.postPayment);
 

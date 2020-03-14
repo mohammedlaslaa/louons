@@ -20,8 +20,16 @@ router.post("/", [isemptybody, jwtsuperadmin], adminController.postNewAdmin);
 
 router.get("/:id", [objectvalid, jwtsuperadmin], adminController.getAdminById);
 
-router.put("/:id", [objectvalid, isemptybody, jwtsuperadmin], adminController.putAdminById);
+router.put(
+  "/:id",
+  [objectvalid, isemptybody, jwtsuperadmin],
+  adminController.putAdminById
+);
 
-router.delete("/:id", [objectvalid, jwtsuperadmin], adminController.deleteAdminById);
+router.delete(
+  "/:id",
+  [objectvalid, jwtsuperadmin],
+  adminController.deleteAdminById
+);
 
 module.exports = router;

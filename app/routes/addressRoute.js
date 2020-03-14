@@ -36,6 +36,10 @@ router.delete(
 
 // Post an address
 
-router.post("/", [isemptybody, ifexistadminuser], addresscontroller.postAddress);
+router.post(
+  "/",
+  [isemptybody, ifexistadminuser],
+  addresscontroller.postAddress
+);
 
 module.exports = router;

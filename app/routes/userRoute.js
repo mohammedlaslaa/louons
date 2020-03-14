@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const objectvalid = require("../middleware/objectIdValid");
 const jwtverify = require("../middleware/jwtVerify");
+const jwtSuperAdmin = require("../middleware/jwtSuperAdmin");
 const isemptybody = require("../middleware/isEmptyBody");
 const userController = require("../controllers/userController");
 
@@ -21,10 +22,18 @@ router.get("/", jwtverify, userController.getAllUsers);
 
 router.get("/:id", [objectvalid, jwtverify], userController.getUserById);
 
-router.put("/:id", [isemptybody, objectvalid, jwtverify], userController.putUserById);
+router.put(
+  "/:id",
+  [isemptybody, objectvalid, jwtverify],
+  userController.putUserById
+);
 
 // Only the superadmin can delete users
 
-router.delete("/:id", objectvalid, userController.deleteUserById);
+router.delete(
+  "/:id",
+  [objectvalid, jwtSuperAdmin],
+  userController.deleteUserById
+);
 
 module.exports = router;

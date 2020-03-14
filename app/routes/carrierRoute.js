@@ -8,7 +8,7 @@ const carrierController = require("../controllers/carrierController");
 
 // Only the admin can, post or update a carrier.
 
-router.get("/", jwtverify, carrierController.getAllCarrier);
+router.get("/", carrierController.getAllCarrier);
 
 router.post("/", [isemptybody, jwtverify], carrierController.postCarrier);
 
