@@ -53,7 +53,7 @@ exports.postCategory = async function(req, res) {
         .status(400)
         .send({ error: true, message: "Error duplicating category title" });
 
-    category = new Category({
+    const category = new Category({
       id_admin: res.locals.admin.id,
       categoryId: valueId,
       title: req.body.title,
@@ -74,12 +74,10 @@ exports.putCategoryById = async function(req, res) {
 
   try {
     if (req.body.id_admin)
-      return res
-        .status(400)
-        .send({
-          error: true,
-          message: "Error your are not authorized to modify admin ID"
-        });
+      return res.status(400).send({
+        error: true,
+        message: "Error your are not authorized to modify admin ID"
+      });
 
     const isTitleExist = await Category.findOne({
       title: { $regex: req.body.title, $options: "i" }
@@ -88,7 +86,10 @@ exports.putCategoryById = async function(req, res) {
     if (isTitleExist)
       return res
         .status(400)
-        .send({ error: true, message: "Error duplicating category title" });
+        .send({
+          error: true,
+          message: "Error duplicating category title or no change detected"
+        });
 
     let category = await Category.findByIdAndUpdate(req.params.id, {
       $set: req.body,
@@ -118,7 +119,10 @@ exports.deleteCategoryById = async function(req, res) {
         message: "There are not category with the id provided"
       });
 
-    return res.send({error: false, message : `The ${category.title} has been removed`});
+    return res.send({
+      error: false,
+      message: `The ${category.title} has been removed`
+    });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }

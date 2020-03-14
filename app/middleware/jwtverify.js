@@ -15,7 +15,7 @@ module.exports = function(req, res, next) {
       if (
         err ||
         !admin ||
-        (decode.adminLevel !== "admin" && decode.adminLevel !== "superadmin")
+        (admin.adminLevel !== "admin" && admin.adminLevel !== "superadmin")
       ) {
         return res.status(401).send({ error: true, message: "Not Authorized" });
       } else {

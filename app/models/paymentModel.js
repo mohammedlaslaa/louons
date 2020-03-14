@@ -1,31 +1,37 @@
 const mongoose = require("mongoose");
 const Joi = require("@hapi/joi");
 
-const categorySchema = new mongoose.Schema({
+const paymentSchema = new mongoose.Schema({
   id_admin: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Admin",
     required: true
   },
 
-  categoryId: {
+  paymentId: {
     type: Number,
-    default : 1
+    default: 1
   },
 
   title: {
     type: String,
     required: true,
     minlength: 3,
-    maxlength: 30,
-    unique: true
+    maxlength: 30
   },
 
   description: {
     type: String,
     required: true,
-    minlength: 20,
-    maxlength: 255
+    minlength: 10,
+    maxlength: 200
+  },
+
+  path_picture: {
+    type: String,
+    required: true,
+    minlength: 10,
+    maxlength: 50
   },
 
   date_register: {
@@ -45,13 +51,13 @@ const categorySchema = new mongoose.Schema({
 
   isActive: {
     type: Boolean,
-    default: false
+    default: true
   }
 });
 
 // Validator with the required fields.
 
-const schemaValidationCategory = Joi.object({
+const schemaValidationPayment = Joi.object({
   id_admin: Joi.string(),
 
   title: Joi.string()
@@ -61,9 +67,13 @@ const schemaValidationCategory = Joi.object({
     .required(),
 
   description: Joi.string()
-    .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
-    .min(20)
-    .max(255)
+    .min(10)
+    .max(200)
+    .required(),
+
+  path_picture: Joi.string()
+    .min(10)
+    .max(50)
     .required(),
 
   isActive: Joi.boolean()
@@ -71,7 +81,7 @@ const schemaValidationCategory = Joi.object({
 
 // Validator put with the required fields.
 
-const schemaPutValidationCategory = Joi.object({
+const schemaPutValidationPayment = Joi.object({
   id_admin: Joi.string(),
 
   title: Joi.string()
@@ -80,15 +90,18 @@ const schemaPutValidationCategory = Joi.object({
     .max(30),
 
   description: Joi.string()
-    .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
-    .min(20)
-    .max(255),
+    .min(10)
+    .max(200),
+
+  path_picture: Joi.string()
+    .min(10)
+    .max(50),
 
   isActive: Joi.boolean()
 });
 
-const Category = mongoose.model("Category", categorySchema);
+const Payment = mongoose.model("Payment", paymentSchema);
 
-module.exports.Category = Category;
-module.exports.schemaValidationCategory = schemaValidationCategory;
-module.exports.schemaPutValidationCategory = schemaPutValidationCategory;
+module.exports.Payment = Payment;
+module.exports.schemaValidationPayment = schemaValidationPayment;
+module.exports.schemaPutValidationPayment = schemaPutValidationPayment;

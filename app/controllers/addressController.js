@@ -20,7 +20,7 @@ exports.getAllSelfAddresses = async (req, res) => {
         .status(400)
         .send({ error: true, message: "An admin do not have address" });
 
-    const selfaddress = await Address.findOne({ id_user: res.locals.owner.id });
+    const selfaddress = await Address.find({ id_user: res.locals.owner.id }).populate('id_user');
 
     if (!selfaddress)
       return res
@@ -67,18 +67,21 @@ exports.putAddressById = async (req, res) => {
       return res.status(200).send({
         error: true,
         message:
-          "Empty list, you are not the owner of the address or you do not have admin rights"
+          "Empty list, you are not the owner of this address or you do not have admin rights"
       });
 
     const isTitleExist = await Address.findOne({
-      title: {'$regex': req.body.title, $options:'i'},
+      title: { $regex: req.body.title, $options: "i" },
       id_user: res.locals.owner.id
     });
 
     if (isTitleExist)
       return res
         .status(400)
-        .send({ error: true, message: "Error duplicating address title" });
+        .send({
+          error: true,
+          message: "Error duplicating address title or no change detected"
+        });
 
     await Address.findByIdAndUpdate(req.params.id, {
       $set: req.body,
@@ -136,7 +139,7 @@ exports.postAddress = async (req, res) => {
       : res.locals.owner.id;
 
     const isTitleExist = await Address.findOne({
-      title: {'$regex': req.body.title, $options:'i'},
+      title: { $regex: req.body.title, $options: "i" },
       id_user: ownerId
     });
 

@@ -12,7 +12,7 @@ module.exports = function(req, res, next) {
       if (!err) {
         admin = await Admin.findById(decode.id);
       }
-      if (err || !admin || decode.adminLevel !== "superadmin") {
+      if (err || !admin || admin.adminLevel !== "superadmin") {
         return res
           .status(401)
           .send({ error: true, message: "Not authorized admin level" });
