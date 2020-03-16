@@ -6,15 +6,15 @@ const ifexistadminuser = require("../middleware/ifExistAdminUser");
 const isemptybody = require("../middleware/isEmptyBody");
 const addresscontroller = require("../controllers/addressController");
 
-// Get all addresses, only the admin can access this route
+// Get all addresses, only an admin or a superadmin can access this route.
 
 router.get("/", jwtverify, addresscontroller.getAllAddresses);
 
-// Get all addresses registered by one user
+// Get all addresses registered by one user. One user can get allself addresses. If the request not comes by the owner or an admin or a superadmin, it will be rejected.
 
 router.get("/allself", ifexistadminuser, addresscontroller.getAllSelfAddresses);
 
-// Get, put and delete an address by id
+// Get, put and delete an address by id. If the request not comes by the owner or an admin or a superadmin, it will be rejected.
 
 router.get(
   "/:id",
@@ -34,7 +34,7 @@ router.delete(
   addresscontroller.deleteAddressById
 );
 
-// Post an address
+// Post an address. To make this operation, the request have to be sended by an admin or a superadmin or a owner valid.
 
 router.post(
   "/",

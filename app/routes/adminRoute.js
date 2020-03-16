@@ -12,9 +12,9 @@ router.get("/me", jwtverify, adminController.getSelf);
 
 router.put("/me", isemptybody, adminController.putSelf);
 
-// Send get all admins, post, put and delete one admin by id. Only the superadmin can access to this route.
+// Send get all admins, post an dmin, put an admin by id and delete an admin by id. Only the superadmin can access to this route.
 
-router.get("/", adminController.getAllAdmins);
+router.get("/", jwtsuperadmin, adminController.getAllAdmins);
 
 router.post("/", [isemptybody, jwtsuperadmin], adminController.postNewAdmin);
 

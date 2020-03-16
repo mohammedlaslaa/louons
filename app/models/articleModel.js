@@ -31,8 +31,7 @@ const articleSchema = new mongoose.Schema({
   },
 
   articleId: {
-    type: Number,
-    default: 1
+    type: Number
   },
 
   title: {
@@ -79,14 +78,14 @@ const articleSchema = new mongoose.Schema({
   }
 });
 
+// Note that the fields send in the request that are not in this JOI Object will automatically throw a rejected request.
+
 // Validator with the required fields.
 
 const schemaValidationArticle = Joi.object({
   id_user: Joi.string(),
 
   id_category: Joi.string(),
-
-  id_article: Joi.string(),
 
   pictures: Joi.array().length(3),
 
@@ -112,11 +111,7 @@ const schemaValidationArticle = Joi.object({
 // Validator put with the required fields.
 
 const schemaPutValidationArticle = Joi.object({
-  id_user: Joi.string(),
-
   id_category: Joi.string(),
-
-  id_article: Joi.string(),
 
   pictures: Joi.array().length(3),
 

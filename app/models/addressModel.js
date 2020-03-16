@@ -68,6 +68,8 @@ const addressSchema = new mongoose.Schema({
   }
 });
 
+// Note that the fields send in the request that are not in this JOI Object will automatically throw a rejected request.
+
 // Validator with the required fields.
 
 const schemaValidationAddress = Joi.object({
@@ -110,6 +112,7 @@ const schemaValidationAddress = Joi.object({
 
 const schemaPutValidationAddress = Joi.object({
   id_user: Joi.string(),
+
   title: Joi.string()
     .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
     .min(5)

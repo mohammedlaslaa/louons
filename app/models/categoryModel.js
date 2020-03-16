@@ -49,6 +49,8 @@ const categorySchema = new mongoose.Schema({
   }
 });
 
+// Note that the fields send in the request that are not in this JOI Object will automatically throw a rejected request.
+
 // Validator with the required fields.
 
 const schemaValidationCategory = Joi.object({

@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
     maxlength: 50
   },
 
-  dateBirth: {
+  date_birth: {
     type: Date,
     default: null
   },
@@ -66,12 +66,16 @@ const userSchema = new mongoose.Schema({
   }
 });
 
+// Generate token method with the private key, the expiresIn option is used to set the token validity period
+
 userSchema.methods.generateToken = function() {
   const token = jwt.sign({ id: this._id }, process.env.PRIVATE_KEY, {
     expiresIn: 32659200
   });
   return token;
 };
+
+// Note that the fields send in the request that are not in this JOI Object will automatically throw a rejected request.
 
 // Validator with the required fields.
 
@@ -88,7 +92,7 @@ const schemaValidationUser = Joi.object({
     .max(50)
     .required(),
 
-  dateBirth: Joi.date().iso(),
+  date_birth: Joi.date().iso(),
 
   email: Joi.string()
     .email({ minDomainSegments: 2 })
@@ -121,7 +125,7 @@ const schemaPutValidationUser = Joi.object({
     .min(3)
     .max(50),
 
-  dateBirth: Joi.date().iso(),
+  date_birth: Joi.date().iso(),
 
   email: Joi.string()
     .email({ minDomainSegments: 2 })

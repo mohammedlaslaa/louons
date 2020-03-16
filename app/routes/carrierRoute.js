@@ -6,13 +6,15 @@ const jwtsuperadmin = require("../middleware/jwtSuperAdmin");
 const isemptybody = require("../middleware/isEmptyBody");
 const carrierController = require("../controllers/carrierController");
 
-// Only the admin can, post or update a carrier.
+// Get all carrier or carrier by id, this route is available for everyone.
 
 router.get("/", carrierController.getAllCarrier);
 
-router.post("/", [isemptybody, jwtverify], carrierController.postCarrier);
+router.get("/:id", objectvalid, carrierController.getCarrierById);
 
-router.get("/:id", [objectvalid, jwtverify], carrierController.getCarrierById);
+// Only the admin can, post or update a carrier.
+
+router.post("/", [isemptybody, jwtverify], carrierController.postCarrier);
 
 router.put(
   "/:id",

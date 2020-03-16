@@ -6,17 +6,19 @@ const jwtsuperadmin = require("../middleware/jwtSuperAdmin");
 const isemptybody = require("../middleware/isEmptyBody");
 const categoryController = require("../controllers/categoryController");
 
-// Only the admin can post or update a category.
+// Get all carrier or carrier by id, this route is available for everyone.
 
 router.get("/", categoryController.getAllCategory);
 
-router.post("/", [isemptybody, jwtverify], categoryController.postCategory);
+// Only the admin can get category by id, post or update a category by id.
 
 router.get(
   "/:id",
   [objectvalid, jwtverify],
   categoryController.getCategoryById
 );
+
+router.post("/", [isemptybody, jwtverify], categoryController.postCategory);
 
 router.put(
   "/:id",

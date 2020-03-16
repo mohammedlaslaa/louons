@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-// This middleware verify the id sended by the client request.
+// This middleware verify if the id sended by the client is valid.
 
 module.exports = function(req, res, next) {
   if (mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -8,6 +8,9 @@ module.exports = function(req, res, next) {
   } else {
     return res
       .status(404)
-      .send({ error : true, message: "Error, the id must to be a valid objectId !" });
+      .send({
+        error: true,
+        message: "Error, the id must to be a valid objectId !"
+      });
   }
 };

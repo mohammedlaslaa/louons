@@ -69,6 +69,8 @@ const adminSchema = new mongoose.Schema({
   }
 });
 
+// Generate token method with the private key, the expiresIn option is used to set the token validity period.
+
 adminSchema.methods.generateToken = function() {
   const token = jwt.sign(
     { id: this._id, adminLevel: this.adminLevel },
@@ -79,6 +81,8 @@ adminSchema.methods.generateToken = function() {
   );
   return token;
 };
+
+// Note that the fields send in the request that are not in this JOI Object will automatically throw a rejected request.
 
 // Validator with the required fields.
 

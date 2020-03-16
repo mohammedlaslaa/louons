@@ -8,6 +8,10 @@ const bcrypt = require("bcrypt");
 
 exports.getSelf = async (req, res) => {
   try {
+    // The res.locals.admin comes from the jwtverify middleware (It ensure that the client is an existing admin with his token). It return the admin.
+
+    // Then return this res.lacals.admin to the client.
+
     return res.send(res.locals.admin);
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
@@ -15,11 +19,15 @@ exports.getSelf = async (req, res) => {
 };
 
 exports.putSelf = async (req, res) => {
-  const { error } = schemaPutValidationAdmin.validate(req.body);
-  if (error)
-    return res.status(400).send({ error: true, message: error.message });
-
   try {
+    // Validation put admin.
+
+    const { error } = schemaPutValidationAdmin.validate(req.body);
+    if (error)
+      return res.status(400).send({ error: true, message: error.message });
+
+    // If the request contains a password, hash this.
+
     if (req.body.password) {
       req.body.password = await bcrypt.hash(
         req.body.password,
@@ -27,22 +35,27 @@ exports.putSelf = async (req, res) => {
       );
     }
 
+    // Only the superadmin can update the adminlevel.
+
     const verify = jwt.verify(
       req.header("x-auth-token"),
       process.env.PRIVATE_KEY
     );
 
-    console.log(verify)
     if (verify.adminLevel !== "superadmin" && req.body.adminLevel)
       return res.status(400).send({
         error: true,
         message: "Only the superadmin can do this action"
       });
 
+    // Check if an admin exist and update.
+
     let admin = await Admin.findByIdAndUpdate(verify.id, {
       $set: req.body,
       date_update: Date.now()
     });
+
+    // If not admin find, return a 401 response status code.
 
     if (!admin)
       return res.status(401).send({
@@ -50,8 +63,9 @@ exports.putSelf = async (req, res) => {
         message: "Not Authorized"
       });
 
+    // If all the checks is passing, return a 200 response status code with a successfull message.
+
     return res.send({
-      error: false,
       modified: true,
       message: "Modified with success"
     });
@@ -62,23 +76,16 @@ exports.putSelf = async (req, res) => {
 
 exports.getAllAdmins = async (req, res) => {
   try {
-    const verify = jwt.verify(
-      req.header("x-auth-token"),
-      process.env.PRIVATE_KEY
-    );
+    // Only the superadmin can perform this action.
 
-    if (!verify.adminLevel || verify.adminLevel !== "superadmin")
-      return res
-        .status(401)
-        .send({ error: true, message: "Not authorized admin level" });
+    let admin = await Admin.find();
 
-    let admin = await Admin.findById(verify.id);
+    // If the request fail, return a 400 response status code with a message.
+
     if (!admin)
-      return res.status(401).send({ error: true, message: "Not authorized" });
+      return res.status(400).send({ error: true, message: "Bad request" });
 
-    admin = await Admin.find();
-    if (!admin)
-      return res.status(200).send({ error: true, message: "Bad request" });
+    // If all the checks is passing, return a 200 response status code with all admins.
 
     return res.send(admin);
   } catch (e) {
@@ -87,15 +94,22 @@ exports.getAllAdmins = async (req, res) => {
 };
 
 exports.postNewAdmin = async (req, res) => {
-  const { error } = schemaValidationAdmin.validate(req.body);
-  if (error)
-    return res.status(400).send({ error: true, message: error.message });
-
   try {
+    // Only the superadmin can perform this action.
+    // Validation post admin.
+
+    const { error } = schemaValidationAdmin.validate(req.body);
+    if (error)
+      return res.status(400).send({ error: true, message: error.message });
+
+    // Hash the password send by the client.
+
     const hashPwd = await bcrypt.hash(
       req.body.password,
       parseInt(process.env.SALT)
     );
+
+    // Get the max value of adminId and increment it to the next admin registered.
 
     const maxId = await Admin.find()
       .sort({ adminId: -1 })
@@ -104,7 +118,11 @@ exports.postNewAdmin = async (req, res) => {
 
     let valueId;
 
+    // If the maxId does not return a value set the valueId to 1 by default.
+
     maxId.length == 0 ? (valueId = 1) : (valueId = maxId[0].adminId + 1);
+
+    // Create a new admin document.
 
     admin = new Admin({
       lastName: req.body.lastName,
@@ -114,6 +132,8 @@ exports.postNewAdmin = async (req, res) => {
       adminLevel: req.body.adminLevel,
       adminId: valueId
     });
+
+    // If all the checks is passing, save the admin, then send back a 200 response status code with a successfull message.
 
     await admin.save();
 
@@ -127,12 +147,19 @@ exports.postNewAdmin = async (req, res) => {
 
 exports.getAdminById = async (req, res) => {
   try {
-    admin = await Admin.findById(req.params.id);
+    // Only the superadmin can perform this action.
+
+    // Check if there are an existing admin with the req.params.id provided by the client.
+    let admin = await Admin.findById(req.params.id);
+
+    // If there are not admin find, send a 400 response status code with a message.
     if (!admin)
       return res.status(400).send({
         error: true,
         message: "There are not admin with the id provided"
       });
+
+    // If all the checks is passing, return the admin, with a 200 response status code.
 
     return res.send(admin);
   } catch (e) {
@@ -141,10 +168,17 @@ exports.getAdminById = async (req, res) => {
 };
 
 exports.putAdminById = async (req, res) => {
-  const { error } = schemaPutValidationAdmin.validate(req.body);
-  if (error)
-    return res.status(400).send({ error: true, message: error.message });
   try {
+    // Only the superadmin can perform this action.
+
+    // Validation put admin.
+
+    const { error } = schemaPutValidationAdmin.validate(req.body);
+    if (error)
+      return res.status(400).send({ error: true, message: error.message });
+
+    // If the request contains a password, hash this.
+
     if (req.body.password) {
       req.body.password = await bcrypt.hash(
         req.body.password,
@@ -152,13 +186,16 @@ exports.putAdminById = async (req, res) => {
       );
     }
 
+    // Check if an admin exist and update.
+
     await Admin.findByIdAndUpdate(req.params.id, {
       $set: req.body,
       date_update: Date.now()
     });
 
+    // If all the checks is passing, return a 200 response status code with a succesfull message.
+
     return res.send({
-      error: false,
       modified: true,
       message: "Modified with success"
     });
@@ -169,18 +206,35 @@ exports.putAdminById = async (req, res) => {
 
 exports.deleteAdminById = async (req, res) => {
   try {
-    if (req.params.id == res.locals.verify.id)
-      return res.status(400).send({
-        error: true,
-        message: "You can not delete yourself, please contact support"
-      });
+    // Only the superadmin can perform this action.
 
-    admin = await Admin.findByIdAndRemove(req.params.id);
+    // Check if an admin exist.
+
+    let admin = await Admin.findOne({ _id: req.params.id });
+
+    // If there are not admin find, send a 400 response status code with a message.
+
     if (!admin)
       return res.status(400).send({
         error: true,
         message: "There are not admin with the id provided"
       });
+    // Check if the req.params.id == res.locals.verify.id, and if there are the same return a 400 response status code.
+    if (
+      req.params.id == res.locals.verify.id &&
+      admin.adminLevel == "superadmin"
+    )
+      return res.status(400).send({
+        error: true,
+        message:
+          "You can not delete yourself or delete a superadmin, please contact support"
+      });
+
+    // Check if an admin exist and update.
+
+    admin = await Admin.findByIdAndRemove(req.params.id);
+
+    // If all the checks is passing, return a 200 response status code with a succesfull message.
 
     return res.send(`Admin ${admin.lastName} has been removed with success !`);
   } catch (e) {

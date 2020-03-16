@@ -10,6 +10,7 @@ module.exports = function(req, res, next) {
     async function(err, decode) {
       let admin = true;
       if (!err) {
+        // If the verify not fail, check if the client is an existing admin.
         admin = await Admin.findById(decode.id);
       }
       if (
@@ -17,8 +18,10 @@ module.exports = function(req, res, next) {
         !admin ||
         (admin.adminLevel !== "admin" && admin.adminLevel !== "superadmin")
       ) {
+        // If check verify fail, or if the client is not an admin or if the client is an admin but not an admin or a superdamin send a 401 error.
         return res.status(401).send({ error: true, message: "Not Authorized" });
       } else {
+        // If check verify not fail, and if the client is an admin and if the client is an admin or a superadmin send the admin to the res.locals.admin.
         res.locals.admin = admin;
         next();
       }

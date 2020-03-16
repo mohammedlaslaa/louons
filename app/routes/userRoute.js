@@ -4,11 +4,12 @@ const objectvalid = require("../middleware/objectIdValid");
 const jwtverify = require("../middleware/jwtVerify");
 const jwtSuperAdmin = require("../middleware/jwtSuperAdmin");
 const isemptybody = require("../middleware/isEmptyBody");
+const ifExistAdminUser = require("../middleware/ifExistAdminUser");
 const userController = require("../controllers/userController");
 
 // Users access get and put routes to their data only with token.
 
-router.get("/me", userController.getSelf);
+router.get("/me", ifExistAdminUser, userController.getSelf);
 
 router.put("/me", isemptybody, userController.putSelf);
 
@@ -28,7 +29,7 @@ router.put(
   userController.putUserById
 );
 
-// Only the superadmin can delete users
+// Only the superadmin can delete users.
 
 router.delete(
   "/:id",
