@@ -8,7 +8,7 @@ exports.getAllCategory = async function(req, res) {
   try {
     // Find all the categories, then return them to the client.
 
-    const allCategory = await Category.find({isActive: true});
+    const allCategory = await Category.find({isActive: true}).select('title');
     return res.send(allCategory);
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });

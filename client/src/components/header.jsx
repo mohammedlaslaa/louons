@@ -7,10 +7,12 @@ class Header extends Component {
   state = {};
   render() {
     return (
-      <div className="row">
-        <Logo/>
-        <NavBar/>
-      </div>
+      <header className="container-fluid">
+        <div className="row w80 mx-auto py-3">
+          <Logo />
+          <NavBar />
+        </div>
+      </header>
     );
   }
 }

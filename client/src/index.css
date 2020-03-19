@@ -1,30 +1,36 @@
-
-.bar{
+.bar {
     width: 35px;
     height: 5px;
     background-color: #3c8ce4;
     margin: 0.2rem 0;
 }
 
-.containbar{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-   
-}
-
-.logoimg{
+.logoimg {
     max-width: 200px !important;
 }
 
-@media screen and (min-width : 992px){
-    .bar{
-        display: none;
-    }
+.menulink{
+    color: #000;
 }
 
-@media screen and (max-width : 992px){
-    .nav-bar{
+.menulink:hover{
+    color: #3c8ce4;
+}
+
+
+@media screen and (min-width : 992px) {
+    .bar {
         display: none;
-    } 
+    }
+
+    .w80 {
+        width: 80%;
+    }
+
+}
+
+@media screen and (max-width : 992px) {
+    .nav-bar {
+        display: none;
+    }
 }
