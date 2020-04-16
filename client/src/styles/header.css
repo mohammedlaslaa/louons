@@ -1,0 +1,87 @@
+/* header */
+
+.headercontainer {
+  height: 8rem;
+}
+
+header li:hover{
+  cursor: pointer;
+}
+
+/* logo */
+
+.logoimg {
+  max-width: 200px !important;
+}
+
+/* bar */
+
+.containbar{
+  z-index: 10;
+}
+
+.bar {
+  width: 35px;
+  height: 5px;
+  background-color: #3c8ce4;
+  margin: 0.2rem 0;
+}
+
+/* menu */
+
+.listmenucontainer{
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.menuelement{
+  font-size: 1.5rem;
+}
+
+/* searchbar */
+
+.has-search .form-control {
+  padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 2.375rem;
+  height: 2.375rem;
+  line-height: 2.375rem;
+  text-align: center;
+  pointer-events: none;
+  color: #aaa;
+}
+
+/* icon */
+
+.icon-font24{
+  font-size : 2.4rem
+}
+
+/* media queries */
+
+@media screen and (max-width: 340px) {
+  .icon-font24{
+    font-size : 1.8rem
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .listmenucontainer{
+    position: relative !important;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .headercontainer {
+    height: 10rem;
+  }
+}
+
+@media screen and (max-width: 992px) {
+}

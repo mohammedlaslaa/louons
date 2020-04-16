@@ -1,10 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import Header from './components/header'
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./components/App/App";
+import {ToggleProvider} from "./context/TogglerContext"
+import * as serviceWorker from "./serviceWorker";
 
-ReactDOM.render(<Header />, document.getElementById('root'));
+ReactDOM.render(
+  <ToggleProvider>
+    <App />
+  </ToggleProvider>,
+  document.getElementById("root")
+);
 // ReactDOM.render(< />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
@@ -22,4 +27,3 @@ serviceWorker.unregister();
 //   console.log(data)
 // })
 // .catch(error => console.error(error))
- 
