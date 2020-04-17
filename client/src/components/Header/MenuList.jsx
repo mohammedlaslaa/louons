@@ -2,8 +2,13 @@ import React, { useState } from "react";
 import { ListSubCategoryContext } from "../../context/SubCategoryContext";
 
 function MenuList(props) {
-  const [displaySubCatgeory, setDisplaySubCategory] = useState("d-none");
-  const listMenu = props.list.map((currElt, index) => {
+  // Set state displaySubCategory to false
+
+  const [displaySubCategory, setDisplaySubCategory] = useState("d-none");
+
+  // Map over the menuList prop and render a list of category, then when the element of the menuList is equal to "catégories", provide a new ul list from the ListSubCategory Consumer in order to display a submenu of category
+  
+  const menuList = props.menuList.map((currElt, index) => {
     if (currElt.toLowerCase() === "catégories") {
       return (
         <li
@@ -14,7 +19,7 @@ function MenuList(props) {
         >
           {currElt}
           <ul
-            className={`${displaySubCatgeory} list-unstyled position-absolute`}
+            className={`${displaySubCategory} list-unstyled position-absolute`}
           >
             <ListSubCategoryContext.Consumer>
               {({ listSubCat }) =>
@@ -34,13 +39,14 @@ function MenuList(props) {
   });
 
   return (
-    <>
-      <ul
-        className={`my-auto d-md-flex justify-content-center w-100 list-unstyled listmenucontainer`}
-      >
-        {listMenu}
-      </ul>
-    </>
+    // Render the ul of the menuList
+
+    <ul
+      className={`my-auto d-lg-flex justify-content-center w-100 list-unstyled listmenucontainer`}
+    >
+      {menuList}
+    </ul>
   );
 }
+
 export default MenuList;

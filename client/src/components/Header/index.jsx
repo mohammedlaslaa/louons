@@ -4,16 +4,19 @@ import Logo from "./Logo";
 import Nav from "./Nav";
 import RightSide from "./RightSide";
 import SearchBar from "./SearchBar";
-import Bar from "./Bar";
+import { ToggleMenuProvider } from "../../context/TogglerMenuContext";
 
 function Header() {
   return (
+    // Return all components of the header and provide the toggle menu context to the nav and the rightside
+
     <header className="container headercontainer d-flex align-items-center w-100">
       <Logo />
-      <Nav />
-      <SearchBar />
-      <RightSide />
-      <Bar />
+      <ToggleMenuProvider>
+        <Nav />
+        <SearchBar />
+        <RightSide />
+      </ToggleMenuProvider>
     </header>
   );
 }

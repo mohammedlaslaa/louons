@@ -1,4 +1,5 @@
 {
+  "_comment": "This file contain many informations about the app",
   "short_name": "React App",
   "name": "Create React App Sample",
   "icons": [
