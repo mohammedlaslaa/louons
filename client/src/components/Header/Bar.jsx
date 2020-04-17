@@ -10,7 +10,7 @@ function Bar() {
     // Render the bars and add an event listener, which set the toggle to its opposite state on click.
 
     <div
-      className="containbar mx-2 d-flex flex-column d-lg-none justify-content-center"
+      className="barcontainer mx-2 d-flex flex-column d-lg-none justify-content-center"
       onClick={() => setToggle()}
     >
       <div className="bar bar1"></div>

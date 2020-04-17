@@ -1,12 +1,16 @@
 /* general */
 
 * {
-  font-family: "Baloo Thambi 2", cursive;
+  font-family: 'Spartan', sans-serif;
 }
 
 .color3c8ce4 {
   color: #3c8ce4;
 }
+
+.color9cd1ff{
+  color: #9cd1ff;
+} 
 
 .color3c94e4 {
   color: #3c94e4;
@@ -21,5 +25,29 @@
 }
 
 .color28749c {
+  color: #28749c;
+}
+
+.bgcolor3c8ce4 {
+  background-color: #3c8ce4;
+}
+
+.bgcolor9cd1ff{
+  background-color: #9cd1ff;
+} 
+
+.bgcolor3c94e4 {
+  background-color: #3c94e4;
+}
+
+.bgcolor144c84 {
+  background-color: #144c84;
+}
+
+.bgcolor144c8c {
+  background-color: #144c8c;
+}
+
+.bgcolor28749c {
   color: #28749c;
 }

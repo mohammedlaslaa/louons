@@ -4,7 +4,7 @@ function Logo() {
   return (
     // Just render an image logo
     
-    <div className="col-5 col-sm-6 col-md-3 col-lg-2 p-0 text-center">
+    <div className="col-5 col-sm-6 col-lg-2 p-0 text-center logocontainer">
       <img
         src="../assets/img/louons.png"
         alt="logo_louons"

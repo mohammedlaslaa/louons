@@ -3,7 +3,6 @@ import "../../styles/header.css";
 import Logo from "./Logo";
 import Nav from "./Nav";
 import RightSide from "./RightSide";
-import SearchBar from "./SearchBar";
 import { ToggleMenuProvider } from "../../context/TogglerMenuContext";
 
 function Header() {
@@ -14,7 +13,6 @@ function Header() {
       <Logo />
       <ToggleMenuProvider>
         <Nav />
-        <SearchBar />
         <RightSide />
       </ToggleMenuProvider>
     </header>

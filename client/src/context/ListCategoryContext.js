@@ -2,11 +2,11 @@ import React from "react";
 
 // initialize the context. this context return all the category 
 
-const ListSubCategoryContext = React.createContext();
+const ListCategoryContext = React.createContext();
 
 class ListCategoryProvider extends React.Component {
   state = {
-    listSubCat: [],
+    listCat: [],
   };
 
   // Fetch the list of category
@@ -15,22 +15,22 @@ class ListCategoryProvider extends React.Component {
       .then((res) => res.json())
       .then((result) =>
         this.setState({
-          listSubCat: result,
+          listCat: result,
         })
       );
   };
 
   render() {
-    const { listSubCat } = this.state;
+    const { listCat } = this.state;
     // Render the provider and give the access of the listSubCat to his children
     return (
-      <ListSubCategoryContext.Provider value={{ listSubCat }}>
+      <ListCategoryContext.Provider value={{ listCat }}>
         {this.props.children}
-      </ListSubCategoryContext.Provider>
+      </ListCategoryContext.Provider>
     );
   }
 }
 
 // Export the provider and the context in order to have access wherever it's needed
 
-export { ListCategoryProvider, ListSubCategoryContext };
+export { ListCategoryProvider, ListCategoryContext };

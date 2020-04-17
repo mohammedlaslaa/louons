@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "../Header";
-import { ListCategoryProvider } from "../../context/SubCategoryContext";
+import { ListCategoryProvider } from "../../context/ListCategoryContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../styles/icon/remixicon.css";
 import "../../styles/general.css";

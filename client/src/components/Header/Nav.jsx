@@ -6,7 +6,7 @@ class Nav extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      listOfMenu: ["Accueil", "Catégories", "Déposer Annonce"],
+      listOfMenu: ["Annonces", "Catégories", "Déposer une annonce"],
       forceRender: false,
     };
     // Bind the method to the context of the class.
@@ -49,11 +49,11 @@ class Nav extends Component {
     // These variable take conditional values ​​in certain cases and add certain classes necessary for rendering. Then render the menulist with the menuList prop.
 
     const isShown = this.context.isToggle ? "d-block" : "d-none";
-    const isWidth767 = window.innerWidth > 992 ? "col-lg-6" : "";
+    const isWidth767 = window.innerWidth > 992 ? "col-lg-7" : "";
 
     return (
       <div
-        className={`p-0 ${isShown} ${isWidth767} order-1 order-md-0 d-lg-flex align-items-center justify-content-lg-center listmenucontainer`}
+        className={`p-0 ${isShown} ${isWidth767} d-lg-flex align-items-center justify-content-lg-center`}
       >
         <MenuList menuList={this.state.listOfMenu} />
       </div>
