@@ -1,21 +1,22 @@
 const {
   Category,
   schemaValidationCategory,
-  schemaPutValidationCategory
+  schemaPutValidationCategory,
 } = require("../models/categoryModel");
 
-exports.getAllCategory = async function(req, res) {
+exports.getAllCategory = async function (req, res) {
   try {
+    console.log(req.cookies)
     // Find all the categories, then return them to the client.
 
-    const allCategory = await Category.find({isActive: true}).select('title');
+    const allCategory = await Category.find({ isActive: true }).select("title link");
     return res.send(allCategory);
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
 };
 
-exports.getCategoryById = async function(req, res) {
+exports.getCategoryById = async function (req, res) {
   try {
     // Only an existing admin can perform this action.
 
@@ -30,7 +31,7 @@ exports.getCategoryById = async function(req, res) {
     if (!category)
       return res.status(400).send({
         error: true,
-        message: "There are not category with the id provided"
+        message: "There are not category with the id provided",
       });
 
     // If there is an existing category, send back a 200 response status code with a this category.
@@ -41,7 +42,7 @@ exports.getCategoryById = async function(req, res) {
   }
 };
 
-exports.postCategory = async function(req, res) {
+exports.postCategory = async function (req, res) {
   try {
     // Only an existing admin can perform this action.
 
@@ -67,15 +68,18 @@ exports.postCategory = async function(req, res) {
     // Check if the category title is already existing.
 
     const isTitleExist = await Category.findOne({
-      title: { $regex: `^${req.body.title}$`, $options: "i" }
+      $or: [
+        { title: { $regex: `^${req.body.title}$`, $options: "i" } },
+        { link: { $regex: `^${req.body.link}$`, $options: "i" } },
+      ],
     });
-
+    console.log(isTitleExist);
     // If the category title is already existing send a 400 response status code with a message.
 
     if (isTitleExist)
       return res
         .status(400)
-        .send({ error: true, message: "Error duplicating category title" });
+        .send({ error: true, message: "Error duplicating category title or link" });
 
     // Create a new category document.
 
@@ -83,7 +87,8 @@ exports.postCategory = async function(req, res) {
       id_admin: res.locals.admin.id,
       categoryId: valueId,
       title: req.body.title,
-      description: req.body.description
+      link: req.body.link,
+      description: req.body.description,
     });
 
     // If all the checks is passing, save the category, then send back a 200 response status code with a successfull message.
@@ -96,7 +101,7 @@ exports.postCategory = async function(req, res) {
   }
 };
 
-exports.putCategoryById = async function(req, res) {
+exports.putCategoryById = async function (req, res) {
   try {
     // Only an existing admin can perform this action.
 
@@ -111,13 +116,13 @@ exports.putCategoryById = async function(req, res) {
     if (req.body.id_admin)
       return res.status(400).send({
         error: true,
-        message: "Error your are not authorized to modify admin ID"
+        message: "Error your are not authorized to modify admin ID",
       });
 
     // Check if the category title is already existing.
 
     const isTitleExist = await Category.findOne({
-      title: { $regex: `^${req.body.title}$`, $options: "i" }
+      title: { $regex: `^${req.body.title}$`, $options: "i" },
     });
 
     // If the category title is already existing send a 400 response status code with a message.
@@ -125,14 +130,14 @@ exports.putCategoryById = async function(req, res) {
     if (isTitleExist)
       return res.status(400).send({
         error: true,
-        message: "Error duplicating category title or no change detected"
+        message: "Error duplicating category title or no change detected",
       });
 
     // Check if the category is existing and update.
 
     let category = await Category.findByIdAndUpdate(req.params.id, {
       $set: req.body,
-      date_update: Date.now()
+      date_update: Date.now(),
     });
 
     // If there is not category with the id provided, send back a 400 response status code with a message.
@@ -140,7 +145,7 @@ exports.putCategoryById = async function(req, res) {
     if (!category)
       return res.status(400).send({
         error: true,
-        message: "There are not category with the id provided"
+        message: "There are not category with the id provided",
       });
 
     // If all the checks is passing, send back a 200 response status code with succesfull message.
@@ -151,7 +156,7 @@ exports.putCategoryById = async function(req, res) {
   }
 };
 
-exports.deleteCategoryById = async function(req, res) {
+exports.deleteCategoryById = async function (req, res) {
   try {
     // Only an existing superadmin can perform this action.
 
@@ -164,13 +169,13 @@ exports.deleteCategoryById = async function(req, res) {
     if (!category)
       return res.status(400).send({
         error: true,
-        message: "There are not category with the id provided"
+        message: "There are not category with the id provided",
       });
 
     // If all the checks is passing, delete the category, then send back a 200 response status code with succesfull message.
     return res.send({
       error: false,
-      message: `The ${category.title} has been removed`
+      message: `The ${category.title} has been removed`,
     });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });

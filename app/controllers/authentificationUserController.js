@@ -34,7 +34,11 @@ exports.postAuthUser = async (req, res) => {
 
     // If all the checks is passing, send back a token to the res.header("x-auth-token").
 
-    res.header("x-auth-token", user.generateToken()).send(user);
+    res
+      .cookie("x-auth-token", user.generateToken(), {
+        maxAge: 10800000,
+      })
+      .send({ error: false, message: "Authentication success" });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -56,5 +60,5 @@ const schemaValidationMailPwd = Joi.object({
       new RegExp(
         /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[#$%^&*()+=!?\-';,.\/{}|:<>?~]).{8,20})/
       )
-    )
+    ),
 });

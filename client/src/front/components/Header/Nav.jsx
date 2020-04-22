@@ -34,7 +34,11 @@ class Nav extends Component {
       return this.context.setToggle(false);
     } else if (window.innerWidth < 992 && this.state.forceRender) {
       this.setState({
-        forceRender: false,
+        forceRender: false
+      });
+    }else{
+      this.setState({
+        forceRender: false
       });
     }
   }
@@ -48,15 +52,13 @@ class Nav extends Component {
   render() {
     // These variable take conditional values ​​in certain cases and add certain classes necessary for rendering. Then render the menulist with the menuList prop.
 
-    const isShown = this.context.isToggle ? "d-block" : "d-none";
     const isWidth767 = window.innerWidth > 992 ? "col-lg-7" : "";
-
     return (
-      <div
-        className={`p-0 ${isShown} ${isWidth767} d-lg-flex align-items-center justify-content-lg-center`}
-      >
-        <MenuList menuList={this.state.listOfMenu} />
-      </div>
+          <div
+            className={`p-0 ${isWidth767} h-100 d-lg-flex align-items-center justify-content-lg-center`}
+          >
+            <MenuList isShown={this.context.isToggle} menuList={this.state.listOfMenu} />
+          </div>
     );
   }
 }

@@ -2,13 +2,23 @@ const Joi = require("@hapi/joi");
 const { Admin } = require("../models/adminModel");
 const bcrypt = require("bcrypt");
 
+exports.getAdmin = async (req, res) => {
+  const cookie = req.cookies['x-auth-token'];
+  res.send(cookie);
+};
+
+exports.isAuth = async (req, res) => {
+  const cookie = req.cookies;
+  res.send(cookie);
+};
+
 exports.postAuthAdmin = async (req, res) => {
   try {
     // Validation post admin.
 
     const { error } = schemaValidationMailPwd.validate(req.body);
     if (error)
-      return res.status(400).send({ error: true, message: error.message });
+      return res.status(401).send({ error: true, message: error.message });
 
     // Check if an admin is existing with the req.body.email provided. An account must to be active.
 
@@ -18,7 +28,7 @@ exports.postAuthAdmin = async (req, res) => {
 
     if (!admin)
       return res
-        .status(400)
+        .status(401)
         .send({ error: true, message: "Email or password error" });
 
     // Compare the admin password with the password provided in a req.body.password.
@@ -29,12 +39,15 @@ exports.postAuthAdmin = async (req, res) => {
 
     if (!decrypt)
       return res
-        .status(400)
+        .status(401)
         .send({ error: true, message: "Email or password error" });
 
     // If all the checks is passing, send back a token to the res.header("x-auth-token").
-
-    res.header("x-auth-token", admin.generateToken()).send(admin);
+    res
+      .cookie("x-auth-token", admin.generateToken(), {
+        maxAge: 10800000,
+      })
+      .send({ error: false, message: "Authentication success" });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -56,5 +69,5 @@ const schemaValidationMailPwd = Joi.object({
       new RegExp(
         /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[#$%^&*()+=!?\-';,.\/{}|:<>?~]).{8,20})/
       )
-    )
+    ),
 });

@@ -1,15 +1,16 @@
 import React from "react";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-function SearchBar(props) {
-  const isShown = props.isShown ? "d-block" : "d-none";
-  return (
-    // Render an input search bar.
 
-    <TransitionGroup component={null}>
+function SearchBar(props) {
+  
+  return (
+    // Render an input search bar with animation.
+
+    <TransitionGroup >
       {props.isShown && (
-        <CSSTransition classNames="searchanimation" timeout={300}>
+        <CSSTransition classNames="searchanimation" timeout={1000}>
           <div
-            className={`${isShown} ${props.specificClass} searchbar my-2 mx-auto`}
+            className={`${props.specificClass} searchbar my-2 mx-auto`}
           >
             <form action="" className="form-group has-search my-auto">
               <i className="ri-search-line form-control-feedback"></i>

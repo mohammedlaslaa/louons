@@ -7,4 +7,13 @@ const authAdminController = require("../controllers/authentificationAdminControl
 
 router.post("/", isemptybody, authAdminController.postAuthAdmin);
 
+
+// Route test to get the cookie, this route will be disabled in devlopment environment
+
+router.get("/", authAdminController.getAdmin);
+
+// cookie authentication verification route
+
+router.get("/", authAdminController.getAdmin);
+
 module.exports = router;

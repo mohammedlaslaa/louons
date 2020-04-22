@@ -11,15 +11,18 @@ const article = require("../routes/articleRoute");
 const rental = require("../routes/rentalRoute");
 const morgan = require("morgan");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 
-module.exports = function(app) {
+module.exports = function (app) {
   // Morgan send many informations of the request status in a dev environment.
   process.env.NODE_ENV == "dev" ? app.use(morgan("tiny")) : "";
   // Only parse JSON incoming requests.
   app.use(express.json());
+  // Get the cookie parser.
+  app.use(cookieParser());
   // Accept cors request.
-  app.use(cors());
+  app.use(cors({ origin: "http://localhost:3000", credentials: true }));
   // Secure Express apps by setting various HTTP headers.
   app.use(helmet());
   // Authentification User route.

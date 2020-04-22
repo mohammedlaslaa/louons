@@ -4,13 +4,22 @@
   font-family: 'Spartan', sans-serif;
 }
 
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+#root {
+  position: relative;
+}
+
 .color3c8ce4 {
   color: #3c8ce4;
 }
 
-.color9cd1ff{
+.color9cd1ff {
   color: #9cd1ff;
-} 
+}
 
 .color3c94e4 {
   color: #3c94e4;
@@ -32,9 +41,9 @@
   background-color: #3c8ce4;
 }
 
-.bgcolor9cd1ff{
+.bgcolor9cd1ff {
   background-color: #9cd1ff;
-} 
+}
 
 .bgcolor3c94e4 {
   background-color: #3c94e4;

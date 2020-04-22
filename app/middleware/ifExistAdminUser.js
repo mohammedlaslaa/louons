@@ -6,7 +6,7 @@ const { User } = require("../models/userModel");
 
 module.exports = function(req, res, next) {
   jwt.verify(
-    req.header("x-auth-token"),
+    req.cookies['x-auth-token'],
     process.env.PRIVATE_KEY,
     async function(err, decode) {
       if (err)
