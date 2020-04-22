@@ -1,19 +1,24 @@
 import React, { useState, useEffect, useContext } from "react";
-// import { Redirect, Switch, Route } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import Cookies from "js-cookie";
 import "../../styles/admin/login.css";
 
 function Login({ history }) {
   // initialize state and set them when the input email and password change
-  const { isAuth, setIsAuth, cookieToken } = useContext(AuthContext);
+
+  const { isAuth, setIsAuth, setIsLoading, setCookieToken } = useContext(
+    AuthContext
+  );
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
-  
+ 
 
-  if(cookieToken){
-    console.log('token exist')
-  }
+  useEffect(() => {
+    if (isAuth) {
+      history.replace("/admin/home");
+    }
+  }, [isAuth]);
 
   // when the form is submitted, fetch them to the api in order to login the user
 
@@ -29,14 +34,14 @@ function Login({ history }) {
     })
       .then((res) => res.json())
       .then((json) => {
-          if (!json.error) {
-            setIsAuth(true);
-            history.replace("/admin/home");
-          }
+        if (!json.error) {
+          setIsAuth(true);
+          setIsLoading(false);
+          setCookieToken(Cookies.get("x-auth-token"));
+          history.replace("/admin/home");
+        }
       });
   };
-
-  useEffect(() => {}, []);
 
   return (
     <>

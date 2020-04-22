@@ -3,13 +3,12 @@ const { Admin } = require("../models/adminModel");
 const bcrypt = require("bcrypt");
 
 exports.getAdmin = async (req, res) => {
-  const cookie = req.cookies['x-auth-token'];
+  const cookie = req.cookies["x-auth-token"];
   res.send(cookie);
 };
 
-exports.isAuth = async (req, res) => {
-  const cookie = req.cookies;
-  res.send(cookie);
+exports.isAuthAdmin = async (req, res) => {
+  res.send({ error: false, message: "Authentication success" });
 };
 
 exports.postAuthAdmin = async (req, res) => {
@@ -45,7 +44,7 @@ exports.postAuthAdmin = async (req, res) => {
     // If all the checks is passing, send back a token to the res.header("x-auth-token").
     res
       .cookie("x-auth-token", admin.generateToken(), {
-        maxAge: 10800000,
+        expires: new Date(Date.now() + 10000)
       })
       .send({ error: false, message: "Authentication success" });
   } catch (e) {
