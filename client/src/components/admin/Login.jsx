@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import Cookies from "js-cookie";
-import "../../styles/admin/login.css";
 
 function Login({ history }) {
   // Display the login page with the login form
@@ -65,7 +64,7 @@ function Login({ history }) {
       </header>
       <main className="row flex-grow-1">
         <form
-          className="mt-5 form-group mx-auto d-flex flex-column col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 align-items-center"
+          className="mt-5 form-group mx-auto d-flex flex-column col-12 col-sm-6 col-md-5 col-lg-4 align-items-center"
           onSubmit={onFormSubmit}
         >
           {errorMessage && (

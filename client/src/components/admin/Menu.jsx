@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "../../styles/admin/menu.css";
 
 function Menu() {
   const [listMenu] = useState([

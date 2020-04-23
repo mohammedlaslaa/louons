@@ -7,6 +7,7 @@ import Menu from "./Menu";
 import Footer from "./Footer.jsx";
 import Logout from "./Logout";
 import PrivateRoute from "../general/PrivateRoute";
+import "../../styles/admin/global.css";
 
 function Admin() {
   // This routes are only accessible when the user is logged in

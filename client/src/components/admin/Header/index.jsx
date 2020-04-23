@@ -2,7 +2,6 @@ import React from "react";
 import Logo from "../../general/Logo";
 import SearchBar from "../../general/SearchBar";
 import RightHeaderPart from "./RightHeaderPart";
-import "../../../styles/admin/header.css";
 
 function Header() {
   // Render the header of the admin
