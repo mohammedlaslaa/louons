@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ListCategoryContext } from "../../../context/ListCategoryContext";
-import SearchBar from "./SearchBar";
+import SearchBar from "../../general/SearchBar";
 import { CSSTransition } from "react-transition-group";
 import { Link } from "react-router-dom";
 

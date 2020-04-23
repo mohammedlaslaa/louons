@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { Redirect } from "react-router-dom";
 import Cookies from "js-cookie";
@@ -8,11 +8,12 @@ function Logout() {
 
   const { setIsAuth } = useContext(AuthContext);
 
-  setIsAuth(false);
+  useEffect(() => {
+    setIsAuth(false);
+    Cookies.remove("x-auth-token");
+  });
 
-  Cookies.remove("x-auth-token");
-
-  return <Redirect to="/admin/login" />;
+  return <Redirect to="/adminlogin" />;
 }
 
 export default Logout;

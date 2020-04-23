@@ -1,0 +1,12 @@
+/* header admin */
+
+.adminheader {
+  height: 8rem;
+}
+
+@media screen and (min-width: 1200px) {
+  .adminheader {
+    width: 80%;
+    margin: auto;
+  }
+}

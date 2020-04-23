@@ -2,12 +2,7 @@ const Joi = require("@hapi/joi");
 const { Admin } = require("../models/adminModel");
 const bcrypt = require("bcrypt");
 
-exports.getAdmin = async (req, res) => {
-  const cookie = req.cookies["x-auth-token"];
-  res.send(cookie);
-};
-
-exports.isAuthAdmin = async (req, res) => {
+exports.getIsAuthAdmin = async (req, res) => {
   res.send({ error: false, message: "Authentication success" });
 };
 
@@ -42,9 +37,12 @@ exports.postAuthAdmin = async (req, res) => {
         .send({ error: true, message: "Email or password error" });
 
     // If all the checks is passing, send back a token to the res.header("x-auth-token").
+
     res
+      .clearCookie("x-auth-token")
       .cookie("x-auth-token", admin.generateToken(), {
-        expires: new Date(Date.now() + 10000),
+        path: "/",
+        expires: new Date(Date.now() + 500000),
       })
       .send({ error: false, message: "Authentication success" });
   } catch (e) {

@@ -18,7 +18,7 @@ function Login({ history }) {
 
   useEffect(() => {
     if (isAuth) {
-      history.replace("/admin/home");
+      history.replace("/admin");
     }
   });
 
@@ -42,16 +42,16 @@ function Login({ history }) {
           setIsAuth(true);
           setIsLoading(false);
           setCookieToken(Cookies.get("x-auth-token"));
-          history.replace("/admin/home");
+          history.replace("/admin");
         } else if (json.error) {
           setErrorMessage(true);
         }
-      });
+      })
   };
 
   return (
     <>
-      <header className="row d-flex align-items-center">
+      <header className="header row d-flex align-items-center">
         <div className="col-12 col-md-6 text-center p-3 order-md-1">
           <img
             src="../assets/img/louons.png"
@@ -65,7 +65,7 @@ function Login({ history }) {
       </header>
       <main className="row flex-grow-1">
         <form
-          className="mt-5 form-group mx-auto d-flex flex-column col-12 col-sm-8 col-md-5 align-items-center"
+          className="mt-5 form-group mx-auto d-flex flex-column col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 align-items-center"
           onSubmit={onFormSubmit}
         >
           {errorMessage && (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Bar from "./Bar";
-import SearchBar from "./SearchBar";
+import Bar from "../../general/Bar";
+import SearchBar from "../../general/SearchBar";
 import { Link } from "react-router-dom";
 
 function RightSide() {
@@ -23,7 +23,7 @@ function RightSide() {
 
     <div className="col-7 col-sm-6 col-lg-3 p-0 d-flex justify-content-end justify-content-lg-around">
       <i
-        className="mx-2 d-none d-sm-block ri-search-line icon-font22 color3c8ce4"
+        className="ri-search-line mx-2 d-none d-sm-block icon-font22 color3c8ce4"
         onClick={() => handleIsShownSearchBar()}
       ></i>
       <Link key="rightside2" className="text-decoration-none" to="/message">
@@ -34,7 +34,7 @@ function RightSide() {
       </Link>
 
       <SearchBar
-        specificClass={"position-absolute"}
+        specificClass={"position-absolute searchbar"}
         isShown={isShownSearchBar}
       />
       <Bar />

@@ -25,13 +25,13 @@ const AuthProvider = ({ children }) => {
         });
       setIsLoading(false);
     } else {
-      setIsAuth(false)
+      setIsAuth(false);
       setIsLoading(false);
     }
   }, [cookieToken]);
 
   // return the authcontext provider component
-  
+
   return (
     <AuthContext.Provider
       value={{

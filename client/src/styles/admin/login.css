@@ -6,8 +6,8 @@
   height: 100%;
 }
 
-header {
-  height: 13rem;
+.header {
+  height: 10rem;
 }
 
 .logoimg {
@@ -15,7 +15,11 @@ header {
 }
 
 .titlelogin {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
+}
+
+.form-control {
+  font-size: 0.8rem;
 }
 
 /* form signin */
@@ -27,4 +31,14 @@ font-size: 0.9rem;
 .btnlogin {
   border-radius: 2rem;
   padding: 0.5rem 2rem;
+}
+
+@media screen and (min-width: 768px) {
+  .titlelogin {
+    font-size: 1.5rem;
+  }
+
+  .form-control {
+    font-size: 1rem;
+  }
 }

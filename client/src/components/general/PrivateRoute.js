@@ -18,8 +18,6 @@ function PrivateRoute({ component: Component, ...rest }) {
   }
 
   return (
-    <>
-    <h1>exemple header</h1>
     <Route
       {...rest}
       render={(props) => {
@@ -30,8 +28,6 @@ function PrivateRoute({ component: Component, ...rest }) {
         );
       }}
     />
-    <h1>exemple footer</h1>
-    </>
   );
 }
 

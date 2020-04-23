@@ -5,7 +5,7 @@ function Home() {
   return (
     <>
       <h1>Hello from Panel !</h1>
-      <Link to="/admin/category">go to cat</Link>
+      <Link to="/admin/panel/category">go to cat</Link>
     </>
   );
 }

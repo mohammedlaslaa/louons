@@ -1,16 +1,21 @@
 /* general */
 
 * {
-  font-family: 'Spartan', sans-serif;
+  font-family: "Spartan", sans-serif;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   overflow-x: hidden;
 }
 
 #root {
   position: relative;
+}
+
+i[class^="ri"] {
+  cursor: pointer;
 }
 
 .color3c8ce4 {
@@ -59,4 +64,38 @@ html, body {
 
 .bgcolor28749c {
   color: #28749c;
+}
+
+/* logo */
+
+.logocontainer {
+  z-index: 2;
+}
+
+/* 
+.logoimg {
+  max-width: 160px !important;
+} */
+
+/* searchbar */
+
+.has-search .form-control {
+  padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+  position: absolute;
+  display: block;
+  width: 2.375rem;
+  height: 2.375rem;
+  line-height: 2.375rem;
+  text-align: center;
+  pointer-events: none;
+  color: #aaa;
+}
+
+@media screen and (min-width: 992px) {
+  .containerwidth {
+    width: 85%;
+  }
 }

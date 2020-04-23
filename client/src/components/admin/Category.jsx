@@ -5,8 +5,8 @@ function Category() {
   return (
     <>
       <h1>Hello from Category !</h1>
-      <Link to="/admin/home">Home</Link>
-      <Link to="/admin/logout">Logout</Link>
+      <Link to="/admin">Home</Link>
+      <Link to="/adminlogout">Logout</Link>
     </>
   );
 }
