@@ -1,26 +1,30 @@
 /* header login */
 
 #root {
-    display: flex;
-    flex-flow: column;
-    height: 100%;
+  display: flex;
+  flex-flow: column;
+  height: 100%;
 }
 
 header {
-    height: 13rem;
+  height: 13rem;
 }
 
 .logoimg {
-    max-width: 160px !important;
+  max-width: 160px !important;
 }
 
 .titlelogin {
-    font-size: 1.5rem;
+  font-size: 1.5rem;
 }
 
 /* form signin */
 
+.messagesize {
+font-size: 0.9rem;
+}
+
 .btnlogin {
-    border-radius: 2rem;
-    padding: 0.5rem 2rem
+  border-radius: 2rem;
+  padding: 0.5rem 2rem;
 }

@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const {
   User,
   schemaValidationUser,
-  schemaPutValidationUser
+  schemaPutValidationUser,
 } = require("../models/userModel");
 const bcrypt = require("bcrypt");
 
@@ -36,14 +36,14 @@ exports.putSelf = async (req, res) => {
     }
 
     const verify = jwt.verify(
-      req.header("x-auth-token"),
+      req.cookies["x-auth-token"],
       process.env.PRIVATE_KEY
     );
     // Check if an user exist and update.
 
     const user = await User.findByIdAndUpdate(verify.id, {
       $set: req.body,
-      date_update: Date.now()
+      date_update: Date.now(),
     });
 
     // If not user find, return a 401 response status code.
@@ -55,7 +55,7 @@ exports.putSelf = async (req, res) => {
 
     return res.send({
       modified: true,
-      message: "Modified with success"
+      message: "Modified with success",
     });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
@@ -98,7 +98,7 @@ exports.postInscription = async (req, res) => {
       firstName: req.body.firstName,
       email: req.body.email,
       password: hashPwd,
-      date_birth: req.body.date_birth
+      date_birth: req.body.date_birth,
     });
 
     // If all the checks is passing, save the user, then send back a 200 response status code with a successfull message and a token in the header.
@@ -148,7 +148,7 @@ exports.getUserById = async (req, res) => {
     if (!user)
       return res.status(400).send({
         error: true,
-        message: "There are not user with the id provided"
+        message: "There are not user with the id provided",
       });
 
     // If all the checks is passing, return the user, with a 200 response status code.
@@ -182,7 +182,7 @@ exports.putUserById = async (req, res) => {
 
     const user = await User.findByIdAndUpdate(req.params.id, {
       $set: req.body,
-      date_update: Date.now()
+      date_update: Date.now(),
     });
 
     // If there are not user find, send a 400 response status code with a message.
@@ -194,7 +194,7 @@ exports.putUserById = async (req, res) => {
 
     return res.send({
       modified: true,
-      message: "User modified with success"
+      message: "User modified with success",
     });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
@@ -217,7 +217,7 @@ exports.deleteUserById = async (req, res) => {
         .send({ message: "There are not user with the id provided" });
 
     // If all the checks is passing, return a 200 response status code with a succesfull message.
-    
+
     return res.send(`User ${user.lastName} has been removed with success`);
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });

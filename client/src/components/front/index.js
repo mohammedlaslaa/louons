@@ -1,7 +1,7 @@
 import React from "react";
-import { ListCategoryProvider } from "./context/ListCategoryContext";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import { ListCategoryProvider } from "../../context/ListCategoryContext";
+import Header from "./Header";
+import Footer from "./Footer";
 import { Switch, Route } from "react-router-dom";
 
 function Front() {
@@ -18,7 +18,7 @@ function Front() {
           <h1>Coucou</h1>
         </Route>
         <Route exact path="/">
-          <h1>Front</h1>
+          <h1>Espace front test</h1>
         </Route>
         <Route >
           <h1>Not found</h1>

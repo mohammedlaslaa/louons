@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import "../../../styles/front/footer.css";
-import { ListCategoryContext } from "../../context/ListCategoryContext";
+import { ListCategoryContext } from "../../../context/ListCategoryContext";
 import PartOfFooter from "./PartOfFooter";
 
 function Footer() {
@@ -21,7 +21,7 @@ function Footer() {
     { link: "contactus", title: "Nous contacter" }
   ]);
 
-  // get the context in listCat
+  // get the context of listCat
 
   const {listCat} = useContext(ListCategoryContext);
 

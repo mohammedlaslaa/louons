@@ -44,7 +44,7 @@ exports.postAuthAdmin = async (req, res) => {
     // If all the checks is passing, send back a token to the res.header("x-auth-token").
     res
       .cookie("x-auth-token", admin.generateToken(), {
-        expires: new Date(Date.now() + 10000)
+        expires: new Date(Date.now() + 10000),
       })
       .send({ error: false, message: "Authentication success" });
   } catch (e) {

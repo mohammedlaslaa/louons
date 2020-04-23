@@ -8,14 +8,15 @@ const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [cookieToken, setCookieToken] = useState(Cookies.get("x-auth-token"));
 
+  // if the cookie token is existing fetch to the api to ensure that the client has a valid cookie token else set the isAuth value to false.
+
   useEffect(() => {
     if (cookieToken) {
       fetch("http://localhost:5000/louons/api/v1/authentificationadmin", {
-        credentials: "include",
+        credentials: "include", // ensure that the header can include cookie.
       })
         .then((res) => res.json())
         .then((json) => {
-          console.log(json);
           if (!json.error) {
             setIsAuth(true);
           } else if (json.error) {
@@ -29,6 +30,8 @@ const AuthProvider = ({ children }) => {
     }
   }, [cookieToken]);
 
+  // return the authcontext provider component
+  
   return (
     <AuthContext.Provider
       value={{

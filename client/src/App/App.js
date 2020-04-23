@@ -2,23 +2,25 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/general.css";
 import "../styles/icon/remixicon.css";
-import Front from "../front";
-import Admin from "../admin";
-import { Switch, Route } from "react-router-dom";
-import AuthProvider  from "../context/AuthContext";
+import Front from "../components/front";
+import Admin from "../components/admin";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import AuthProvider from "../context/AuthContext";
 
 function App() {
   return (
-    // Provide the category list to the app or to the component that need it
+    // Provide context authentication to the entire app and configure the main route admin and / (public)
     <AuthProvider>
-      <Switch>
-        <Route path="/admin">
-          <Admin />
-        </Route>
-        <Route path="/">
-          <Front />
-        </Route>
-      </Switch>
+      <Router>
+        <Switch>
+          <Route path="/admin">
+            <Admin />
+          </Route>
+          <Route path="/">
+            <Front />
+          </Route>
+        </Switch>
+      </Router>
     </AuthProvider>
   );
 }

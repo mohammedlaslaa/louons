@@ -1,18 +1,25 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { Redirect, Route } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
-import Home from "./components/Home";
+import { AuthContext } from "../../context/AuthContext";
 
 function PrivateRoute({ component: Component, ...rest }) {
+
+  // This route will render a component specify in props with the header and footer of the admin panel
+
+  // get the auth context to ensure that the client is authenticated
   const { isAuth, setCookieToken } = useContext(AuthContext);
+
+  // get the page to redirect to if the client is not authenticated
   const { pageifnotauth } = { ...rest };
 
-  if(document.cookie == ""){
+  // if the cookie is expired or inexisting, set the cookie token to an empty string, that will trigger automatically a logout
+  if(document.cookie === ""){
     setCookieToken('')
   }
+
   return (
     <>
-    <h1>exemple footer</h1>
+    <h1>exemple header</h1>
     <Route
       {...rest}
       render={(props) => {

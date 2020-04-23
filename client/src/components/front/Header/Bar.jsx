@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { TogglerContext } from "../../context/TogglerMenuContext";
+import { TogglerContext } from "../../../context/TogglerMenuContext";
 import { CSSTransition } from "react-transition-group";
 
 function Bar() {

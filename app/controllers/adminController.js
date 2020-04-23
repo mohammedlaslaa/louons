@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const {
   Admin,
   schemaValidationAdmin,
-  schemaPutValidationAdmin
+  schemaPutValidationAdmin,
 } = require("../models/adminModel");
 const bcrypt = require("bcrypt");
 
@@ -38,21 +38,21 @@ exports.putSelf = async (req, res) => {
     // Only the superadmin can update the adminlevel.
 
     const verify = jwt.verify(
-      req.header("x-auth-token"),
+      req.cookies["x-auth-token"],
       process.env.PRIVATE_KEY
     );
 
     if (verify.adminLevel !== "superadmin" && req.body.adminLevel)
       return res.status(400).send({
         error: true,
-        message: "Only the superadmin can do this action"
+        message: "Only the superadmin can do this action",
       });
 
     // Check if an admin exist and update.
 
     let admin = await Admin.findByIdAndUpdate(verify.id, {
       $set: req.body,
-      date_update: Date.now()
+      date_update: Date.now(),
     });
 
     // If not admin find, return a 401 response status code.
@@ -60,14 +60,14 @@ exports.putSelf = async (req, res) => {
     if (!admin)
       return res.status(401).send({
         error: true,
-        message: "Not Authorized"
+        message: "Not Authorized",
       });
 
     // If all the checks is passing, return a 200 response status code with a successfull message.
 
     return res.send({
       modified: true,
-      message: "Modified with success"
+      message: "Modified with success",
     });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
@@ -130,7 +130,7 @@ exports.postNewAdmin = async (req, res) => {
       email: req.body.email,
       password: hashPwd,
       adminLevel: req.body.adminLevel,
-      adminId: valueId
+      adminId: valueId,
     });
 
     // If all the checks is passing, save the admin, then send back a 200 response status code with a successfull message.
@@ -156,7 +156,7 @@ exports.getAdminById = async (req, res) => {
     if (!admin)
       return res.status(400).send({
         error: true,
-        message: "There are not admin with the id provided"
+        message: "There are not admin with the id provided",
       });
 
     // If all the checks is passing, return the admin, with a 200 response status code.
@@ -190,14 +190,14 @@ exports.putAdminById = async (req, res) => {
 
     await Admin.findByIdAndUpdate(req.params.id, {
       $set: req.body,
-      date_update: Date.now()
+      date_update: Date.now(),
     });
 
     // If all the checks is passing, return a 200 response status code with a succesfull message.
 
     return res.send({
       modified: true,
-      message: "Modified with success"
+      message: "Modified with success",
     });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
@@ -217,7 +217,7 @@ exports.deleteAdminById = async (req, res) => {
     if (!admin)
       return res.status(400).send({
         error: true,
-        message: "There are not admin with the id provided"
+        message: "There are not admin with the id provided",
       });
     // Check if the req.params.id == res.locals.verify.id, and if there are the same return a 400 response status code.
     if (
@@ -227,7 +227,7 @@ exports.deleteAdminById = async (req, res) => {
       return res.status(400).send({
         error: true,
         message:
-          "You can not delete yourself or delete a superadmin, please contact support"
+          "You can not delete yourself or delete a superadmin, please contact support",
       });
 
     // Check if an admin exist and update.

@@ -4,23 +4,27 @@ import Cookies from "js-cookie";
 import "../../styles/admin/login.css";
 
 function Login({ history }) {
+  // Display the login page with the login form
   // initialize state and set them when the input email and password change
-
+  
   const { isAuth, setIsAuth, setIsLoading, setCookieToken } = useContext(
     AuthContext
   );
+  const [errorMessage, setErrorMessage] = useState(false);
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
- 
+  // automatic redirection, when the user try to display the login page if he is logged in
 
   useEffect(() => {
     if (isAuth) {
       history.replace("/admin/home");
     }
-  }, [isAuth]);
+  });
 
   // when the form is submitted, fetch them to the api in order to login the user
+  // If the api respond with an error settled to false, set the isAuth to true, the isLoading to false and set the cookieToken with the new token received
+  // otherwise display an error message to the client
 
   const onFormSubmit = (e) => {
     e.preventDefault();
@@ -39,6 +43,8 @@ function Login({ history }) {
           setIsLoading(false);
           setCookieToken(Cookies.get("x-auth-token"));
           history.replace("/admin/home");
+        } else if (json.error) {
+          setErrorMessage(true);
         }
       });
   };
@@ -62,6 +68,11 @@ function Login({ history }) {
           className="mt-5 form-group mx-auto d-flex flex-column col-12 col-sm-8 col-md-5 align-items-center"
           onSubmit={onFormSubmit}
         >
+          {errorMessage && (
+            <p className="messagesize text-danger">
+              Email ou mot de passe erroné
+            </p>
+          )}
           <label className="p-2 w-100">
             Email :
             <input
