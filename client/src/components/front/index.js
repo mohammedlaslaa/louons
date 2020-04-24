@@ -7,21 +7,65 @@ import { Switch, Route } from "react-router-dom";
 function Front() {
   return (
     // Provide the category list to the app or to the component that need it
-
     <ListCategoryProvider>
       <Header />
       <Switch>
         <Route path="/informatique">
-          <h1>informatique</h1>
+          <main className="w-75 mx-auto">informatique</main>
         </Route>
         <Route path="/annonces">
-          <h1>Coucou</h1>
+          <main>Coucou</main>
         </Route>
         <Route exact path="/">
-          <h1>Espace front test</h1>
+          <main className="w-75 mx-auto">
+            Espace front test
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+          </main>
         </Route>
-        <Route >
-          <h1>Not found</h1>
+        <Route>
+          <main className="w-75 mx-auto">Not found</main>
         </Route>
       </Switch>
       <Footer />

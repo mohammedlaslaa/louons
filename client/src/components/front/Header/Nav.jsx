@@ -14,32 +14,15 @@ class Nav extends Component {
     this.forceRender = this.forceRender.bind(this);
   }
 
-  // This method is called when the windows is resized and allow to force rendering by setting the state forceRender when it's necessary.
-  // The force rendering is necessary when certain classes need to be updated depending on screen size and context state.
-  // There are 3 situations that the re-render is needed when the window is resizing:
-  // 1. When the window width is greather or equal than 992px and the isToggle context is settled to true. In this case, set the forceRender to true and setToggle context to false.
-  // 2. When the window width is greather or equal than 992px and the forceRender state is settled to false. In this case, set the forceRender to its opposite and setToggle context to false.
-  // 3. When the window width is less than 992px and the forceRender state is settled to true. In this case, just set the forceRender to false to be sure to match one of the previous conditions if the window was resized again.
-
   forceRender() {
-    if (window.innerWidth >= 992 && this.context.isToggle) {
-      this.setState({ forceReRender: true });
-      return this.context.setToggle(false);
-    } else if (window.innerWidth >= 992 && !this.state.forceRender) {
-      this.setState((prevstate) => {
+    if (this.context.isToggle) {
+      console.log('coucou')
+      this.setState(prevState => {
         return {
-          forceRender: !prevstate.forceRender,
-        };
-      });
-      return this.context.setToggle(false);
-    } else if (window.innerWidth < 992 && this.state.forceRender) {
-      this.setState({
-        forceRender: false
-      });
-    }else{
-      this.setState({
-        forceRender: false
-      });
+          forceRender : !prevState.forceRender
+        }
+      })
+      this.context.setToggle(false)
     }
   }
 
@@ -50,15 +33,16 @@ class Nav extends Component {
   }
 
   render() {
-    // These variable take conditional values ​​in certain cases and add certain classes necessary for rendering. Then render the menulist with the menuList prop.
 
-    const isWidth767 = window.innerWidth > 992 ? "col-lg-7" : "";
     return (
-          <div
-            className={`p-0 ${isWidth767} h-100 d-lg-flex align-items-center justify-content-lg-center`}
-          >
-            <MenuList isShown={this.context.isToggle} menuList={this.state.listOfMenu} />
-          </div>
+      <div
+        className={`p-0 h-100 d-lg-flex align-items-center justify-content-lg-center`}
+      >
+        <MenuList
+          isShown={this.context.isToggle}
+          menuList={this.state.listOfMenu}
+        />
+      </div>
     );
   }
 }

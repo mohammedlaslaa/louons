@@ -8,7 +8,7 @@ function Logo(props) {
       <img
         src="/assets/img/louons.png"
         alt="logo_louons"
-        className="w-100 img-fluid logoimg"
+        className="w-100 img-fluid logoimg mx-0 mx-sm-2 mx-md-0"
       />
     </div>
   );

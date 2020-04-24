@@ -7,16 +7,25 @@
 html,
 body {
   height: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
-#root {
-  position: relative;
+#root{
+  display: flex;
+  flex-direction: column;
 }
 
-i[class^="ri"] {
-  cursor: pointer;
+main {
+  flex-grow: 1;
 }
+
+/* container of all the content */
+
+.containerwidth {
+  height: 100%;
+}
+
+/* general color */
 
 .color3c8ce4 {
   color: #3c8ce4;
@@ -66,9 +75,15 @@ i[class^="ri"] {
   color: #28749c;
 }
 
-/* logo */
+/* all icon */
 
-.logocontainer {
+i[class^="ri"] {
+  cursor: pointer;
+}
+
+/* logo global style */
+
+.logo {
   z-index: 2;
 }
 
@@ -95,7 +110,4 @@ i[class^="ri"] {
 }
 
 @media screen and (min-width: 992px) {
-  .containerwidth {
-    width: 85%;
-  }
 }

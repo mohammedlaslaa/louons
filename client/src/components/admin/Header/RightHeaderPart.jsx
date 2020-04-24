@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Bar from "../../general/Bar";
 
 function RightHeaderPart() {
   // Render the righside part of the header
@@ -13,6 +14,7 @@ function RightHeaderPart() {
           className="ri-logout-circle-r-line mx-1 mx-sm-2 icon-font22 color3c8ce4"
         ></i>
       </Link>
+      <Bar/>
     </div>
   );
 }
