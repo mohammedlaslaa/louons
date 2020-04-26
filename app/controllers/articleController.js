@@ -8,7 +8,8 @@ exports.getAllArticle = async function(req, res) {
   try {
     // Find all the articles, then return them to the client.
 
-    const allArticle = await Article.find();
+      
+      const allArticle = await Article.find().populate("id_category", "title -_id")
     return res.send(allArticle);
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });

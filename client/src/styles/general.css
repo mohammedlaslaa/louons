@@ -7,7 +7,7 @@
 html,
 body {
   height: 100%;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 #root{
@@ -87,11 +87,6 @@ i[class^="ri"] {
   z-index: 2;
 }
 
-/* 
-.logoimg {
-  max-width: 160px !important;
-} */
-
 /* searchbar */
 
 .has-search .form-control {
@@ -107,7 +102,4 @@ i[class^="ri"] {
   text-align: center;
   pointer-events: none;
   color: #aaa;
-}
-
-@media screen and (min-width: 992px) {
 }

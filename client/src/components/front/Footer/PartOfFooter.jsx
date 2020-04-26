@@ -7,7 +7,7 @@ function PartOfFooter(props) {
 
   const list = props.dataToDisplay.map((elt, index) => (
     <Link key={`link${index}`} to={elt.link} className="text-white">
-      <li key={`title${index}`} className="footerli p-2">
+      <li key={`title${index}`} className="footerli p-2" onClick={() => setIsDisplay(false)}>
         {elt.title}
       </li>
     </Link>
@@ -19,7 +19,7 @@ function PartOfFooter(props) {
   return (
     // Return each part of the footer
 
-    <div className="col-md-4 text-center">
+    <div className="col-md-4 text-center my-2">
       <div className="d-flex align-items-center justify-content-between justify-content-sm-around flex-row flex-md-column">
         <h4 className="text-white p-2 m-0 titlefooter">{props.title}</h4>
         <i

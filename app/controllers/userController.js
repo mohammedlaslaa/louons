@@ -118,7 +118,7 @@ exports.getAllUsers = async (req, res) => {
   try {
     // Only an admin can perform this action.
 
-    const allUsers = await User.find();
+    const allUsers = await User.find().select('-password -email -date_delete -dateBirth -date_update');
 
     // If the request fail, return a 400 response status code with a message.
 

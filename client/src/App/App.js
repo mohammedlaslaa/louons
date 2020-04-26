@@ -8,24 +8,26 @@ import Login from "../components/admin/Login";
 import Logout from "../components/admin/Logout";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import AuthProvider from "../context/AuthContext";
+import PrivateRoute from "../components/general/PrivateRoute";
 
 function App() {
   return (
     // Provide context authentication to the entire app and configure the main route admin and / (public)
-    <AuthProvider>
-      <Router>
-        <Switch>
-          <Route component={Login} path="/adminlogin"></Route>
-          <Route component={Logout} exact path="/adminlogout"></Route>
-          <Route path="/admin">
-            <Admin />
-          </Route>
-          <Route path="/">
-            <Front />
-          </Route>
-        </Switch>
-      </Router>
-    </AuthProvider>
+
+    <Router>
+      <AuthProvider>
+          <Switch>
+            <Route component={Login} exact path="/adminlogin"></Route>
+            <Route component={Logout} exact path="/adminlogout"></Route>
+            <Route path="/admin">
+              <PrivateRoute component={Admin} pageifnotauth="/adminlogin" />
+            </Route>
+            <Route path="/">
+              <Front />
+            </Route>
+          </Switch>
+      </AuthProvider>
+    </Router>
   );
 }
 

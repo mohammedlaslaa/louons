@@ -1,0 +1,14 @@
+/* main front container */
+
+.widthmain {
+  width: 100%;
+}
+
+@media screen and (min-width: 1200px) {
+  .widthmain {
+    width: 80%;
+  }
+  .imgnotfound{
+      width: 75%;
+  }
+}

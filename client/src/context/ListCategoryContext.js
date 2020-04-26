@@ -10,6 +10,7 @@ class ListCategoryProvider extends React.Component {
   };
 
   // Fetch the list of category
+
   componentDidMount = () => {
     fetch("http://localhost:5000/louons/api/v1/category")
       .then((res) => res.json())
@@ -23,6 +24,7 @@ class ListCategoryProvider extends React.Component {
   render() {
     const { listCat } = this.state;
     // Render the provider and give the access of the listSubCat to his children
+    
     return (
       <ListCategoryContext.Provider value={{ listCat }}>
         {this.props.children}

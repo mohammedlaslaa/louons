@@ -128,6 +128,8 @@ header li:hover {
   color: #3c8ce4;
 }
 
+/* menu animation csstranstion */
+
 .menuanimation-enter {
   opacity: 0.01;
   right: -100%;
@@ -168,6 +170,8 @@ header li:hover {
   border-bottom: 0.2rem solid #3c8ce4;
 }
 
+/* submenuelt animation csstranstion */
+
 .submenuelt-enter {
   visibility: hidden;
   opacity: 0;
@@ -198,6 +202,8 @@ header li:hover {
   top: 100%;
   left: 0;
 }
+
+/* searchbar animation csstranstion */
 
 .searchanimation-enter {
   opacity: 0;
@@ -314,6 +320,10 @@ header li:hover {
 @media screen and (min-width: 992px) {
   .headercontainer {
     height: 10rem;
+  }
+
+  .navmenu {
+    flex: 1 1 auto;
   }
 
   .listmenucontainer {

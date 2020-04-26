@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 function Login({ history }) {
   // Display the login page with the login form
   // initialize state and set them when the input email and password change
-  
+
   const { isAuth, setIsAuth, setIsLoading, setCookieToken } = useContext(
     AuthContext
   );
@@ -41,11 +41,11 @@ function Login({ history }) {
           setIsAuth(true);
           setIsLoading(false);
           setCookieToken(Cookies.get("x-auth-token"));
-          history.replace("/admin");
+          history.replace("/admin/home");
         } else if (json.error) {
           setErrorMessage(true);
         }
-      })
+      });
   };
 
   return (
@@ -64,7 +64,7 @@ function Login({ history }) {
       </header>
       <main className="row flex-grow-1">
         <form
-          className="mt-5 form-group mx-auto d-flex flex-column col-12 col-sm-6 col-md-5 col-lg-4 align-items-center"
+          className="mt-5 form-group mx-auto d-flex flex-column col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 align-items-center"
           onSubmit={onFormSubmit}
         >
           {errorMessage && (
@@ -77,7 +77,10 @@ function Login({ history }) {
             <input
               className="form-control mt-3"
               type="email"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setErrorMessage(false);
+              }}
             />
           </label>
           <label className="p-2 w-100">
@@ -85,7 +88,10 @@ function Login({ history }) {
             <input
               className="form-control mt-3"
               type="password"
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setErrorMessage(false);
+              }}
             />
           </label>
           <input

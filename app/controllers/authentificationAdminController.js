@@ -3,7 +3,11 @@ const { Admin } = require("../models/adminModel");
 const bcrypt = require("bcrypt");
 
 exports.getIsAuthAdmin = async (req, res) => {
-  res.send({ error: false, message: "Authentication success" });
+  res.send({
+    error: false,
+    message: "Authentication success",
+    user: res.locals.admin,
+  });
 };
 
 exports.postAuthAdmin = async (req, res) => {
@@ -42,7 +46,7 @@ exports.postAuthAdmin = async (req, res) => {
       .clearCookie("x-auth-token")
       .cookie("x-auth-token", admin.generateToken(), {
         path: "/",
-        expires: new Date(Date.now() + 500000),
+        expires: new Date(Date.now() + 3000000),
       })
       .send({ error: false, message: "Authentication success" });
   } catch (e) {

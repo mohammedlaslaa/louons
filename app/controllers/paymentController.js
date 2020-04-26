@@ -146,8 +146,12 @@ exports.putPaymentById = async function(req, res) {
 
     await payment.save();
 
-    return res.status(201).send(`The payment has been modified`);
+    return res.status(201).send({
+      error: false,
+      message: `The payment has been modified`
+    });
   } catch (e) {
+    console.log('error')
     return res.status(404).send({ error: true, message: e.message });
   }
 };

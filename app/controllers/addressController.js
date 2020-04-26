@@ -8,7 +8,7 @@ exports.getAllAddresses = async (req, res) => {
   try {
     // Find all the addresses, then return them to the client.
 
-    const address = await Address.find();
+    const address = await Address.find().populate("id_user", "firstName lastName");
 
     // If there is an existing address, send back a 200 response status code with a this address.
 

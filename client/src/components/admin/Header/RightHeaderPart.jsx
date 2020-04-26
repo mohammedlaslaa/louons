@@ -6,7 +6,7 @@ function RightHeaderPart() {
   // Render the righside part of the header
 
   return (
-    <div className="col-6 col-md-4 d-flex align-items-center justify-content-center">
+    <div className="col-6 col-md-3 d-flex align-items-center justify-content-center">
       <i className="ri-mail-fill mx-1 mx-sm-2 icon-font22 color3c8ce4"></i>
       <i className="ri-user-settings-line mx-1 mx-sm-2 icon-font22 color3c8ce4"></i>
       <Link to="/adminlogout">

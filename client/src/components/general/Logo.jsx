@@ -4,7 +4,7 @@ function Logo(props) {
   return (
     // Just render an image logo with specific class setting in props
     
-    <div className={props.specificClass}>
+    <div className={props.specificclassname}>
       <img
         src="/assets/img/louons.png"
         alt="logo_louons"

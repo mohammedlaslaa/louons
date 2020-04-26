@@ -8,14 +8,14 @@ function Menu() {
   // Initialize the list of the menu
 
   const [listMenu] = useState([
-    { link: "", title: "Accueil" },
+    { link: "home", title: "Accueil" },
     { link: "users", title: "Utilisateurs" },
-    { link: "category", title: "Catégories" },
-    { link: "article", title: "Article" },
-    { link: "rental", title: "Location" },
-    { link: "adress", title: "Adresse" },
-    { link: "payment", title: "Paiement" },
-    { link: "delivery", title: "Livraison" },
+    { link: "categories", title: "Catégories" },
+    { link: "articles", title: "Article" },
+    { link: "rentals", title: "Location" },
+    { link: "addresses", title: "Adresse" },
+    { link: "payments", title: "Paiement" },
+    { link: "deliveries", title: "Livraison" },
     { link: "admins", title: "Administrateurs" },
     { link: "adminlogout", title: "Deconnexion" },
   ]);
@@ -34,7 +34,7 @@ function Menu() {
       className="text-decoration-none"
       to={elt.title === 'Deconnexion' ? `/${elt.link}` : `/admin/${elt.link}`}
     >
-      <li key={index} className="py-2 text-white border-bottom listmenuadmin" onClick={()=> setToggle(false)}>
+      <li key={index} className="py-2 text-white text-center border-bottom listmenuadmin" onClick={()=> setToggle(false)}>
         {elt.title}
       </li>
     </Link>

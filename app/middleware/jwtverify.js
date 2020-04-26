@@ -4,6 +4,7 @@ const { Admin } = require("../models/adminModel");
 // This middleware ensure that the client request comes by an admin or a superadmin.
 
 module.exports = function(req, res, next) {
+  console.log(req.cookies)
   jwt.verify(
     req.cookies['x-auth-token'],
     process.env.PRIVATE_KEY,
@@ -11,7 +12,7 @@ module.exports = function(req, res, next) {
       let admin = true;
       if (!err) {
         // If the verify not fail, check if the client is an existing admin.
-        admin = await Admin.findById(decode.id);
+        admin = await Admin.findById(decode.id).select("adminId lastName firstName adminLevel");;
       }
       if (
         err ||

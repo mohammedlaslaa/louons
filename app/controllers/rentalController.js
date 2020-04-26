@@ -1,25 +1,27 @@
 const {
   Rental,
   schemaValidationRental,
-  schemaPutValidationRental
+  schemaPutValidationRental,
 } = require("../models/rentalModel");
 const { User } = require("../models/userModel");
 const { Payment } = require("../models/paymentModel");
 const { Carrier } = require("../models/carrierModel");
 const { Article } = require("../models/articleModel");
 
-exports.getAllRentals = async function(req, res) {
+exports.getAllRentals = async function (req, res) {
   try {
     // Only an admin can perform this action.
 
-    const allRental = await Rental.find();
+    const allRental = await Rental.find()
+      .populate("id_article", "title -_id")
+      .populate("id_user", "lastName firstName -_id");
 
     // If the request fail, return a 400 response status code with a message.
 
     if (!allRental)
       return res.status(400).send({
         error: true,
-        message: "Bad request"
+        message: "Bad request",
       });
 
     // If the request succeeded, return a 200 response status code with all users.
@@ -30,7 +32,7 @@ exports.getAllRentals = async function(req, res) {
   }
 };
 
-exports.getAllMyRental = async function(req, res) {
+exports.getAllMyRental = async function (req, res) {
   try {
     // This action can be performed by an admin or an user.
 
@@ -50,7 +52,7 @@ exports.getAllMyRental = async function(req, res) {
     if (!myRental || myRental.length == 0)
       return res.status(400).send({
         error: true,
-        message: "There is not rentals with this ID"
+        message: "There is not rentals with this ID",
       });
 
     // If all the checks is passing, return the rentals to the client, with a 200 response status code.
@@ -61,17 +63,17 @@ exports.getAllMyRental = async function(req, res) {
   }
 };
 
-exports.getRentalById = async function(req, res) {
+exports.getRentalById = async function (req, res) {
   try {
     // Do the request rental depending if the client is an admin or not.
 
     const rental = res.locals.owner.adminLevel
       ? await Rental.findOne({
-          _id: req.params.id
+          _id: req.params.id,
         })
       : await Rental.findOne({
           _id: req.params.id,
-          id_user: res.locals.owner.id
+          id_user: res.locals.owner.id,
         });
 
     // If there are not rental found, send a 400 response status code with a message.
@@ -89,7 +91,7 @@ exports.getRentalById = async function(req, res) {
   }
 };
 
-exports.postRental = async function(req, res) {
+exports.postRental = async function (req, res) {
   try {
     // Validation post inscription rental.
 
@@ -104,7 +106,7 @@ exports.postRental = async function(req, res) {
       if (!ifUserExist)
         return res.status(400).send({
           error: true,
-          message: "Invalid user ID"
+          message: "Invalid user ID",
         });
     }
 
@@ -117,7 +119,7 @@ exports.postRental = async function(req, res) {
       return res.status(400).send({
         error: true,
         message:
-          "Invalid request, the start date must be less than the end date"
+          "Invalid request, the start date must be less than the end date",
       });
 
     // Check if the same Rental exist at this start date.
@@ -126,7 +128,7 @@ exports.postRental = async function(req, res) {
       id_article: req.body.id_article,
       start_date: { $lte: req.body.start_date },
       end_date: { $gte: req.body.start_date },
-      isActive: true
+      isActive: true,
     });
 
     // If the same rental exist at this start date, send a 400 response status code with a message.
@@ -134,7 +136,7 @@ exports.postRental = async function(req, res) {
     if (ifSameRentalExist.length > 0)
       return res.status(400).send({
         error: true,
-        message: "This rental is already reserved on this start date"
+        message: "This rental is already reserved on this start date",
       });
 
     // Check id the same Rental exist at this end date.
@@ -142,7 +144,7 @@ exports.postRental = async function(req, res) {
     ifSameRentalExist = await Rental.find({
       id_article: req.body.id_article,
       start_date: { $gte: req.body.start_date, $lte: req.body.end_date },
-      isActive: true
+      isActive: true,
     });
 
     // If the same rental exist at this end date, send a 400 response status code with a message.
@@ -150,7 +152,7 @@ exports.postRental = async function(req, res) {
     if (ifSameRentalExist.length > 0)
       return res.status(400).send({
         error: true,
-        message: "This rental is already reserved on this end date"
+        message: "This rental is already reserved on this end date",
       });
 
     // Check that the id payment match to a valid payment, otherwise, send a 400 response status code with a message.
@@ -159,7 +161,7 @@ exports.postRental = async function(req, res) {
     if (!isPayment)
       return res.status(400).send({
         error: true,
-        message: "Invalid Payment"
+        message: "Invalid Payment",
       });
 
     // Check that the id carrier match to a valid carrier, otherwise, send a 400 response status code with a message.
@@ -168,7 +170,7 @@ exports.postRental = async function(req, res) {
     if (!isCarrier)
       return res.status(400).send({
         error: true,
-        message: "Invalid Carrier"
+        message: "Invalid Carrier",
       });
 
     // Check that the id article match to a valid article, otherwise, send a 400 response status code with a message.
@@ -177,7 +179,7 @@ exports.postRental = async function(req, res) {
     if (!isArticle)
       return res.status(400).send({
         error: true,
-        message: "Invalid Article"
+        message: "Invalid Article",
       });
 
     // The ownerId will sent to the id_user field depending if the client is an admin or not.
@@ -208,7 +210,7 @@ exports.postRental = async function(req, res) {
       id_carrier: req.body.id_carrier,
       id_article: req.body.id_article,
       start_date: req.body.start_date,
-      end_date: req.body.end_date
+      end_date: req.body.end_date,
     });
 
     // If all the checks is passing, save the rental, then send back a 200 response status code with a successfull message.
@@ -217,14 +219,14 @@ exports.postRental = async function(req, res) {
 
     return res.status(201).send({
       error: true,
-      message: "`The rental has been placed`"
+      message: "`The rental has been placed`",
     });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
 };
 
-exports.putRentalById = async function(req, res) {
+exports.putRentalById = async function (req, res) {
   try {
     // Validation put inscription rental.
 
@@ -239,7 +241,7 @@ exports.putRentalById = async function(req, res) {
       if (!ifUserExist)
         return res.status(400).send({
           error: true,
-          message: "Invalid user ID"
+          message: "Invalid user ID",
         });
     }
 
@@ -258,13 +260,13 @@ exports.putRentalById = async function(req, res) {
           return res.status(400).send({
             error: true,
             message:
-              "Invalid request, the start date must be less than the end date"
+              "Invalid request, the start date must be less than the end date",
           });
         }
       } else {
         return res.status(400).send({
           error: true,
-          message: "You can not modify the date start without the date end"
+          message: "You can not modify the date start without the date end",
         });
       }
     } else if (req.body.end_date) {
@@ -272,7 +274,7 @@ exports.putRentalById = async function(req, res) {
       if (!req.body.start_date) {
         return res.status(400).send({
           error: true,
-          message: "You can not modify the date end without the date start"
+          message: "You can not modify the date end without the date start",
         });
       }
     }
@@ -284,7 +286,7 @@ exports.putRentalById = async function(req, res) {
       if (!isPayment)
         return res.status(400).send({
           error: true,
-          message: "Invalid Payment"
+          message: "Invalid Payment",
         });
     }
     // Check that the id carrier match to a valid carrier, otherwise, send a 400 response status code with a message.
@@ -294,7 +296,7 @@ exports.putRentalById = async function(req, res) {
       if (!isCarrier)
         return res.status(400).send({
           error: true,
-          message: "Invalid Carrier"
+          message: "Invalid Carrier",
         });
     }
 
@@ -304,7 +306,7 @@ exports.putRentalById = async function(req, res) {
     if (!ifRentalExist)
       return res.status(400).send({
         error: true,
-        message: "Invalid Rental"
+        message: "Invalid Rental",
       });
 
     // Check if the same Rental exist at this start date, without the rental itself.
@@ -314,7 +316,7 @@ exports.putRentalById = async function(req, res) {
       id_article: ifRentalExist.id_article,
       start_date: { $lte: req.body.start_date },
       end_date: { $gte: req.body.start_date },
-      isActive: true
+      isActive: true,
     });
 
     // If the same rental exist at this start date, send a 400 response status code with a message.
@@ -322,7 +324,7 @@ exports.putRentalById = async function(req, res) {
     if (ifSameRentalExist.length > 0)
       return res.status(400).send({
         error: true,
-        message: "This rental is already reserved on this start date"
+        message: "This rental is already reserved on this start date",
       });
 
     // Check id the same Rental exist at this end date, without the rental itself.
@@ -331,7 +333,7 @@ exports.putRentalById = async function(req, res) {
       _id: { $not: { $eq: req.params.id } },
       id_article: ifRentalExist.id_article,
       start_date: { $gte: req.body.start_date, $lte: req.body.end_date },
-      isActive: true
+      isActive: true,
     });
 
     // If the same rental exist at this end date, send a 400 response status code with a message.
@@ -339,7 +341,7 @@ exports.putRentalById = async function(req, res) {
     if (ifSameRentalExist.length > 0)
       return res.status(400).send({
         error: true,
-        message: "This rental is already reserved on this end date"
+        message: "This rental is already reserved on this end date",
       });
 
     // Check if a Rental exist with the req.params.id provided, depending if the client is an admin or not, and update.
@@ -347,13 +349,13 @@ exports.putRentalById = async function(req, res) {
     const rental = res.locals.owner.adminLevel
       ? await Rental.findOneAndUpdate(req.params.id, {
           $set: req.body,
-          date_update: Date.now()
+          date_update: Date.now(),
         })
       : await Rental.findOneAndUpdate(
           { _id: req.params.id, id_user: res.locals.owner.id },
           {
             $set: req.body,
-            date_update: Date.now()
+            date_update: Date.now(),
           }
         );
 
@@ -372,7 +374,7 @@ exports.putRentalById = async function(req, res) {
   }
 };
 
-exports.deleteRentalById = async function(req, res) {
+exports.deleteRentalById = async function (req, res) {
   try {
     // Validation put inscription rental.
 
@@ -385,13 +387,13 @@ exports.deleteRentalById = async function(req, res) {
     const rental = res.locals.owner.adminLevel
       ? await Rental.findOneAndUpdate(req.params.id, {
           date_delete: Date.now(),
-          isActive: false
+          isActive: false,
         })
       : await Rental.findOneAndUpdate(
           { _id: req.params.id, id_user: res.locals.owner.id },
           {
             date_delete: Date.now(),
-            isActive: false
+            isActive: false,
           }
         );
 

@@ -29,15 +29,7 @@
 
 /* header admin */
 
-.adminheader {
-  height: 8rem;
-}
-
 /* footer admin */
-
-.footeradmin {
-  height: 3rem;
-}
 
 /* menu nav admin style */
 
@@ -97,9 +89,3 @@
   }
 }
 
-@media screen and (min-width: 1200px) {
-  .adminheader {
-    width: 80%;
-    margin: 0 auto;
-  }
-}

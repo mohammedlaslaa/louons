@@ -21,7 +21,7 @@ function RightSide() {
   return (
     // Render two icons. The mail icon and the user profile icon.
 
-    <div className="col-7 col-sm-6 col-lg-3 p-0 d-flex justify-content-end justify-content-lg-around">
+    <div className="col-7 col-sm-6 col-lg-2 p-0 d-flex justify-content-end justify-content-lg-around">
       <i
         className="ri-search-line mx-2 d-none d-sm-block icon-font22 color3c8ce4"
         onClick={() => handleIsShownSearchBar()}
@@ -34,7 +34,7 @@ function RightSide() {
       </Link>
 
       <SearchBar
-        specificClass={"position-absolute searchbar"}
+        specificclassname={"position-absolute searchbar"}
         isShown={isShownSearchBar}
       />
       <Bar />

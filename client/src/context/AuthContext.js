@@ -7,6 +7,7 @@ const AuthProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [cookieToken, setCookieToken] = useState(Cookies.get("x-auth-token"));
+  const [dataUser, setDataUser] = useState({});
 
   // if the cookie token is existing fetch to the api to ensure that the client has a valid cookie token else set the isAuth value to false.
 
@@ -19,11 +20,13 @@ const AuthProvider = ({ children }) => {
         .then((json) => {
           if (!json.error) {
             setIsAuth(true);
+            setIsLoading(false);
+            setDataUser(json.user)
           } else if (json.error) {
             setIsAuth(false);
+            setIsLoading(false);
           }
         });
-      setIsLoading(false);
     } else {
       setIsAuth(false);
       setIsLoading(false);
@@ -41,6 +44,7 @@ const AuthProvider = ({ children }) => {
         isLoading,
         setIsLoading,
         setCookieToken,
+        dataUser
       }}
     >
       {children}

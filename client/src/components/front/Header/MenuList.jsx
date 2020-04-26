@@ -85,7 +85,7 @@ function MenuList(props) {
         className={`my-auto ${isShown} d-lg-flex flex-column flex-lg-row justify-content-lg-around list-unstyled listmenucontainer`}
       >
         {menuList}
-        <SearchBar isShown={true} specificClass="d-md-none" />
+        <SearchBar isShown={true} specificclassname="d-md-none" />
       </ul>
     </CSSTransition>
   );

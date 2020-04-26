@@ -10,7 +10,7 @@ function SearchBar(props) {
       {props.isShown && (
         <CSSTransition classNames="searchanimation" timeout={1000}>
           <div
-            className={`${props.specificClass} my-2 mx-auto`}
+            className={`${props.specificclassname} my-2 mx-auto`}
           >
             <form action="" className="form-group has-search w-75 m-auto">
               <i className="ri-search-line form-control-feedback"></i>
@@ -30,7 +30,7 @@ function SearchBar(props) {
 
 SearchBar.defaultProps = {
   isShown: true,
-  specificClass : ""
+  specificclassname : ""
 };
 
 export default SearchBar;

@@ -6,10 +6,9 @@ const {
 
 exports.getAllCategory = async function (req, res) {
   try {
-    console.log(req.cookies)
     // Find all the categories, then return them to the client.
 
-    const allCategory = await Category.find({ isActive: true }).select("title link");
+    const allCategory = await Category.find({ isActive: true }).select("categoryId title link");
     return res.send(allCategory);
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });

@@ -1,1 +1,13 @@
 /* main part style of the admin */
+
+.titlepage {
+  font-size: 1rem;
+  margin-top: 3rem;
+  text-align: center;
+}
+
+@media screen and (min-width: 992px) {
+  .titlepage {
+    font-size: 1.5rem;
+  }
+}

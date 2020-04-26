@@ -7,7 +7,6 @@ class Nav extends Component {
     super(props);
     this.state = {
       listOfMenu: ["Annonces", "Catégories", "Déposer une annonce"],
-      forceRender: false,
     };
     // Bind the method to the context of the class.
 
@@ -15,28 +14,19 @@ class Nav extends Component {
   }
 
   forceRender() {
-    if (this.context.isToggle) {
-      console.log('coucou')
-      this.setState(prevState => {
-        return {
-          forceRender : !prevState.forceRender
-        }
-      })
-      this.context.setToggle(false)
-    }
+    this.context.setToggle(false);
   }
 
-  // Add an event listener resize to the window.
+  // Add an event listener resize to the window in order to reset the istoggle.
 
   componentDidMount() {
     window.addEventListener("resize", this.forceRender);
   }
 
   render() {
-
     return (
       <div
-        className={`p-0 h-100 d-lg-flex align-items-center justify-content-lg-center`}
+        className={`p-0 h-100 navmenu d-block d-lg-flex align-items-center justify-content-lg-center`}
       >
         <MenuList
           isShown={this.context.isToggle}
