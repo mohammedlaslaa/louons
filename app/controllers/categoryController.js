@@ -3,13 +3,22 @@ const {
   schemaValidationCategory,
   schemaPutValidationCategory,
 } = require("../models/categoryModel");
+const jwt = require("jsonwebtoken");
 
 exports.getAllCategory = async function (req, res) {
   try {
-    // Find all the categories, then return them to the client.
-
-    const allCategory = await Category.find({ isActive: true }).select("categoryId title link");
-    return res.send(allCategory);
+    // Find all the active categories, then return them to the client.
+    const verify = jwt.verify(
+      req.cookies["x-auth-token"],
+      process.env.PRIVATE_KEY
+    );
+    const allCategory = await Category.find({ isActive: true }).select(
+      "categoryId isActive title link"
+    );
+    return res.status(200).send({
+      adminLevel: verify.adminLevel,
+      data: allCategory,
+    });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -76,9 +85,10 @@ exports.postCategory = async function (req, res) {
     // If the category title is already existing send a 400 response status code with a message.
 
     if (isTitleExist)
-      return res
-        .status(400)
-        .send({ error: true, message: "Error duplicating category title or link" });
+      return res.status(400).send({
+        error: true,
+        message: "Error duplicating category title or link",
+      });
 
     // Create a new category document.
 
@@ -149,7 +159,10 @@ exports.putCategoryById = async function (req, res) {
 
     // If all the checks is passing, send back a 200 response status code with succesfull message.
 
-    return res.status(201).send(`The category has been modified`);
+    return res.status(201).send({
+      error: false,
+      message: `The category has been modified`,
+    });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }

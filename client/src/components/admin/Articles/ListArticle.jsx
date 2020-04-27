@@ -16,9 +16,10 @@ function ListArticle() {
         { price: "Prix" },
         { seeMore: "Voir" },
         { date_register: "Date d'ajout" },
+        { delete: "Supprimer" },
       ]}
       titlebutton="Ajouter un article"
-      linkbutton="articles/add"
+      link="articles"
     />
   );
 }

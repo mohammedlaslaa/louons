@@ -4,7 +4,6 @@ const { Admin } = require("../models/adminModel");
 // This middleware ensure that the client request comes by an admin or a superadmin.
 
 module.exports = function(req, res, next) {
-  console.log(req.cookies)
   jwt.verify(
     req.cookies['x-auth-token'],
     process.env.PRIVATE_KEY,

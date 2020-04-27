@@ -1,13 +1,60 @@
 /* main part style of the admin */
 
+/*title of each page */
+
 .titlepage {
   font-size: 1rem;
   margin-top: 3rem;
   text-align: center;
 }
 
+/* image home */
+
+.imagehome {
+  width: 100%;
+}
+
+/* form style */
+
+.widthform {
+  width: 100%;
+}
+
+/* add user form */
+
+.lastnameerror{
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+@media screen and (min-width: 768px) {
+  .widthform {
+    width: 90%;
+  }
+}
+
 @media screen and (min-width: 992px) {
   .titlepage {
     font-size: 1.5rem;
+  }
+
+  .imagehome {
+    width: 75%;
+  }
+
+  .widthform {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .widthform {
+    width: 85%;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .widthform {
+    width: 60%;
   }
 }

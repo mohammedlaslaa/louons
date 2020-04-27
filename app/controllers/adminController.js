@@ -12,7 +12,7 @@ exports.getSelf = async (req, res) => {
 
     // Then return this res.lacals.admin to the client.
 
-    return res.send(res.locals.admin);
+    return res.status(200).send(res.locals.admin);
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -76,6 +76,7 @@ exports.putSelf = async (req, res) => {
 
 exports.getAllAdmins = async (req, res) => {
   try {
+
     // Only the superadmin can perform this action.
 
     let admin = await Admin.find();
@@ -87,7 +88,7 @@ exports.getAllAdmins = async (req, res) => {
 
     // If all the checks is passing, return a 200 response status code with all admins.
 
-    return res.send(admin);
+    return res.status(200).send({adminLevel : res.locals.verify.adminLevel, data : admin});
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }

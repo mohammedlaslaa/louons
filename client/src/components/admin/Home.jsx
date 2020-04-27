@@ -11,10 +11,10 @@ function Home() {
         Bienvenue sur le panel de louons.fr{" "}
         {`${dataUser.firstName} ${dataUser.lastName}`}
       </h3>
-      <div>
+      <div className="text-center">
         <img
           src="/assets/img/welcome.jpg"
-          className="w-100"
+          className="imagehome"
           alt="welcome_panel"
         />
       </div>

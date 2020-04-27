@@ -1,6 +1,6 @@
 import React from "react";
 
-// initialize the context. this context return all the category 
+// initialize the context. this context return all the category
 
 const ListCategoryContext = React.createContext();
 
@@ -12,19 +12,21 @@ class ListCategoryProvider extends React.Component {
   // Fetch the list of category
 
   componentDidMount = () => {
-    fetch("http://localhost:5000/louons/api/v1/category")
+    fetch("http://localhost:5000/louons/api/v1/category", {
+      credentials: "include",
+    })
       .then((res) => res.json())
-      .then((result) =>
+      .then((result) => {
         this.setState({
-          listCat: result,
-        })
-      );
+          listCat: result.data,
+        });
+      });
   };
 
   render() {
     const { listCat } = this.state;
     // Render the provider and give the access of the listSubCat to his children
-    
+
     return (
       <ListCategoryContext.Provider value={{ listCat }}>
         {this.props.children}

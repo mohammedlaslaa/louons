@@ -18,6 +18,7 @@ class PageTableList extends Component {
       isUnAuthorized: false,
       listOfTh: props.th,
       listOfData: [],
+      adminLevel: "",
     };
   }
 
@@ -36,7 +37,8 @@ class PageTableList extends Component {
       .then((result) => {
         if (!result.error) {
           this.setState({
-            listOfData: result,
+            listOfData: result.data,
+            adminLevel: result.adminLevel,
           });
         } else if (
           (result.error && result.message === "Not authorized admin level") ||
@@ -52,14 +54,15 @@ class PageTableList extends Component {
       });
   }
 
-  // This method allow to update the isactive field, depending on the API link and the id and boolean passed in parameter
+  // This method allow to update the isactive field, depending on the API link (linkputapi or the linkapi) and the id and boolean passed in parameter
   // When this method is called, the isLoadingUpdate state is set to true and when the fetch operation is finished, this state is set to false
 
   handleIsActive = (id, bool) => {
     this.setState({
       isLoadingUpdate: true,
     });
-    fetch(`${this.props.linkapi}/${id}`, {
+    const linkupdate = this.props.linkputapi || this.props.linkapi;
+    fetch(`${linkupdate}/${id}`, {
       method: "PUT",
       credentials: "include",
       headers: {
@@ -81,7 +84,7 @@ class PageTableList extends Component {
 
   getDateRegister = (arg) => {
     let date = new Date(arg);
-    return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
   };
 
   // Render the display of the table depending the states. Mapping over the listOfTh and the listOfData object keys in array and compare them in order to display the table correctly
@@ -93,6 +96,7 @@ class PageTableList extends Component {
       isLoading,
       isLoadingUpdate,
       isUnAuthorized,
+      adminLevel
     } = this.state;
 
     return isLoading ? (
@@ -107,7 +111,7 @@ class PageTableList extends Component {
         )}
         <div className="text-right p-3">
           {this.props.titlebutton && (
-            <Link to={this.props.linkbutton}>
+            <Link to={`${this.props.link}/add`}>
               <button className="btn text-white bgcolor3c8ce4">
                 {this.props.titlebutton}
               </button>
@@ -136,7 +140,19 @@ class PageTableList extends Component {
                             className="text-center"
                             key={`seemore${indexData}`}
                           >
-                            Voir
+                            <Link
+                              key={`link${indexData}`}
+                              to={`${this.props.link}/${eltData["_id"]}`}
+                            >
+                              Voir
+                            </Link>
+                          </td>
+                        ) : subTh === "delete" && adminLevel === "superadmin" ? (
+                          <td
+                            className="text-center"
+                            key={`delete${indexData}`}
+                          >
+                            Delete
                           </td>
                         ) : subTh === "category" ? (
                           <td

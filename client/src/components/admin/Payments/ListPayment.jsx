@@ -14,9 +14,10 @@ function ListPayment() {
         { description: "Description" },
         { isActive: "Activer" },
         { seeMore: "Voir" },
+        { delete: "Supprimer" },
       ]}
-      titlebutton="Ajouter une catégorie"
-      linkbutton="payments/add"
+      titlebutton="Ajouter un paiement"
+      link="payments"
     />
   );
 }

@@ -26,7 +26,7 @@ exports.getAllRentals = async function (req, res) {
 
     // If the request succeeded, return a 200 response status code with all users.
 
-    return res.send(allRental);
+    return res.status(200).send({adminLevel : res.locals.admin.adminLevel, data : allRental});
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -57,7 +57,7 @@ exports.getAllMyRental = async function (req, res) {
 
     // If all the checks is passing, return the rentals to the client, with a 200 response status code.
 
-    return res.send(myRental);
+    return res.send({aminLevel : res.locals.admin, data : myRental});
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }

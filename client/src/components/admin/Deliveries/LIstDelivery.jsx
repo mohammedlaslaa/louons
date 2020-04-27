@@ -14,9 +14,10 @@ function ListDelivery() {
         { description: "Description" },
         { isActive: "Activer" },
         { seeMore: "Voir" },
+        { delete: "Supprimer" },
       ]}
       titlebutton="Ajouter une catégorie"
-      linkbutton="carrier/add"
+      link="deliveries"
     />
   );
 }

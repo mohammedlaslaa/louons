@@ -1,18 +1,21 @@
 const {
   Address,
   schemaValidationAddress,
-  schemaPutValidationAddress
+  schemaPutValidationAddress,
 } = require("../models/addressModel");
 
 exports.getAllAddresses = async (req, res) => {
   try {
     // Find all the addresses, then return them to the client.
 
-    const address = await Address.find().populate("id_user", "firstName lastName");
+    const address = await Address.find().populate(
+      "id_user",
+      "firstName lastName"
+    );
 
     // If there is an existing address, send back a 200 response status code with a this address.
 
-    return res.send(address);
+    return res.status(200).send({ adminLevel: res.locals.admin.adminLevel, data: address });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -28,7 +31,7 @@ exports.getAllSelfAddresses = async (req, res) => {
     }
 
     const selfaddress = await Address.find({
-      id_user: res.locals.owner.id
+      id_user: res.locals.owner.id,
     }).populate("id_user");
 
     // If the client does not have addresses return a 200 response status code with a message.
@@ -52,11 +55,11 @@ exports.getAddressById = async (req, res) => {
 
     const address = res.locals.owner.adminLevel
       ? await Address.findOne({
-          _id: req.params.id
+          _id: req.params.id,
         })
       : await Address.findOne({
           _id: req.params.id,
-          id_user: res.locals.owner.id
+          id_user: res.locals.owner.id,
         });
 
     // If there are not address with this id return a 400 response status code with a message.
@@ -90,7 +93,7 @@ exports.postAddress = async (req, res) => {
 
     const isTitleExist = await Address.findOne({
       title: { $regex: req.body.title, $options: "i" },
-      id_user: ownerId
+      id_user: ownerId,
     });
 
     // If the address title is already existing send a 400 response status code with a message
@@ -122,7 +125,7 @@ exports.postAddress = async (req, res) => {
       address: req.body.address,
       zipcode: req.body.zipcode,
       city: req.body.city,
-      country: req.body.country
+      country: req.body.country,
     });
 
     // If all the checks is passing, save the address, then send back a 200 response status code with a successfull message.
@@ -151,7 +154,7 @@ exports.putAddressById = async (req, res) => {
 
     const isOwner = await Address.findOne({
       _id: req.params.id,
-      id_user: ownerId
+      id_user: ownerId,
     });
 
     // If the client is not the owner and is not and admin send a 400 response status code with a message.
@@ -160,7 +163,7 @@ exports.putAddressById = async (req, res) => {
       return res.status(400).send({
         error: true,
         message:
-          "Empty list, you are not the owner of this address or you do not have admin rights"
+          "Empty list, you are not the owner of this address or you do not have admin rights",
       });
 
     if (req.body.title) {
@@ -169,14 +172,14 @@ exports.putAddressById = async (req, res) => {
       if (res.locals.owner.adminLevel && !ownerId) {
         return res.status(400).send({
           error: true,
-          message: "Id_user is required"
+          message: "Id_user is required",
         });
       } else if (!res.locals.owner.adminLevel && req.body.id_user) {
         // The client who is not an admin does not have to specify an id_user field.
 
         return res.status(400).send({
           error: true,
-          message: "You do not have to specify the user id"
+          message: "You do not have to specify the user id",
         });
       }
 
@@ -184,13 +187,13 @@ exports.putAddressById = async (req, res) => {
 
       const isTitleExist = await Address.findOne({
         title: { $regex: `^${req.body.title}$`, $options: "gi" },
-        id_user: ownerId
+        id_user: ownerId,
       });
 
       if (isTitleExist)
         return res.status(400).send({
           error: true,
-          message: "Error duplicating address title or no change detected"
+          message: "Error duplicating address title or no change detected",
         });
     }
 
@@ -198,12 +201,12 @@ exports.putAddressById = async (req, res) => {
 
     await Address.findByIdAndUpdate(req.params.id, {
       $set: req.body,
-      date_update: Date.now()
+      date_update: Date.now(),
     });
 
     return res.send({
       modified: true,
-      message: "Address modified with success"
+      message: "Address modified with success",
     });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
@@ -216,7 +219,7 @@ exports.deleteAddressById = async (req, res) => {
 
     const isOwner = await Address.findOne({
       _id: req.params.id,
-      id_user: res.locals.owner.id
+      id_user: res.locals.owner.id,
     });
 
     // If the client does not have an address with the id provided send him a 200 response status code http with a message
@@ -225,7 +228,7 @@ exports.deleteAddressById = async (req, res) => {
       return res.status(200).send({
         error: true,
         message:
-          "Empty list, you are not the owner of the address or you do not have admin rights"
+          "Empty list, you are not the owner of the address or you do not have admin rights",
       });
 
     // Check if an address exist and delete.
@@ -243,7 +246,7 @@ exports.deleteAddressById = async (req, res) => {
 
     return res.send({
       modified: true,
-      message: "Address deleted with success"
+      message: "Address deleted with success",
     });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });

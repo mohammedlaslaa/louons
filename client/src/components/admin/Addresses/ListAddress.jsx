@@ -11,12 +11,13 @@ function ListAddress() {
       th={[
         { addressId: "ID" },
         { user: "Utilisateur" },
-        { address : "Adresse" },
+        { address: "Adresse" },
         { isActive: "Activer" },
         { seeMore: "Voir" },
+        { delete: "Supprimer" },
       ]}
-      titlebutton="Ajouter une location"
-      linkbutton="rentals/add"
+      titlebutton="Ajouter une adresse"
+      link="address"
     />
   );
 }

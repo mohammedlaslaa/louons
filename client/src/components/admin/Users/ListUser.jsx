@@ -17,9 +17,10 @@ function ListUser() {
         { isActive: "Activer" },
         { isSubscribe: "Newsletter" },
         { seeMore: "Voir" },
+        { delete: "Supprimer" },
       ]}
       titlebutton="Ajouter un utilisateur"
-      linkbutton="users/add"
+      link="users"
     />
   );
 }

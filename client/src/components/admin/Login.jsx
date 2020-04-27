@@ -35,14 +35,14 @@ function Login({ history }) {
       },
       body: JSON.stringify({ email: email, password: password }),
     })
-      .then((res) => res.json())
-      .then((json) => {
-        if (!json.error) {
+      .then((response) => response.json())
+      .then((result) => {
+        if (!result.error) {
           setIsAuth(true);
           setIsLoading(false);
           setCookieToken(Cookies.get("x-auth-token"));
-          history.replace("/admin/home");
-        } else if (json.error) {
+          history.replace("/admin");
+        } else if (result.error) {
           setErrorMessage(true);
         }
       });

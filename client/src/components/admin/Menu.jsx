@@ -8,7 +8,7 @@ function Menu() {
   // Initialize the list of the menu
 
   const [listMenu] = useState([
-    { link: "home", title: "Accueil" },
+    { link: "", title: "Accueil" },
     { link: "users", title: "Utilisateurs" },
     { link: "categories", title: "Catégories" },
     { link: "articles", title: "Article" },

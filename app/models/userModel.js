@@ -4,26 +4,32 @@ const Joi = require("@hapi/joi");
 
 const userSchema = new mongoose.Schema({
   clientId: {
-    type: Number
+    type: Number,
+  },
+
+  gender: {
+    type: String,
+    required: true,
+    enum: ["mr", "mrs"],
   },
 
   lastName: {
     type: String,
     required: true,
     minlength: 3,
-    maxlength: 50
+    maxlength: 50,
   },
 
   firstName: {
     type: String,
     required: true,
     minlength: 3,
-    maxlength: 50
+    maxlength: 50,
   },
 
   date_birth: {
     type: Date,
-    default: null
+    default: null,
   },
 
   email: {
@@ -31,46 +37,46 @@ const userSchema = new mongoose.Schema({
     unique: true,
     required: true,
     minlength: 10,
-    maxlength: 50
+    maxlength: 50,
   },
 
   password: {
     type: String,
     required: true,
-    minlength: 8
+    minlength: 8,
   },
 
   date_register: {
     type: Date,
-    default: Date.now()
+    default: Date.now(),
   },
 
   date_update: {
     type: Date,
-    default: Date.now()
+    default: Date.now(),
   },
 
   date_delete: {
     type: Date,
-    default: null
+    default: null,
   },
 
   isActive: {
     type: Boolean,
-    default: true
+    default: true,
   },
 
   isSubscribe: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 
 // Generate token method with the private key, the expiresIn option is used to set the token validity period
 
-userSchema.methods.generateToken = function() {
+userSchema.methods.generateToken = function () {
   const token = jwt.sign({ id: this._id }, process.env.PRIVATE_KEY, {
-    expiresIn: 32659200
+    expiresIn: 32659200,
   });
   return token;
 };
@@ -80,6 +86,8 @@ userSchema.methods.generateToken = function() {
 // Validator with the required fields.
 
 const schemaValidationUser = Joi.object({
+  gender: Joi.string().required(),
+
   lastName: Joi.string()
     .pattern(new RegExp(/[a-zA-Z\séùàüäîçïèêôö-]+$/))
     .min(3)
@@ -109,12 +117,16 @@ const schemaValidationUser = Joi.object({
     )
     .required(),
 
-  isActive: Joi.boolean()
+  isSubscribe: Joi.boolean(),
+
+  isActive: Joi.boolean(),
 });
 
 // Validator without the required fields, more especially to send update requests.
 
 const schemaPutValidationUser = Joi.object({
+  gender: Joi.string(),
+
   lastName: Joi.string()
     .pattern(new RegExp(/[a-zA-Z\séùàüäîçïèêôö-]+$/))
     .min(3)
@@ -139,7 +151,9 @@ const schemaPutValidationUser = Joi.object({
     )
   ),
 
-  isActive: Joi.boolean()
+  isSubscribe: Joi.boolean(),
+
+  isActive: Joi.boolean(),
 });
 
 const User = mongoose.model("User", userSchema);

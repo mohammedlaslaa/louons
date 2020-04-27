@@ -8,14 +8,16 @@ function ListCategory() {
     <PageTableList
       titlepage="Liste des catégories"
       linkapi="http://localhost:5000/louons/api/v1/category"
+      linkputapi="http://localhost:5000/louons/api/v1/category"
       th={[
         { categoryId: "ID" },
         { title: "Titre" },
         { isActive: "Activer" },
         { seeMore: "Voir" },
+        { delete: "Supprimer" },
       ]}
       titlebutton="Ajouter une catégorie"
-      linkbutton="categories/add"
+      link="categories"
     />
   );
 }

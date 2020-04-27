@@ -6,7 +6,7 @@ const jwtsuperadmin = require("../middleware/jwtSuperAdmin");
 const isemptybody = require("../middleware/isEmptyBody");
 const categoryController = require("../controllers/categoryController");
 
-// Get all carrier or carrier by id, this route is available for everyone.
+// Get all carrier, this route is available for everyone.
 
 router.get("/", categoryController.getAllCategory);
 

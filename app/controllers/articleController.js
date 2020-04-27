@@ -1,22 +1,33 @@
 const {
   Article,
   schemaValidationArticle,
-  schemaPutValidationArticle
+  schemaPutValidationArticle,
 } = require("../models/articleModel");
+const jwt = require("jsonwebtoken");
 
-exports.getAllArticle = async function(req, res) {
+exports.getAllArticle = async function (req, res) {
   try {
     // Find all the articles, then return them to the client.
+    // Find all the active categories, then return them to the client.
+    const verify = jwt.verify(
+      req.cookies["x-auth-token"],
+      process.env.PRIVATE_KEY
+    );
 
-      
-      const allArticle = await Article.find().populate("id_category", "title -_id")
-    return res.send(allArticle);
+    const allArticle = await Article.find().populate(
+      "id_category",
+      "title -_id"
+    );
+    return res.status(200).send({
+      adminLevel: verify.adminLevel,
+      data: allArticle,
+    });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
 };
 
-exports.getArticleById = async function(req, res) {
+exports.getArticleById = async function (req, res) {
   try {
     // Find an article by id, then return it to the client.
 
@@ -30,7 +41,7 @@ exports.getArticleById = async function(req, res) {
     if (!article)
       return res.status(400).send({
         error: true,
-        message: "There are not article with the id provided"
+        message: "There are not article with the id provided",
       });
 
     // If there is an existing article, send back a 200 response status code with a this article.
@@ -41,7 +52,7 @@ exports.getArticleById = async function(req, res) {
   }
 };
 
-exports.postArticle = async function(req, res) {
+exports.postArticle = async function (req, res) {
   try {
     // Only an existing admin or an existing user can perform this action.
 
@@ -72,7 +83,7 @@ exports.postArticle = async function(req, res) {
     // Check if the article title is already existing.
 
     const isTitleExist = await Article.findOne({
-      title: { $regex: `^${req.body.title}$`, $options: "i" }
+      title: { $regex: `^${req.body.title}$`, $options: "i" },
     });
 
     // If the article title is already existing send a 400 response status code with a message.
@@ -91,7 +102,7 @@ exports.postArticle = async function(req, res) {
       title: req.body.title,
       description: req.body.description,
       price: req.body.price,
-      pictures: req.body.pictures
+      pictures: req.body.pictures,
     });
 
     // If all the checks is passing, save the article, then send back a 200 response status code with a successfull message.
@@ -104,7 +115,7 @@ exports.postArticle = async function(req, res) {
   }
 };
 
-exports.putArticleById = async function(req, res) {
+exports.putArticleById = async function (req, res) {
   try {
     // Only an existing admin or an existing owner user can perform this action.
 
@@ -119,13 +130,13 @@ exports.putArticleById = async function(req, res) {
     if (req.body.id_user)
       return res.status(400).send({
         error: true,
-        message: "Error your are not authorized to modify user ID"
+        message: "Error your are not authorized to modify user ID",
       });
 
     // Check if the article title is already existing.
 
     const isTitleExist = await Article.findOne({
-      title: { $regex: `^${req.body.title}$`, $options: "i" }
+      title: { $regex: `^${req.body.title}$`, $options: "i" },
     });
 
     // If the article title is already existing send a 400 response status code with a message.
@@ -133,7 +144,7 @@ exports.putArticleById = async function(req, res) {
     if (isTitleExist)
       return res.status(400).send({
         error: true,
-        message: "Error duplicating article title or no change detected"
+        message: "Error duplicating article title or no change detected",
       });
 
     // Check if the article is existing.
@@ -145,7 +156,7 @@ exports.putArticleById = async function(req, res) {
     if (!article)
       return res.status(400).send({
         error: true,
-        message: "There are not article with the id provided"
+        message: "There are not article with the id provided",
       });
 
     // If the article exist, if the user is not owner and it is not an admin or a superadmin, send back a 400 response status code with a message.
@@ -157,14 +168,14 @@ exports.putArticleById = async function(req, res) {
     )
       return res.status(400).send({
         error: true,
-        message: "Error you don't have the permission to modify this article"
+        message: "Error you don't have the permission to modify this article",
       });
 
     // If all the checks is passing, update the article, then send back a 200 response status code with succesfull message.
 
     article = await Article.findByIdAndUpdate(req.params.id, {
       $set: req.body,
-      date_update: Date.now()
+      date_update: Date.now(),
     });
 
     return res.status(201).send(`The article has been modified`);
@@ -173,7 +184,7 @@ exports.putArticleById = async function(req, res) {
   }
 };
 
-exports.deleteArticleById = async function(req, res) {
+exports.deleteArticleById = async function (req, res) {
   try {
     // Only an existing admin can perform this action.
 
@@ -186,13 +197,13 @@ exports.deleteArticleById = async function(req, res) {
     if (!article)
       return res.status(400).send({
         error: true,
-        message: "There are not article with the id provided"
+        message: "There are not article with the id provided",
       });
 
     // If all the checks is passing, delete the article, then send back a 200 response status code with succesfull message.
 
     return res.send({
-      message: `The ${article.title} has been removed`
+      message: `The ${article.title} has been removed`,
     });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });

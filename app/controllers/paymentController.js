@@ -3,13 +3,17 @@ const {
   schemaValidationPayment,
   schemaPutValidationPayment
 } = require("../models/paymentModel");
+const jwt = require("jsonwebtoken");
 
 exports.getAllPayment = async function(req, res) {
   try {
     // Find all the payments, then return them to the client.
-
+    const verify = jwt.verify(
+      req.cookies["x-auth-token"],
+      process.env.PRIVATE_KEY
+    );
     const allPayment = await Payment.find();
-    return res.send(allPayment);
+    return res.status(200).send({adminLevel : verify.adminLevel, data : allPayment});
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }

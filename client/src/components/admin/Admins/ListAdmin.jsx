@@ -15,9 +15,10 @@ function ListAdmin() {
         { adminLevel: "Role" },
         { isActive: "Activer" },
         { seeMore: "Voir" },
+        { delete: "Supprimer" },
       ]}
       titlebutton="Ajouter un Admin"
-      linkbutton="admin/add"
+      link="admins"
     />
   );
 }

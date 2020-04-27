@@ -1,21 +1,28 @@
 const {
   Carrier,
   schemaValidationCarrier,
-  schemaPutValidationCarrier
+  schemaPutValidationCarrier,
 } = require("../models/carrierModel");
+const jwt = require("jsonwebtoken");
 
-exports.getAllCarrier = async function(req, res) {
+exports.getAllCarrier = async function (req, res) {
   try {
     // Find all the carriers, then return them to the client.
-
+    const verify = jwt.verify(
+      req.cookies["x-auth-token"],
+      process.env.PRIVATE_KEY
+    );
     const allCarrier = await Carrier.find();
-    return res.send(allCarrier);
+    return res.status(200).send({
+      adminLevel: verify.adminLevel,
+      data: allCarrier,
+    });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
 };
 
-exports.getCarrierById = async function(req, res) {
+exports.getCarrierById = async function (req, res) {
   try {
     // Only an existing admin can perform this action.
 
@@ -30,7 +37,7 @@ exports.getCarrierById = async function(req, res) {
     if (!carrier)
       return res.status(400).send({
         error: true,
-        message: "There are not carrier with the id provided"
+        message: "There are not carrier with the id provided",
       });
 
     // If there is an existing carrier, send back a 200 response status code with a this carrier.
@@ -41,7 +48,7 @@ exports.getCarrierById = async function(req, res) {
   }
 };
 
-exports.postCarrier = async function(req, res) {
+exports.postCarrier = async function (req, res) {
   try {
     // Only an existing admin can perform this action.
 
@@ -66,7 +73,7 @@ exports.postCarrier = async function(req, res) {
     // Check if the carrier title is already existing.
 
     const isTitleExist = await Carrier.findOne({
-      title: { $regex: `^${req.body.title}$`, $options: "i" }
+      title: { $regex: `^${req.body.title}$`, $options: "i" },
     });
 
     // If the carrier title is already existing send a 400 response status code with a message.
@@ -85,7 +92,7 @@ exports.postCarrier = async function(req, res) {
       description: req.body.description,
       price: req.body.price,
       path_picture: req.body.path_picture,
-      delay_delivery: req.body.delay_delivery
+      delay_delivery: req.body.delay_delivery,
     });
 
     // If all the checks is passing, save the carrier, then send back a 200 response status code with a successfull message.
@@ -98,7 +105,7 @@ exports.postCarrier = async function(req, res) {
   }
 };
 
-exports.putCarrierById = async function(req, res) {
+exports.putCarrierById = async function (req, res) {
   try {
     // Only an existing admin can perform this action.
 
@@ -113,13 +120,13 @@ exports.putCarrierById = async function(req, res) {
     if (req.body.id_admin)
       return res.status(400).send({
         error: true,
-        message: "Error your are not authorized to modify admin ID"
+        message: "Error your are not authorized to modify admin ID",
       });
 
     // Check if the carrier title is already existing.
 
     const isTitleExist = await Carrier.findOne({
-      title: { $regex: `^${req.body.title}$`, $options: "i" }
+      title: { $regex: `^${req.body.title}$`, $options: "i" },
     });
 
     // If the carrier title is already existing send a 400 response status code with a message.
@@ -127,14 +134,14 @@ exports.putCarrierById = async function(req, res) {
     if (isTitleExist)
       return res.status(400).send({
         error: true,
-        message: "Error duplicating carrier title or no change detected"
+        message: "Error duplicating carrier title or no change detected",
       });
 
     // Check if the carrier is existing and update.
 
     let carrier = await Carrier.findByIdAndUpdate(req.params.id, {
       $set: req.body,
-      date_update: Date.now()
+      date_update: Date.now(),
     });
 
     // If there is not carrier with the id provided, send back a 400 response status code with a message.
@@ -142,21 +149,21 @@ exports.putCarrierById = async function(req, res) {
     if (!carrier)
       return res.status(400).send({
         error: true,
-        message: "There are not carrier with the id provided"
+        message: "There are not carrier with the id provided",
       });
 
     // If all the checks is passing, send back a 200 response status code with succesfull message.
 
     return res.status(201).send({
       error: false,
-      message: `The carrier has been modified`
+      message: `The carrier has been modified`,
     });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
 };
 
-exports.deleteCarrierById = async function(req, res) {
+exports.deleteCarrierById = async function (req, res) {
   try {
     // Only an existing admin can perform this action.
 
@@ -169,13 +176,13 @@ exports.deleteCarrierById = async function(req, res) {
     if (!carrier)
       return res.status(400).send({
         error: true,
-        message: "There are not carrier with the id provided"
+        message: "There are not carrier with the id provided",
       });
 
     // If all the checks is passing, delete the carrier, then send back a 200 response status code with succesfull message.
 
     return res.send({
-      message: `The ${carrier.title} has been removed`
+      message: `The ${carrier.title} has been removed`,
     });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
