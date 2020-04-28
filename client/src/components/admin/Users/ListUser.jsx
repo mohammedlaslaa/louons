@@ -21,6 +21,7 @@ function ListUser() {
       ]}
       titlebutton="Ajouter un utilisateur"
       link="users"
+      linkbutton="users"
     />
   );
 }

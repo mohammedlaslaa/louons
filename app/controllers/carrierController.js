@@ -123,20 +123,6 @@ exports.putCarrierById = async function (req, res) {
         message: "Error your are not authorized to modify admin ID",
       });
 
-    // Check if the carrier title is already existing.
-
-    const isTitleExist = await Carrier.findOne({
-      title: { $regex: `^${req.body.title}$`, $options: "i" },
-    });
-
-    // If the carrier title is already existing send a 400 response status code with a message.
-
-    if (isTitleExist)
-      return res.status(400).send({
-        error: true,
-        message: "Error duplicating carrier title or no change detected",
-      });
-
     // Check if the carrier is existing and update.
 
     let carrier = await Carrier.findByIdAndUpdate(req.params.id, {

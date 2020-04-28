@@ -32,8 +32,8 @@ const categorySchema = new mongoose.Schema({
   description: {
     type: String,
     required: true,
-    minlength: 20,
-    maxlength: 255,
+    minlength: 10,
+    maxlength: 150,
   },
 
   date_register: {
@@ -65,21 +65,20 @@ const schemaValidationCategory = Joi.object({
   id_admin: Joi.string(),
 
   title: Joi.string()
-    .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
+    .pattern(new RegExp(/[a-zA-Z\séùàüäîçïèêôö-]+$/))
     .min(3)
     .max(30)
     .required(),
 
   link: Joi.string()
-    .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
+    .pattern(new RegExp(/[a-zA-Z\séùàüäîçïèêôö-]+$/))
     .min(3)
     .max(30)
     .required(),
 
   description: Joi.string()
-    .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
-    .min(20)
-    .max(255)
+    .min(10)
+    .max(150)
     .required(),
 
   isActive: Joi.boolean(),
@@ -101,9 +100,8 @@ const schemaPutValidationCategory = Joi.object({
     .max(30),
 
   description: Joi.string()
-    .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
-    .min(20)
-    .max(255),
+    .min(10)
+    .max(150),
 
   isActive: Joi.boolean(),
 });

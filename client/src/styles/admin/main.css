@@ -22,9 +22,20 @@
 
 /* add user form */
 
-.lastnameerror{
+.lastnameerror {
   font-size: 0.7rem;
   font-weight: bold;
+}
+
+/* addpopup */
+
+.addpopupcontainer {
+  position: absolute;
+  right: 0;
+  left: 0;
+  margin: 5% auto;
+  width: 100%;
+  z-index: 2;
 }
 
 @media screen and (min-width: 768px) {
@@ -44,6 +55,10 @@
 
   .widthform {
     width: 100%;
+  }
+
+  .addpopupcontainer {
+    width: 70%;
   }
 }
 

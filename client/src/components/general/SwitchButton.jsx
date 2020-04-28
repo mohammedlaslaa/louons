@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
 
 function SwitchButton(props) {
-const [isActive, setIsActive] = useState(props.isActive)
+  const [isActive, setIsActive] = useState(props.isActive);
 
   return (
     <BootstrapSwitchButton
@@ -12,11 +12,15 @@ const [isActive, setIsActive] = useState(props.isActive)
       size="xs"
       width="70"
       onChange={() => {
-          props.handleIsActive(props.id, isActive);
-          setIsActive(!isActive)
-        }}
+        props.handleIsActive(
+          props.id,
+          "PUT",
+          JSON.stringify({ isActive: !isActive })
+        );
+        setIsActive(!isActive);
+      }}
     />
   );
 }
 
-export default SwitchButton
+export default SwitchButton;

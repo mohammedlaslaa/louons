@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 const TogglerContext = React.createContext();
 
-function ToggleMenuProvider(props) {
+function TogglerProvider(props) {
   const [isToggle, setIsToggle] = useState(false);
 
   // Set the isToggle state to its opposite. The default value is false.
@@ -24,4 +24,4 @@ function ToggleMenuProvider(props) {
 
 // Export the provider and the context in order to have access wherever it's needed
 
-export {ToggleMenuProvider, TogglerContext};
+export {TogglerProvider, TogglerContext};

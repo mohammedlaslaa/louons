@@ -12,9 +12,12 @@ exports.getAllCategory = async function (req, res) {
       req.cookies["x-auth-token"],
       process.env.PRIVATE_KEY
     );
-    const allCategory = await Category.find({ isActive: true }).select(
-      "categoryId isActive title link"
-    );
+
+    const allCategory = verify.adminLevel
+      ? await Category.find().select("categoryId isActive title link")
+      : await Category.find({ isActive: true }).select(
+          "categoryId isActive title link"
+        );
     return res.status(200).send({
       adminLevel: verify.adminLevel,
       data: allCategory,
@@ -30,9 +33,7 @@ exports.getCategoryById = async function (req, res) {
 
     // Find a category by id, then return it to the client.
 
-    const category = await Category.findById(req.params.id).select(
-      "title description"
-    );
+    const category = await Category.findById(req.params.id);
 
     // If there are not category with this id return a 400 response status code with a message.
 
@@ -44,7 +45,7 @@ exports.getCategoryById = async function (req, res) {
 
     // If there is an existing category, send back a 200 response status code with a this category.
 
-    return res.send(category);
+    return res.send({ error: false, data: category });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -73,23 +74,6 @@ exports.postCategory = async function (req, res) {
 
     maxId.length == 0 ? (valueId = 1) : (valueId = maxId[0].categoryId + 1);
 
-    // Check if the category title is already existing.
-
-    const isTitleExist = await Category.findOne({
-      $or: [
-        { title: { $regex: `^${req.body.title}$`, $options: "i" } },
-        { link: { $regex: `^${req.body.link}$`, $options: "i" } },
-      ],
-    });
-    console.log(isTitleExist);
-    // If the category title is already existing send a 400 response status code with a message.
-
-    if (isTitleExist)
-      return res.status(400).send({
-        error: true,
-        message: "Error duplicating category title or link",
-      });
-
     // Create a new category document.
 
     const category = new Category({
@@ -104,7 +88,9 @@ exports.postCategory = async function (req, res) {
 
     await category.save();
 
-    return res.status(201).send(`The category has been created`);
+    return res
+      .status(201)
+      .send({ error: false, message: `The category has been created` });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -126,20 +112,6 @@ exports.putCategoryById = async function (req, res) {
       return res.status(400).send({
         error: true,
         message: "Error your are not authorized to modify admin ID",
-      });
-
-    // Check if the category title is already existing.
-
-    const isTitleExist = await Category.findOne({
-      title: { $regex: `^${req.body.title}$`, $options: "i" },
-    });
-
-    // If the category title is already existing send a 400 response status code with a message.
-
-    if (isTitleExist)
-      return res.status(400).send({
-        error: true,
-        message: "Error duplicating category title or no change detected",
       });
 
     // Check if the category is existing and update.

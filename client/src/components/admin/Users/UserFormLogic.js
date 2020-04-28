@@ -4,7 +4,6 @@ import AddUserForm from "./UserForm";
 
 function AddUser(props) {
   const [method, setMethod] = useState("POST");
-  const [fetchPut, setFetchPut] = useState(false);
   const [gender, setGender] = useState("mr");
   const [isSubscribe, setIsSubscribe] = useState(false);
   const [lastName, setLastName] = useState("");
@@ -14,6 +13,7 @@ function AddUser(props) {
   const [password, setPassword] = useState("");
   const [confirmationPassword, setConfirmationPassword] = useState("");
   const [errorForm, setErrorForm] = useState(false);
+  const [numberErrorForm, setNumberErrorForm] = useState(0);
   const [errorLastName, setErrorLastName] = useState(false);
   const [errorFirstName, setErrorFirstName] = useState(false);
   const [errorMail, setErrorMail] = useState(false);
@@ -23,6 +23,7 @@ function AddUser(props) {
   const [isFailed, setIsFailed] = useState(false);
   const [idParams] = useState(useParams().id);
 
+  // initialize body object depending the value of the password and the method
   const dataForm =
     password === "" && method === "PUT"
       ? JSON.stringify({
@@ -31,24 +32,28 @@ function AddUser(props) {
           firstName,
           date_birth: dateBirth,
           email,
-          isSubscribe
+          isSubscribe,
         })
       : JSON.stringify({
-        gender,
-        lastName,
-        firstName,
-        date_birth: dateBirth,
-        email,
-        password,
-        isSubscribe
-      });
+          gender,
+          lastName,
+          firstName,
+          date_birth: dateBirth,
+          email,
+          password,
+          isSubscribe,
+        });
 
   const handleSubmit = (e) => {
     e.preventDefault(e);
+
+    // adapt the link according to the method
     const getLink =
       method === "POST"
         ? "http://localhost:5000/louons/api/v1/user"
         : `http://localhost:5000/louons/api/v1/user/${idParams}`;
+
+    // fetch only if there are not errorform
 
     if (!errorForm) {
       fetch(getLink, {
@@ -62,23 +67,33 @@ function AddUser(props) {
         .then((response) => response.json())
         .then((result) => {
           if (!result.error) {
-            handleIsSuccess();
+            // set issuccess to true if there are not error
+            setIsSuccess(true);
+            setTimeout(() => {
+              setIsSuccess(false);
+            }, 1500);
             if (method === "POST") {
+              // reset all value of the form if the value method is equal to POST
               setGender("");
               setLastName("");
               setFirstName("");
               setDateBirth("");
               setEmail("");
               setPassword("");
-              setIsSubscribe(false)
+              setIsSubscribe(false);
             }
           } else if (result.error) {
-            handleFailed();
+            // set isfailed to false if there are an error
+            setIsFailed(true);
+            setTimeout(() => {
+              setIsFailed(false);
+            }, 1500);
           }
         });
     }
   };
 
+  // function that set either the lastname or the firstname
   const handleName = (e) => {
     if (e.target.name === "lastname") {
       setLastName(e.target.value);
@@ -88,8 +103,9 @@ function AddUser(props) {
   };
 
   useEffect(() => {
-    if (idParams && !fetchPut) {
-      setFetchPut(true);
+    setNumberErrorForm(0)
+    // if the method is not equal to true and there are an idparams, fetch the data to the api and set the state
+    if (idParams && method !== "PUT") {
       setMethod("PUT");
       fetch(`http://localhost:5000/louons/api/v1/user/${idParams}`, {
         credentials: "include",
@@ -110,6 +126,7 @@ function AddUser(props) {
         });
     }
 
+    // initialize the regex
     const regexName = new RegExp(/[a-zA-Z\séùàüäîçïèêôö-]+$/);
     const regexMail = new RegExp(
       /^\w*([.|-]){0,1}\w*([.|-]){0,1}\w*[@][a-z]*[.]\w{2,5}/
@@ -118,9 +135,10 @@ function AddUser(props) {
       /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[#$%^&*()+=!?\-';,./{}|:<>?~]).{8,20})/
     );
 
+    // set the error depending the value of the fields
     if (!regexName.test(lastName) && lastName !== "") {
       setErrorLastName(true);
-      setErrorForm(true);
+      setNumberErrorForm((prev) => prev + 1);
     } else {
       setErrorLastName(false);
       setErrorForm(false);
@@ -128,7 +146,7 @@ function AddUser(props) {
 
     if (!regexName.test(firstName) && firstName !== "") {
       setErrorFirstName(true);
-      setErrorForm(true);
+      setNumberErrorForm((prev) => prev + 1);
     } else {
       setErrorFirstName(false);
       setErrorForm(false);
@@ -136,53 +154,41 @@ function AddUser(props) {
 
     if (!regexMail.test(email) && email !== "") {
       setErrorMail(true);
-      setErrorForm(true);
+      setNumberErrorForm((prev) => prev + 1);
     } else {
       setErrorMail(false);
       setErrorForm(false);
     }
 
-    if (!regexPassword.test(password) && password !== "" ) {
+    if (!regexPassword.test(password) && password !== "") {
       setErrorPassword(true);
-      setErrorForm(true);
+      setNumberErrorForm((prev) => prev + 1);
     } else {
       setErrorPassword(false);
       setErrorForm(false);
     }
 
-    if (
-      confirmationPassword !== password  &&
-      password !== ""
-    ) {
+    if (confirmationPassword !== password && password !== "") {
       setErrorConfirmation(true);
-      setErrorForm(true);
+      setNumberErrorForm((prev) => prev + 1);
     } else {
       setErrorConfirmation(false);
       setErrorForm(false);
     }
+
+    if (numberErrorForm > 0) {
+      setErrorForm(true);
+    }
   }, [
+    numberErrorForm,
     lastName,
     firstName,
     email,
     password,
     confirmationPassword,
     idParams,
-    fetchPut
+    method,
   ]);
-
-  const handleIsSuccess = () => {
-    setIsSuccess(true);
-    setTimeout(() => {
-      setIsSuccess(false);
-    }, 1500);
-  };
-
-  const handleFailed = () => {
-    setIsFailed(true);
-    setTimeout(() => {
-      setIsFailed(false);
-    }, 1500);
-  };
 
   return (
     <AddUserForm

@@ -16,45 +16,48 @@ import NotFound from "../general/NotFound";
 import PrivateRoute from "../general/PrivateRoute";
 import "../../styles/admin/global.css";
 import "../../styles/admin/main.css";
-import { ToggleMenuProvider } from "../../context/TogglerMenuContext";
+import { TogglerProvider } from "../../context/TogglerContext";
+import { PopupAddProvider } from "../../context/PopupAddContext";
 
 function Admin() {
   // This routes are only accessible when the user is logged in (PrivateRoute)
 
   return (
-    <ToggleMenuProvider>
+    <TogglerProvider>
       <Header />
       <main className="row">
         <Menu />
         <div className="col-12 col-lg-9">
           <Switch>
-            <Route exact path="/admin">
-              <PrivateRoute component={Home} pageifnotauth="/adminlogin" />
-            </Route>
-            <Route path="/admin/users">
-              <PrivateUser />
-            </Route>
-            <Route path="/admin/categories">
-              <PrivateCategory />
-            </Route>
-            <Route path="/admin/articles">
-              <PrivateArticle />
-            </Route>
-            <Route path="/admin/rentals">
-              <PrivateRental />
-            </Route>
-            <Route path="/admin/addresses">
-              <PrivateAddress />
-            </Route>
-            <Route path="/admin/payments">
-              <PrivatePayment />
-            </Route>
-            <Route path="/admin/deliveries">
-              <PrivateDelivery />
-            </Route>
-            <Route path="/admin/admins">
-              <PrivateAdmin />
-            </Route>
+            <PopupAddProvider>
+              <Route exact path="/admin">
+                <PrivateRoute component={Home} pageifnotauth="/adminlogin" />
+              </Route>
+              <Route path="/admin/users">
+                <PrivateUser />
+              </Route>
+              <Route path="/admin/categories">
+                <PrivateCategory />
+              </Route>
+              <Route path="/admin/articles">
+                <PrivateArticle />
+              </Route>
+              <Route path="/admin/rentals">
+                <PrivateRental />
+              </Route>
+              <Route path="/admin/addresses">
+                <PrivateAddress />
+              </Route>
+              <Route path="/admin/payments">
+                <PrivatePayment />
+              </Route>
+              <Route path="/admin/deliveries">
+                <PrivateDelivery />
+              </Route>
+              <Route path="/admin/admins">
+                <PrivateAdmin />
+              </Route>
+            </PopupAddProvider>
             <Route>
               <NotFound />
             </Route>
@@ -62,7 +65,7 @@ function Admin() {
         </div>
       </main>
       <Footer />
-    </ToggleMenuProvider>
+    </TogglerProvider>
   );
 }
 

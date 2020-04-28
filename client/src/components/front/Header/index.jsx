@@ -3,7 +3,7 @@ import "../../../styles/front/header.css";
 import Logo from "../../general/Logo";
 import Nav from "./Nav";
 import RightSide from "./RightSide";
-import { ToggleMenuProvider } from "../../../context/TogglerMenuContext";
+import { TogglerProvider } from "../../../context/TogglerContext";
 
 function Header() {
   return (
@@ -11,10 +11,10 @@ function Header() {
 
     <header className="headercontainer row m-0 d-flex justify-content-center align-items-center mx-auto">
       <Logo specificclassname="col-5 col-sm-6 col-lg-3 p-0 text-sm-left text-md-center logo" />
-      <ToggleMenuProvider>
+      <TogglerProvider>
           <Nav />
           <RightSide />
-      </ToggleMenuProvider>
+      </TogglerProvider>
     </header>
   );
 }

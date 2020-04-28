@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import MenuList from "./MenuList";
-import { TogglerContext } from "../../../context/TogglerMenuContext";
+import { TogglerContext } from "../../../context/TogglerContext";
 
 class Nav extends Component {
   constructor(props) {

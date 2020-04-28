@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import { TogglerContext } from "../../context/TogglerMenuContext";
+import { TogglerContext } from "../../context/TogglerContext";
 import { CSSTransition } from "react-transition-group";
 
 function Menu() {

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import SwictButton from "../general/SwitchButton";
+import SwitchButton from "../general/SwitchButton";
+import { PopupAddContext } from "../../context/PopupAddContext";
 
 class PageTableList extends Component {
   // Component that render a list table with the props he receives
@@ -22,6 +23,10 @@ class PageTableList extends Component {
     };
   }
 
+  // get the context of popupaddcontext
+
+  static contextType = PopupAddContext;
+
   // When the component is mount, the isloading state is set to true and fetch the data to the api (link provided in props)
   // if there are not error, set the listOfData, else if there are error and the message is "Not authorized..." set the isUnauthorized to true.
   // then set the isloading to false
@@ -30,6 +35,12 @@ class PageTableList extends Component {
     this.setState({
       isLoading: true,
     });
+    this.getList();
+    // initialize the popup context to false at each page change
+    this.context.setToggle(false)
+  }
+
+  getList = () => {
     fetch(this.props.linkapi, {
       credentials: "include",
     })
@@ -52,23 +63,23 @@ class PageTableList extends Component {
           isLoading: false,
         });
       });
-  }
+  };
 
   // This method allow to update the isactive field, depending on the API link (linkputapi or the linkapi) and the id and boolean passed in parameter
   // When this method is called, the isLoadingUpdate state is set to true and when the fetch operation is finished, this state is set to false
 
-  handleIsActive = (id, bool) => {
+  handleRequestFetch = (id, method, body = undefined) => {
     this.setState({
       isLoadingUpdate: true,
     });
     const linkupdate = this.props.linkputapi || this.props.linkapi;
     fetch(`${linkupdate}/${id}`, {
-      method: "PUT",
+      method: method,
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ isActive: !bool }),
+      body,
     })
       .then((res) => res.json())
       .then((result) => {
@@ -76,6 +87,9 @@ class PageTableList extends Component {
           this.setState({
             isLoadingUpdate: false,
           });
+        }
+        if (method === "DELETE") {
+          this.getList();
         }
       });
   };
@@ -96,7 +110,7 @@ class PageTableList extends Component {
       isLoading,
       isLoadingUpdate,
       isUnAuthorized,
-      adminLevel
+      adminLevel,
     } = this.state;
 
     return isLoading ? (
@@ -110,23 +124,40 @@ class PageTableList extends Component {
           <p className="bg-success text-white p-2">Loading....</p>
         )}
         <div className="text-right p-3">
-          {this.props.titlebutton && (
+          {this.props.titlebutton && this.props.linkbutton ? (
             <Link to={`${this.props.link}/add`}>
               <button className="btn text-white bgcolor3c8ce4">
                 {this.props.titlebutton}
               </button>
             </Link>
+          ) : (
+            <button className="btn text-white bgcolor3c8ce4"
+            onClick={()=> this.context.setToggle(!this.context.isToggle)}
+            >
+              {this.props.titlebutton}
+            </button>
           )}
         </div>
         <div className="table-responsive">
           <table className="table table-striped">
             <thead>
               <tr>
-                {listOfTh.map((elt, index) => (
-                  <th className="text-center" key={index}>
-                    {Object.values(elt)}
-                  </th>
-                ))}
+                {listOfTh.map((elt, index) => {
+                  if (elt.delete && adminLevel === "superadmin") {
+                    return (
+                      <th className="text-center" key={index}>
+                        {Object.values(elt)}
+                      </th>
+                    );
+                  } else if (!elt.delete) {
+                    return (
+                      <th className="text-center" key={index}>
+                        {Object.values(elt)}
+                      </th>
+                    );
+                  }
+                  return true;
+                })}
               </tr>
             </thead>
             <tbody>
@@ -147,12 +178,21 @@ class PageTableList extends Component {
                               Voir
                             </Link>
                           </td>
-                        ) : subTh === "delete" && adminLevel === "superadmin" ? (
+                        ) : subTh === "delete" &&
+                          adminLevel === "superadmin" ? (
                           <td
                             className="text-center"
                             key={`delete${indexData}`}
                           >
-                            Delete
+                            <i
+                              className="ri-delete-bin-6-fill ri-xl"
+                              onClick={() =>
+                                this.handleRequestFetch(
+                                  eltData["_id"],
+                                  "DELETE"
+                                )
+                              }
+                            ></i>
                           </td>
                         ) : subTh === "category" ? (
                           <td
@@ -191,10 +231,10 @@ class PageTableList extends Component {
                                     "Non"
                                   )
                                 ) : subTh === "isActive" ? (
-                                  <SwictButton
+                                  <SwitchButton
                                     isActive={eltData["isActive"]}
                                     id={eltData["_id"]}
-                                    handleIsActive={this.handleIsActive}
+                                    handleIsActive={this.handleRequestFetch}
                                   />
                                 ) : subTh === "date_register" ||
                                   subTh === "start_date" ||

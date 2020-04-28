@@ -121,7 +121,7 @@ exports.postInscription = async (req, res) => {
 exports.getAllUsers = async (req, res) => {
   try {
     // Only an admin can perform this action.
-    
+
     const allUsers = await User.find().select(
       "-password -email -date_delete -dateBirth -date_update"
     );
@@ -133,7 +133,9 @@ exports.getAllUsers = async (req, res) => {
 
     // If all the checks is passing, return a 200 response status code with all users.
 
-    return res.status(200).send({adminLevel : res.locals.admin.adminLevel, data : allUsers});
+    return res
+      .status(200)
+      .send({ adminLevel: res.locals.admin.adminLevel, data: allUsers });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -224,7 +226,7 @@ exports.deleteUserById = async (req, res) => {
 
     // If all the checks is passing, return a 200 response status code with a succesfull message.
 
-    return res.send(`User ${user.lastName} has been removed with success`);
+    return res.send({ error: false });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }

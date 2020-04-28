@@ -3,6 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import ListCategory from "../Categories/ListCategory";
 import PrivateRoute from "../../general/PrivateRoute";
 import NotFound from "../../general/NotFound";
+import CategoryFormLogic from "../Categories/CategoryFormLogic"
 
 function PrivateCategory() {
   return (
@@ -10,8 +11,8 @@ function PrivateCategory() {
       <Route exact path="/admin/categories">
         <PrivateRoute component={ListCategory} pageifnotauth="/adminlogin" />
       </Route>
-      <Route exact path="/admin/categories/add">
-        <p>coucou</p>
+      <Route exact path="/admin/categories/:id">
+        <CategoryFormLogic title="Modifier" />
       </Route>
       <Route>
         <NotFound />
