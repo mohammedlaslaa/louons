@@ -49,12 +49,12 @@ const addressSchema = new mongoose.Schema({
 
   date_register: {
     type: Date,
-    default: Date.now()
+    default: new Date()
   },
 
   date_update: {
     type: Date,
-    default: Date.now()
+    default: new Date()
   },
 
   date_delete: {

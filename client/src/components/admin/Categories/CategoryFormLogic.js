@@ -3,7 +3,7 @@ import CategoryForm from "./CategoryForm";
 import { useParams } from "react-router-dom";
 import { PopupAddContext } from "../../../context/PopupAddContext";
 
-function CategoryFormLogic(props) {
+function CategoryFormLogic() {
   const [method, setMethod] = useState("GET");
   const [isActive, setIsActive] = useState(false);
   const [dateRegister, setDateRegister] = useState("");
@@ -16,8 +16,8 @@ function CategoryFormLogic(props) {
   const [errorForm, setErrorForm] = useState(false);
   const [errorPost, setErrorPost] = useState(false);
   const [numberErrorForm, setNumberErrorForm] = useState(0);
-  const [successMessage, setSuccessMessage] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isFailed, setIsFailed] = useState(false);
   const [redirect, setRedirect] = useState(false);
   const idParams = useParams().id;
   const stringRegex = new RegExp(/[a-zA-Z\séùàüäîçïèêôö-]+$/);
@@ -122,17 +122,17 @@ function CategoryFormLogic(props) {
         .then((res) => res.json())
         .then((result) => {
           if (!result.error) {
-            setSuccessMessage(true);
+            setIsSuccess(true);
             setTimeout(() => {
-              setSuccessMessage(false);
+              setIsSuccess(false);
             }, 1500);
             if (arg === "isActive") {
               setIsActive(!isActive);
             }
           } else {
-            setErrorMessage(true);
+            setIsFailed(true);
             setTimeout(() => {
-              setErrorMessage(false);
+              setIsFailed(false);
             }, 1500);
           }
         });
@@ -181,7 +181,6 @@ function CategoryFormLogic(props) {
 
   return (
     <CategoryForm
-      titlepage={props.title}
       description={description}
       setDescription={setDescription}
       title={title}
@@ -194,8 +193,8 @@ function CategoryFormLogic(props) {
       setIsActive={setIsActive}
       dateRegister={dateRegister}
       idParams={idParams}
-      successMessage={successMessage}
-      errorMessage={errorMessage}
+      isSuccess={isSuccess}
+      isFailed={isFailed}
       errorTitle={errorTitle}
       errorLink={errorLink}
       errorDescription={errorDescription}

@@ -12,7 +12,7 @@ function PrivateCategory() {
         <PrivateRoute component={ListCategory} pageifnotauth="/adminlogin" />
       </Route>
       <Route exact path="/admin/categories/:id">
-        <CategoryFormLogic title="Modifier" />
+        <CategoryFormLogic />
       </Route>
       <Route>
         <NotFound />

@@ -1,21 +1,18 @@
 import React from "react";
 import moment from "moment";
+import DivInputForm from "../../general/DivInputForm";
+import HeadFormAdmin from "../HeadFormAdmin";
+
 
 function AddUserForm(props) {
   return (
     <>
-      <h4 className="titlepage">{props.title} un utilisateur</h4>
-      {props.isSuccess && (
-        <p className="bg-success text-white text-center p-2">
-          Utilisateur enregistré avec succés !
-        </p>
-      )}
-      {props.isFailed && (
-        <p className="bg-danger text-white text-center p-2">
-          Une erreur s'est produite, veuillez vérifier votre formulaire ou
-          recommencer.
-        </p>
-      )}
+      <HeadFormAdmin
+        titlepage={`${props.titlepage} un utilisateur`}
+        successMessage={props.isSuccess}
+        isFailed={props.isFailed}
+        errorPost={props.errorPost}
+      />
       <form
         className="mx-auto text-center widthform py-md-2"
         onSubmit={props.handleSubmit}
@@ -43,47 +40,37 @@ function AddUserForm(props) {
             />
           </div>
         </div>
-        {props.errorLastName && (
-          <span className="text-danger lastnameerror text-center">
-            Le nom ne peut pas contenir de chiffre ou de charactère spécial
-          </span>
-        )}
-        <div className="row form-group my-3 d-flex justify-content-center align-items-center">
-          <label className="col-9 col-sm-4 mt-2">Nom :</label>
-          <input
-            type="text"
-            name="lastname"
-            value={props.lastName}
-            className="form-control col-9 col-sm-6 col-md-5"
-            onChange={(e) => {
-              props.handleName(e);
-            }}
-          />
-        </div>
-        {props.errorFirstName && (
-          <span className="text-danger lastnameerror text-center">
-            Le prénom ne peut pas contenir de chiffre ou de charactère spécial
-          </span>
-        )}
-        <div className="row form-group my-3 d-flex justify-content-center align-items-center">
-          <label className="col-9 col-sm-4 mt-2">Prénom :</label>
-          <input
-            type="text"
-            name="firstname"
-            value={props.firstName}
-            className="form-control col-9 col-sm-6 col-md-5"
-            onChange={(e) => {
-              props.handleName(e);
-            }}
-          />
-        </div>
+        <DivInputForm
+          label={"Nom :"}
+          name="lastname"
+          type="text"
+          value={props.lastName}
+          change={(e) => {
+            props.handleName(e);
+            props.setErrorPost(false);
+          }}
+          errorcondition={props.errorLastName}
+          errormessage="Le nom ne peut pas contenir de chiffre ou de charactère spécial"
+        />
+        <DivInputForm
+          label={"Prénom :"}
+          name="firstname"
+          type="text"
+          value={props.firstName}
+          change={(e) => {
+            props.handleName(e);
+            props.setErrorPost(false);
+          }}
+          errorcondition={props.errorFirstName}
+          errormessage="Le prénom ne peut pas contenir de chiffre ou de charactère spécial"
+        />
         <div className="row form-group my-3 d-flex justify-content-center align-items-center">
           <label className="col-9 col-sm-4 mt-2">Date de naissance :</label>
           <input
             type="date"
             name="datebirth"
             min="1940-01-01"
-            max={"2010-01-01"}
+            max="2010-01-01"
             value={
               props.dateBirth && moment(props.dateBirth).format("YYYY-MM-DD")
             }
@@ -97,52 +84,47 @@ function AddUserForm(props) {
             }}
           />
         </div>
-        {props.errorMail && (
-          <span className="text-danger lastnameerror text-center">
-            L'email doit être au format johndoe@louons.fr
-          </span>
-        )}
+        <DivInputForm
+          label={"Email :"}
+          name="email"
+          type="email"
+          value={props.email}
+          change={(e) => {
+            props.setEmail(e.target.value);
+            props.setErrorPost(false);
+          }}
+          errorcondition={props.errorMail}
+          errormessage="L'email doit être au format johndoe@louons.fr"
+        />
+        <DivInputForm
+          label={"Mot de passe :"}
+          name="password"
+          type="password"
+          value={props.password}
+          change={(e) => {
+            props.setPassword(e.target.value);
+            props.setErrorPost(false);
+          }}
+          errorcondition={props.errorPassword}
+          errormessage=" Le mot de passe doit contenir au moins 8 charactères, une majuscule
+          un chiffre et un caractère spécial"
+        />
+        <DivInputForm
+          label={"Confirmation :"}
+          name="passwordconf"
+          type="password"
+          value={props.confirmationPassword}
+          change={(e) => {
+            props.setConfirmationPassword(e.target.value);
+            props.setErrorPost(false);
+          }}
+          errorcondition={props.errorConfirmation}
+          errormessage="Le mot de passe de confirmation doit être identique"
+        />
         <div className="row form-group my-3 d-flex justify-content-center align-items-center">
-          <label className="col-9 col-sm-4 mt-2">Email :</label>
-          <input
-            type="email"
-            name="email"
-            value={props.email}
-            className="form-control col-9 col-sm-6 col-md-5"
-            onChange={(e) => props.setEmail(e.target.value)}
-          />
-        </div>
-        {props.errorPassword && (
-          <span className="text-danger lastnameerror text-center">
-            Le mot de passe doit contenir au moins 8 charactères, une majuscule
-            un chiffre et un caractère spécial
-          </span>
-        )}
-        <div className="row form-group my-3 d-flex justify-content-center align-items-center">
-          <label className="col-9 col-sm-4 mt-2">Mot de passe :</label>
-          <input
-            type="password"
-            name="password"
-            className="form-control col-9 col-sm-6 col-md-5"
-            onChange={(e) => props.setPassword(e.target.value)}
-          />
-        </div>
-        {props.errorConfirmation && (
-          <span className="text-danger lastnameerror text-center">
-            Le mot de passe de confirmation doit être identique
-          </span>
-        )}
-        <div className="row form-group my-3 d-flex justify-content-center align-items-center">
-          <label className="col-9 col-sm-4 mt-2">Confirmation :</label>
-          <input
-            type="password"
-            name="passwordconf"
-            className="form-control col-9 col-sm-6 col-md-5"
-            onChange={(e) => props.setConfirmationPassword(e.target.value)}
-          />
-        </div>
-        <div className="row form-group my-3 d-flex justify-content-center align-items-center">
-          <label className="col-9 col-sm-4 mt-2">Inscription à la newsletter :</label>
+          <label className="col-9 col-sm-4 mt-2">
+            Inscription à la newsletter :
+          </label>
           <div>
             <label className="col-9 col-sm-4 mt-2">Oui</label>
             <input

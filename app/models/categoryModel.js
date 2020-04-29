@@ -38,12 +38,12 @@ const categorySchema = new mongoose.Schema({
 
   date_register: {
     type: Date,
-    default: Date.now(),
+    default: new Date(),
   },
 
   date_update: {
     type: Date,
-    default: Date.now(),
+    default: new Date(),
   },
 
   date_delete: {
@@ -76,10 +76,7 @@ const schemaValidationCategory = Joi.object({
     .max(30)
     .required(),
 
-  description: Joi.string()
-    .min(10)
-    .max(150)
-    .required(),
+  description: Joi.string().min(10).max(150).required(),
 
   isActive: Joi.boolean(),
 });
@@ -99,9 +96,7 @@ const schemaPutValidationCategory = Joi.object({
     .min(3)
     .max(30),
 
-  description: Joi.string()
-    .min(10)
-    .max(150),
+  description: Joi.string().min(10).max(150),
 
   isActive: Joi.boolean(),
 });

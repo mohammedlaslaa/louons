@@ -32,12 +32,17 @@ class PageTableList extends Component {
   // then set the isloading to false
 
   componentDidMount() {
+    this._isMounted = true;
     this.setState({
       isLoading: true,
     });
     this.getList();
     // initialize the popup context to false at each page change
-    this.context.setToggle(false)
+    this.context.setToggle(false);
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   getList = () => {
@@ -50,18 +55,19 @@ class PageTableList extends Component {
           this.setState({
             listOfData: result.data,
             adminLevel: result.adminLevel,
+            isLoading: false,
           });
         } else if (
           (result.error && result.message === "Not authorized admin level") ||
           result.message === "Not Authorized"
         ) {
-          this.setState({
-            isUnAuthorized: true,
-          });
+          if (this._isMounted) {
+            this.setState({
+              isUnAuthorized: true,
+              isLoading: false,
+            });
+          }
         }
-        this.setState({
-          isLoading: false,
-        });
       });
   };
 
@@ -131,8 +137,9 @@ class PageTableList extends Component {
               </button>
             </Link>
           ) : (
-            <button className="btn text-white bgcolor3c8ce4"
-            onClick={()=> this.context.setToggle(!this.context.isToggle)}
+            <button
+              className="btn text-white bgcolor3c8ce4"
+              onClick={() => this.context.setToggle(!this.context.isToggle)}
             >
               {this.props.titlebutton}
             </button>

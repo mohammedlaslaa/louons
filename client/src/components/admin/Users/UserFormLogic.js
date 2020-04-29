@@ -13,6 +13,7 @@ function AddUser(props) {
   const [password, setPassword] = useState("");
   const [confirmationPassword, setConfirmationPassword] = useState("");
   const [errorForm, setErrorForm] = useState(false);
+  const [errorPost, setErrorPost] = useState(false);
   const [numberErrorForm, setNumberErrorForm] = useState(0);
   const [errorLastName, setErrorLastName] = useState(false);
   const [errorFirstName, setErrorFirstName] = useState(false);
@@ -44,6 +45,93 @@ function AddUser(props) {
           isSubscribe,
         });
 
+  useEffect(() => {
+    setErrorForm(false);
+    // if the method is not equal to true and there are an idparams, fetch the data to the api and set the state
+    if (idParams && method !== "PUT") {
+      setMethod("PUT");
+      fetch(`http://localhost:5000/louons/api/v1/user/${idParams}`, {
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          if (!result.error) {
+            setGender(result.gender.toLowerCase());
+            setLastName(result.lastName);
+            setFirstName(result.firstName);
+            setDateBirth(result.date_birth);
+            setEmail(result.email);
+            setIsSubscribe(result.isSubscribe);
+          }
+        });
+    }
+
+    setNumberErrorForm(0);
+
+    // initialize the regex
+    const regexName = new RegExp(/[a-zA-Z\séùàüäîçïèêôö-]+$/);
+    const regexMail = new RegExp(
+      /^\w*([.|-]){0,1}\w*([.|-]){0,1}\w*[@][a-z]*[.]\w{2,5}/
+    );
+    const regexPassword = new RegExp(
+      /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[#$%^&*()+=!?\-';,./{}|:<>?~]).{8,20})/
+    );
+
+    // set the error depending the value of the fields
+    if (!regexName.test(lastName) && lastName !== "") {
+      setErrorLastName(true);
+      setNumberErrorForm((prev) => prev + 1);
+    } else {
+      setErrorLastName(false);
+    }
+
+    if (!regexName.test(firstName) && firstName !== "") {
+      setErrorFirstName(true);
+      setNumberErrorForm((prev) => prev + 1);
+    } else {
+      setErrorFirstName(false);
+    }
+
+    if (!regexMail.test(email) && email !== "") {
+      setErrorMail(true);
+      setNumberErrorForm((prev) => prev + 1);
+    } else {
+      setErrorMail(false);
+    }
+
+    if (!regexPassword.test(password) && password !== "") {
+      setErrorPassword(true);
+      setNumberErrorForm((prev) => prev + 1);
+    } else {
+      setErrorPassword(false);
+    }
+
+    if (confirmationPassword !== password && password !== "") {
+      setErrorConfirmation(true);
+      setNumberErrorForm((prev) => prev + 1);
+    } else {
+      setErrorConfirmation(false);
+    }
+
+    if (numberErrorForm > 0) {
+      setErrorForm(true);
+    } else {
+      setErrorForm(false);
+    }
+  }, [
+    numberErrorForm,
+    lastName,
+    firstName,
+    email,
+    password,
+    confirmationPassword,
+    idParams,
+    method,
+  ]);
+
   const handleSubmit = (e) => {
     e.preventDefault(e);
 
@@ -54,8 +142,20 @@ function AddUser(props) {
         : `http://localhost:5000/louons/api/v1/user/${idParams}`;
 
     // fetch only if there are not errorform
-
-    if (!errorForm) {
+    if (
+      lastName === "" ||
+      firstName === "" ||
+      dateBirth === undefined ||
+      email === ""
+    ) {
+      if(method==="POST" && (password === "" ||
+      confirmationPassword === "")){
+        setErrorPost(true);
+      }else{
+        setErrorPost(true)
+      }
+      
+    } else if (!errorForm) {
       fetch(getLink, {
         method: method,
         credentials: "include",
@@ -80,6 +180,7 @@ function AddUser(props) {
               setDateBirth("");
               setEmail("");
               setPassword("");
+              setConfirmationPassword("");
               setIsSubscribe(false);
             }
           } else if (result.error) {
@@ -101,95 +202,6 @@ function AddUser(props) {
       setFirstName(e.target.value);
     }
   };
-
-  useEffect(() => {
-    setNumberErrorForm(0)
-    // if the method is not equal to true and there are an idparams, fetch the data to the api and set the state
-    if (idParams && method !== "PUT") {
-      setMethod("PUT");
-      fetch(`http://localhost:5000/louons/api/v1/user/${idParams}`, {
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          if (!result.error) {
-            setGender(result.gender.toLowerCase());
-            setLastName(result.lastName);
-            setFirstName(result.firstName);
-            setDateBirth(result.date_birth);
-            setEmail(result.email);
-            setIsSubscribe(result.isSubscribe);
-          }
-        });
-    }
-
-    // initialize the regex
-    const regexName = new RegExp(/[a-zA-Z\séùàüäîçïèêôö-]+$/);
-    const regexMail = new RegExp(
-      /^\w*([.|-]){0,1}\w*([.|-]){0,1}\w*[@][a-z]*[.]\w{2,5}/
-    );
-    const regexPassword = new RegExp(
-      /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[#$%^&*()+=!?\-';,./{}|:<>?~]).{8,20})/
-    );
-
-    // set the error depending the value of the fields
-    if (!regexName.test(lastName) && lastName !== "") {
-      setErrorLastName(true);
-      setNumberErrorForm((prev) => prev + 1);
-    } else {
-      setErrorLastName(false);
-      setErrorForm(false);
-    }
-
-    if (!regexName.test(firstName) && firstName !== "") {
-      setErrorFirstName(true);
-      setNumberErrorForm((prev) => prev + 1);
-    } else {
-      setErrorFirstName(false);
-      setErrorForm(false);
-    }
-
-    if (!regexMail.test(email) && email !== "") {
-      setErrorMail(true);
-      setNumberErrorForm((prev) => prev + 1);
-    } else {
-      setErrorMail(false);
-      setErrorForm(false);
-    }
-
-    if (!regexPassword.test(password) && password !== "") {
-      setErrorPassword(true);
-      setNumberErrorForm((prev) => prev + 1);
-    } else {
-      setErrorPassword(false);
-      setErrorForm(false);
-    }
-
-    if (confirmationPassword !== password && password !== "") {
-      setErrorConfirmation(true);
-      setNumberErrorForm((prev) => prev + 1);
-    } else {
-      setErrorConfirmation(false);
-      setErrorForm(false);
-    }
-
-    if (numberErrorForm > 0) {
-      setErrorForm(true);
-    }
-  }, [
-    numberErrorForm,
-    lastName,
-    firstName,
-    email,
-    password,
-    confirmationPassword,
-    idParams,
-    method,
-  ]);
-
   return (
     <AddUserForm
       isSuccess={isSuccess}
@@ -201,6 +213,7 @@ function AddUser(props) {
       dateBirth={dateBirth}
       email={email}
       password={password}
+      confirmationPassword={confirmationPassword}
       setDateBirth={setDateBirth}
       setEmail={setEmail}
       setPassword={setPassword}
@@ -214,7 +227,9 @@ function AddUser(props) {
       errorConfirmation={errorConfirmation}
       isSubscribe={isSubscribe}
       setIsSubscribe={setIsSubscribe}
-      title={props.title}
+      titlepage={props.title}
+      errorPost={errorPost}
+      setErrorPost={setErrorPost}
     />
   );
 }

@@ -5,60 +5,60 @@ const rentalSchema = new mongoose.Schema({
   id_user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true
+    required: true,
   },
 
   id_article: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Article",
-    required: true
+    required: true,
   },
 
   id_payment: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Payment",
-    required: true
+    required: true,
   },
 
   id_carrier: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Carrier",
-    required: true
+    required: true,
   },
 
   rentalId: {
-    type: Number
+    type: Number,
   },
 
   start_date: {
     type: Date,
-    required: true
+    required: true,
   },
 
   end_date: {
     type: Date,
-    required: true
+    required: true,
   },
 
   date_register: {
     type: Date,
-    default: Date.now()
+    default: new Date(),
   },
 
   date_update: {
     type: Date,
-    default: Date.now()
+    default: new Date(),
   },
 
   date_delete: {
     type: Date,
-    default: null
+    default: null,
   },
 
   isActive: {
     type: Boolean,
-    default: true
-  }
+    default: true,
+  },
 });
 
 // Note that the fields send in the request that are not in this JOI Object will automatically throw a rejected request.
@@ -76,7 +76,7 @@ const schemaValidationRental = Joi.object({
 
   start_date: Joi.date().iso(),
 
-  end_date: Joi.date().iso()
+  end_date: Joi.date().iso(),
 });
 
 // Validator put with the required fields.
@@ -92,7 +92,7 @@ const schemaPutValidationRental = Joi.object({
 
   date_delete: Joi.date().iso(),
 
-  isActive: Joi.boolean()
+  isActive: Joi.boolean(),
 });
 
 const Rental = mongoose.model("Rental", rentalSchema);

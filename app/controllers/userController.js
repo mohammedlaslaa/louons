@@ -100,6 +100,7 @@ exports.postInscription = async (req, res) => {
       email: req.body.email,
       password: hashPwd,
       date_birth: req.body.date_birth,
+      isSubscribe : req.body.isSubscribe
     });
 
     // If all the checks is passing, save the user, then send back a 200 response status code with a successfull message and a token in the header.

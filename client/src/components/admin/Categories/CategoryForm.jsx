@@ -2,6 +2,8 @@ import React, { useContext } from "react";
 import moment from "moment";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
 import { PopupAddContext } from "../../../context/PopupAddContext";
+import DivInputForm from "../../general/DivInputForm";
+import HeadFormAdmin from "../HeadFormAdmin";
 
 function CategoryForm(props) {
   const PopupContext = useContext(PopupAddContext);
@@ -13,23 +15,14 @@ function CategoryForm(props) {
 
   return (
     <>
-      <h4 className="titlepage">{props.titlepage} une catégorie</h4>
-      {props.successMessage ? (
-        <p className="bg-success text-white text-center p-2">
-          Modification enregistré avec succés
-        </p>
-      ) : props.errorMessage ? (
-        <p className="bg-danger text-white text-center p-2">
-          Erreur de duplication ou champ vide
-        </p>
-      ) : (
-        true
-      )}
-      {props.errorPost && (
-        <p className="bg-danger text-white text-center p-2">
-          Aucun champ ne peut être vide ou erreur de duplication
-        </p>
-      )}
+      <HeadFormAdmin
+        titlepage={PopupContext.isToggle ? 
+          "Ajouter une catégorie"
+          :"Modifier une catégorie"}
+        successMessage={props.isSuccess}
+        isFailed={props.isFailed}
+        errorPost={props.errorPost}
+      />
       <form
         className="mx-auto text-center widthform py-md-2"
         onSubmit={props.handleSubmit}
@@ -57,45 +50,32 @@ function CategoryForm(props) {
             </div>
           </>
         )}
-
-        {props.errorTitle && (
-          <span className="text-danger lastnameerror text-center">
-            Ce champ ne peut pas contenir de chiffre
-          </span>
-        )}
-        <div className="row form-group my-3 d-flex justify-content-center align-items-center">
-          <label className="col-9 col-sm-4 mt-2">Titre :</label>
-          <input
-            type="text"
-            name="title"
-            value={props.title}
-            className="form-control col-9 col-sm-6 col-md-5"
-            onChange={(e) => {
-              props.setTitle(e.target.value);
-              props.setErrorPost(false);
-            }}
-          />
-        </div>
-        {props.errorLink && (
-          <span className="text-danger lastnameerror text-center">
-            Ce champ ne peut pas contenir de chiffre
-          </span>
-        )}
-        <div className="row form-group my-3 d-flex justify-content-center align-items-center">
-          <label className="col-9 col-sm-4 mt-2">Lien :</label>
-          <input
-            type="text"
-            name="link"
-            value={props.link}
-            className="form-control col-9 col-sm-6 col-md-5"
-            onChange={(e) => {
-              props.setLink(e.target.value);
-              props.setErrorPost(false);
-            }}
-          />
-        </div>
+        <DivInputForm
+          label={"Titre :"}
+          name="title"
+          type="text"
+          value={props.title}
+          change={(e) => {
+            props.setTitle(e.target.value);
+            props.setErrorPost(false);
+          }}
+          errorcondition={props.errorTitle}
+          errormessage="Ce champ ne peut pas contenir de chiffre"
+        />
+        <DivInputForm
+          label={"Lien :"}
+          value={props.link}
+          name="link"
+          type="text"
+          change={(e) => {
+            props.setLink(e.target.value);
+            props.setErrorPost(false);
+          }}
+          errorcondition={props.errorLink}
+          errormessage="Ce champ ne peut pas contenir d'espace ou de chiffre"
+        />
         {props.errorDescription && (
-          <span className="text-danger lastnameerror text-center">
+          <span className="text-danger errormessage text-center">
             Ce champ doit contenir entre 10 et 150 caractères
           </span>
         )}

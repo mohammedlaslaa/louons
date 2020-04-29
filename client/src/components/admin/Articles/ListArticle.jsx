@@ -20,6 +20,7 @@ function ListArticle() {
       ]}
       titlebutton="Ajouter un article"
       link="articles"
+      linkbutton={true}
     />
   );
 }
