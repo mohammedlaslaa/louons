@@ -100,7 +100,7 @@ exports.postInscription = async (req, res) => {
       email: req.body.email,
       password: hashPwd,
       date_birth: req.body.date_birth,
-      isSubscribe : req.body.isSubscribe
+      isSubscribe: req.body.isSubscribe,
     });
 
     // If all the checks is passing, save the user, then send back a 200 response status code with a successfull message and a token in the header.
@@ -123,9 +123,18 @@ exports.getAllUsers = async (req, res) => {
   try {
     // Only an admin can perform this action.
 
-    const allUsers = await User.find().select(
-      "-password -email -date_delete -dateBirth -date_update"
-    );
+    const allUsers =
+      req.params.searchuser
+        ? await User.find({
+            isActive: true,
+            $or: [
+              { firstName: { $regex: req.params.searchuser, $options: "i" } },
+              { lastName: { $regex: req.params.searchuser, $options: "i" } },
+            ],
+          }).select("_id clientId firstName lastName")
+        : await User.find().select(
+            "-password -email -date_delete -dateBirth -date_update"
+          );
 
     // If the request fail, return a 400 response status code with a message.
 
@@ -202,7 +211,7 @@ exports.putUserById = async (req, res) => {
     // If all the checks is passing, return a 200 response status code with a succesfull message.
 
     return res.send({
-      modified: true,
+      error: false,
       message: "User modified with success",
     });
   } catch (e) {

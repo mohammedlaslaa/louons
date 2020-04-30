@@ -19,9 +19,14 @@ function CategoryForm(props) {
         titlepage={PopupContext.isToggle ? 
           "Ajouter une catégorie"
           :"Modifier une catégorie"}
-        successMessage={props.isSuccess}
         isFailed={props.isFailed}
+        isSuccess={props.isSuccess}
         errorPost={props.errorPost}
+        successMessage={PopupContext.isToggle ?
+          "Article enregistré avec succés" :
+          "Modification enregistré avec succés"
+        }
+        failMessage="Erreur de duplication ou champs vide, veuillez vérifier votre formulaire"
       />
       <form
         className="mx-auto text-center widthform py-md-2"

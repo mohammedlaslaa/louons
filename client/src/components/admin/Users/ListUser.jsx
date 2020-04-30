@@ -7,7 +7,8 @@ function ListUser() {
   return (
     <PageTableList
       titlepage="Liste des utilisateurs"
-      linkapi="http://localhost:5000/louons/api/v1/user"
+      linkapi="http://localhost:5000/louons/api/v1/user/all"
+      linkputapi="http://localhost:5000/louons/api/v1/user"
       th={[
         { clientId: "ID" },
         { gender: "Titre" },

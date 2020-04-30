@@ -13,11 +13,15 @@ exports.getAllCategory = async function (req, res) {
       process.env.PRIVATE_KEY
     );
 
-    const allCategory = verify.adminLevel
-      ? await Category.find().select("categoryId isActive title link")
-      : await Category.find({ isActive: true }).select(
-          "categoryId isActive title link"
-        );
+    const allCategory =
+      req.params.isactive === "activecategory"
+        ? await Category.find({ isActive: true }).select("categoryId title")
+        : verify.adminLevel
+        ? await Category.find().select("categoryId isActive title link")
+        : await Category.find({ isActive: true }).select(
+            "categoryId isActive title link"
+          );
+
     return res.status(200).send({
       adminLevel: verify.adminLevel,
       data: allCategory,

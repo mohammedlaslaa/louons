@@ -19,7 +19,7 @@ router.post("/", isemptybody, userController.postInscription);
 
 // Only the admins can get or update in all the users ! The jwtverify middleware comes to ensure that the client is an admin.
 
-router.get("/", jwtverify, userController.getAllUsers);
+router.get("/all/:searchuser?", jwtverify, userController.getAllUsers);
 
 router.get("/:id", [objectvalid, jwtverify], userController.getUserById);
 

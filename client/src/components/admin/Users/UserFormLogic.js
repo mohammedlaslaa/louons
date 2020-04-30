@@ -20,30 +20,10 @@ function AddUser(props) {
   const [errorMail, setErrorMail] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
   const [errorConfirmation, setErrorConfirmation] = useState(false);
+  const [isSubmit, setIsSubmit] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
   const [idParams] = useState(useParams().id);
-
-  // initialize body object depending the value of the password and the method
-  const dataForm =
-    password === "" && method === "PUT"
-      ? JSON.stringify({
-          gender,
-          lastName,
-          firstName,
-          date_birth: dateBirth,
-          email,
-          isSubscribe,
-        })
-      : JSON.stringify({
-          gender,
-          lastName,
-          firstName,
-          date_birth: dateBirth,
-          email,
-          password,
-          isSubscribe,
-        });
 
   useEffect(() => {
     setErrorForm(false);
@@ -72,6 +52,7 @@ function AddUser(props) {
     setNumberErrorForm(0);
 
     // initialize the regex
+
     const regexName = new RegExp(/[a-zA-Z\séùàüäîçïèêôö-]+$/);
     const regexMail = new RegExp(
       /^\w*([.|-]){0,1}\w*([.|-]){0,1}\w*[@][a-z]*[.]\w{2,5}/
@@ -81,6 +62,7 @@ function AddUser(props) {
     );
 
     // set the error depending the value of the fields
+
     if (!regexName.test(lastName) && lastName !== "") {
       setErrorLastName(true);
       setNumberErrorForm((prev) => prev + 1);
@@ -134,6 +116,27 @@ function AddUser(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault(e);
+    setIsSubmit(true);
+    // initialize body object depending the value of the password and the method
+    const dataForm =
+      password === "" && method === "PUT"
+        ? JSON.stringify({
+            gender,
+            lastName,
+            firstName,
+            date_birth: dateBirth,
+            email,
+            isSubscribe,
+          })
+        : JSON.stringify({
+            gender,
+            lastName,
+            firstName,
+            date_birth: dateBirth,
+            email,
+            password,
+            isSubscribe,
+          });
 
     // adapt the link according to the method
     const getLink =
@@ -141,20 +144,21 @@ function AddUser(props) {
         ? "http://localhost:5000/louons/api/v1/user"
         : `http://localhost:5000/louons/api/v1/user/${idParams}`;
 
-    // fetch only if there are not errorform
+    // fetch only if there are not errorPost,
+    // if the lastname the firstname or the datebirth... are empty set the errorpost state to true, else if there are no error, send the data form to the api
+
     if (
       lastName === "" ||
       firstName === "" ||
       dateBirth === undefined ||
       email === ""
     ) {
-      if(method==="POST" && (password === "" ||
-      confirmationPassword === "")){
-        setErrorPost(true);
-      }else{
-        setErrorPost(true)
-      }
-      
+      setErrorPost(true);
+    } else if (
+      method === "POST" &&
+      (password === "" || confirmationPassword === "")
+    ) {
+      setErrorPost(true);
     } else if (!errorForm) {
       fetch(getLink, {
         method: method,
@@ -230,6 +234,7 @@ function AddUser(props) {
       titlepage={props.title}
       errorPost={errorPost}
       setErrorPost={setErrorPost}
+      isSubmit={isSubmit}
     />
   );
 }

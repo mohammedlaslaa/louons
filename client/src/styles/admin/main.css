@@ -38,6 +38,20 @@
   z-index: 2;
 }
 
+/* autocomplete */
+
+.autocomplete {
+  left: 0;
+  position: absolute;
+  right: 0;
+  z-index: 3;
+}
+
+.listcomplete:hover{
+  background-color: #3c94e4;
+  cursor: pointer;
+}
+
 @media screen and (min-width: 768px) {
   .widthform {
     width: 90%;

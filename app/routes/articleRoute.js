@@ -16,7 +16,7 @@ router.get("/:id", objectvalid, articleController.getArticleById);
 
 router.post(
   "/",
-  [isemptybody, ifexistadminuser],
+  ifexistadminuser,
   articleController.postArticle
 );
 

@@ -4,6 +4,10 @@ const {
   schemaPutValidationArticle,
 } = require("../models/articleModel");
 const jwt = require("jsonwebtoken");
+const formidable = require("formidable");
+const fs = require("fs");
+const UPLOAD_IMG_PATH = "uploads/img/";
+const crypto = require("crypto");
 
 exports.getAllArticle = async function (req, res) {
   try {
@@ -55,61 +59,82 @@ exports.getArticleById = async function (req, res) {
 exports.postArticle = async function (req, res) {
   try {
     // Only an existing admin or an existing user can perform this action.
+    const form = new formidable.IncomingForm();
+    let objdata = {};
+    const formdata = await new Promise((resolve, reject) => {
+      form.parse(req, (err, fields, files) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        // store the fields sended by the client in the objdata
+        objdata = fields;
+        objdata["pictures"] = [];
+        // initialize the name of the picture and the path
+        for (const file of Object.entries(files)) {
+          const title = file[1].name;
+          const ext = title.split(".");
+          const random = Math.random().toString();
+          const path = `${crypto
+            .createHash("sha1")
+            .update(ext[0] + random)
+            .digest("hex")}.${ext[1]}`;
+          objdata["pictures"] = [
+            ...objdata["pictures"],
+            {
+              title: title,
+              path_picture: path,
+            },
+          ];
 
-    // Validation post article.
-
-    const { error } = schemaValidationArticle.validate(req.body);
-    if (error)
-      return res.status(400).send({ error: true, message: error.message });
-
-    // Get the id of the client
-    let ownerId = res.locals.owner.adminLevel
-      ? req.body.id_user
-      : res.locals.owner.id;
-
-    // Get the max value of articleId and increment it to the next article registered.
-
-    const maxId = await Article.find()
-      .sort({ articleId: -1 })
-      .limit(1)
-      .select("articleId");
-
-    let valueId;
-
-    // If the maxId does not return a value set the valueId to 1 by default.
-
-    maxId.length == 0 ? (valueId = 1) : (valueId = maxId[0].articleId + 1);
-
-    // Check if the article title is already existing.
-
-    const isTitleExist = await Article.findOne({
-      title: { $regex: `^${req.body.title}$`, $options: "i" },
+          fs.rename(file[1].path, `${UPLOAD_IMG_PATH}/${path}`, (err) => {
+            if (err) throw err;
+          });
+        }
+        resolve("done");
+      });
     });
 
-    // If the article title is already existing send a 400 response status code with a message.
+    if (formdata === "done") {
+      // Validation post article.
 
-    if (isTitleExist)
+      const { error } = schemaValidationArticle.validate(objdata);
+      if (error)
+        return res.status(400).send({ error: true, message: error.message });
+
+      // Get the id of the client
+
+      objdata["id_user"] = res.locals.owner.adminLevel
+        ? objdata.id_user
+        : res.locals.owner.id;
+
+      // Get the max value of articleId and increment it to the next article registered.
+
+      const maxId = await Article.find()
+        .sort({ articleId: -1 })
+        .limit(1)
+        .select("articleId");
+
+      let valueId;
+
+      // If the maxId does not return a value set the valueId to 1 by default.
+
+      maxId.length == 0 ? (valueId = 1) : (valueId = maxId[0].articleId + 1);
+
+      objdata["articleId"] = valueId;
+
+      // Create a new article document.
+
+      const article = new Article(objdata);
+
+      // If all the checks is passing, save the article, then send back a 200 response status code with a successfull message.
+
+      await article.save();
+
       return res
-        .status(400)
-        .send({ error: true, message: "Error duplicating article title" });
-
-    // Create a new article document.
-
-    const article = new Article({
-      id_user: ownerId,
-      articleId: valueId,
-      id_category: req.body.id_category,
-      title: req.body.title,
-      description: req.body.description,
-      price: req.body.price,
-      pictures: req.body.pictures,
-    });
-
-    // If all the checks is passing, save the article, then send back a 200 response status code with a successfull message.
-
-    await article.save();
-
-    return res.status(201).send(`The article has been created`);
+        .status(201)
+        .send({ error: false, message: `The article has been created` });
+    }
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -190,7 +215,7 @@ exports.deleteArticleById = async function (req, res) {
 
     // Check if an article exist and delete.
 
-    const article = await Article.findByIdAndRemove(req.params.id);
+    const article = await Article.findById(req.params.id);
 
     // If there is not article with the id provided, send back a 400 response status code with a message.
 
@@ -199,6 +224,14 @@ exports.deleteArticleById = async function (req, res) {
         error: true,
         message: "There are not article with the id provided",
       });
+
+    // delete all picture associated with the article
+
+    article.pictures.forEach((e) => {
+      fs.unlinkSync(`${UPLOAD_IMG_PATH}/${e.path_picture}`);
+    });
+
+    await Article.findByIdAndRemove(req.params.id);
 
     // If all the checks is passing, delete the article, then send back a 200 response status code with succesfull message.
 

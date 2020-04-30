@@ -1,16 +1,16 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import ListDelivery from "../Deliveries/ListDelivery";
+import ListAddress from "./ListAddress";
 import PrivateRoute from "../../general/PrivateRoute";
 import NotFound from "../../general/NotFound";
 
-function PrivateDelivery() {
+function PrivateAddress() {
   return (
     <Switch>
-      <Route exact path="/admin/deliveries">
-        <PrivateRoute component={ListDelivery} pageifnotauth="/adminlogin" />
+      <Route exact path="/admin/addresses">
+        <PrivateRoute component={ListAddress} pageifnotauth="/adminlogin" />
       </Route>
-      <Route exact path="/admin/deliveries/add">
+      <Route exact path="/admin/addresses/add">
         <p>coucou</p>
       </Route>
       <Route>
@@ -20,4 +20,4 @@ function PrivateDelivery() {
   );
 }
 
-export default PrivateDelivery;
+export default PrivateAddress;

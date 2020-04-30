@@ -6,14 +6,14 @@ const imageSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 3,
-    maxlength: 30
+    maxlength: 200
   },
 
   path_picture: {
     type: String,
     required: true,
     minlength: 10,
-    maxlength: 50
+    maxlength: 200
   }
 });
 
@@ -37,6 +37,7 @@ const articleSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
+    unique: true,
     minlength: 3,
     maxlength: 30
   },
@@ -45,7 +46,7 @@ const articleSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 10,
-    maxlength: 200
+    maxlength: 250
   },
 
   pictures: [imageSchema],
@@ -97,7 +98,7 @@ const schemaValidationArticle = Joi.object({
 
   description: Joi.string()
     .min(10)
-    .max(200)
+    .max(250)
     .required(),
 
   price: Joi.number()
@@ -122,7 +123,7 @@ const schemaPutValidationArticle = Joi.object({
 
   description: Joi.string()
     .min(10)
-    .max(200),
+    .max(250),
 
   price: Joi.number()
     .min(1)

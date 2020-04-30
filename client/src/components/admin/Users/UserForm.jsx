@@ -3,15 +3,16 @@ import moment from "moment";
 import DivInputForm from "../../general/DivInputForm";
 import HeadFormAdmin from "../HeadFormAdmin";
 
-
 function AddUserForm(props) {
   return (
     <>
       <HeadFormAdmin
         titlepage={`${props.titlepage} un utilisateur`}
-        successMessage={props.isSuccess}
+        isSuccess={props.isSuccess}
         isFailed={props.isFailed}
         errorPost={props.errorPost}
+        successMessage="Utilisateur enregistré avec succés"
+        failMessage="Erreur de duplication utilisateur ou champs vide, veuillez vérifier votre formulaire"
       />
       <form
         className="mx-auto text-center widthform py-md-2"
@@ -93,7 +94,7 @@ function AddUserForm(props) {
             props.setEmail(e.target.value);
             props.setErrorPost(false);
           }}
-          errorcondition={props.errorMail}
+          errorcondition={props.errorMail && props.isSubmit}
           errormessage="L'email doit être au format johndoe@louons.fr"
         />
         <DivInputForm

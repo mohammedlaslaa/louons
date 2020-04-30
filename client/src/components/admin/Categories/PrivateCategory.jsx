@@ -1,9 +1,9 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import ListCategory from "../Categories/ListCategory";
+import ListCategory from "./ListCategory";
 import PrivateRoute from "../../general/PrivateRoute";
 import NotFound from "../../general/NotFound";
-import CategoryFormLogic from "../Categories/CategoryFormLogic"
+import CategoryFormLogic from "./CategoryFormLogic"
 
 function PrivateCategory() {
   return (

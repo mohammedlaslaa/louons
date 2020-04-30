@@ -1,9 +1,9 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import ListArticle from "../Articles/ListArticle";
+import ListArticle from "./ListArticle";
 import PrivateRoute from "../../general/PrivateRoute";
 import NotFound from "../../general/NotFound";
-import ArticleFormLogic from "../Articles/ArticleFormLogic";
+import ArticleFormLogic from "./ArticleFormLogic.js";
 
 function PrivateArticle() {
   return (
@@ -12,7 +12,7 @@ function PrivateArticle() {
         <PrivateRoute component={ListArticle} pageifnotauth="/adminlogin" />
       </Route>
       <Route exact path="/admin/articles/add">
-        <ArticleFormLogic />
+        <ArticleFormLogic title="Ajouter" />
       </Route>
       <Route>
         <NotFound />

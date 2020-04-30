@@ -27,8 +27,14 @@ function CategoryFormLogic() {
   // fetch the data to the api at the first loading
 
   useEffect(() => {
+
+    // initialize the value method and the number of error form
+
     setMethod("PUT");
     setNumberErrorForm(0);
+
+    // fetch the data depending if the method state is settled to 'GET' and if there are an idParams
+
     if (method === "GET" && idParams) {
       fetch(`http://localhost:5000/louons/api/v1/category/${idParams}`, {
         method: method,
@@ -49,12 +55,13 @@ function CategoryFormLogic() {
         });
     }
 
+    // condition to display some error in the form
+
     if (!stringRegex.test(title) && title !== "") {
       setErrorTitle(true);
       setNumberErrorForm((prev) => prev + 1);
     } else {
       setErrorTitle(false);
-      setErrorForm(false);
     }
 
     if (!linkRegex.test(link) && link !== "") {
@@ -62,7 +69,6 @@ function CategoryFormLogic() {
       setNumberErrorForm((prev) => prev + 1);
     } else {
       setErrorLink(false);
-      setErrorForm(false);
     }
 
     if (
@@ -73,10 +79,11 @@ function CategoryFormLogic() {
       setNumberErrorForm((prev) => prev + 1);
     } else {
       setErrorDescription(false);
-      setErrorForm(false);
     }
     if (numberErrorForm > 0) {
       setErrorForm(true);
+    }else{
+      setErrorForm(false)
     }
   }, [
     idParams,

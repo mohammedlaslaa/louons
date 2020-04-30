@@ -1,6 +1,6 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import ListRental from "../Rentals/ListRental";
+import ListRental from "./ListRental";
 import PrivateRoute from "../../general/PrivateRoute";
 import NotFound from "../../general/NotFound";
 

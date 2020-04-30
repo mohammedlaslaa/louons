@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import ListUser from "../Users/ListUser";
-import UserFormLogic from "../Users/UserFormLogic.js";
+import ListUser from "./ListUser";
+import UserFormLogic from "./UserFormLogic.js";
 import PrivateRoute from "../../general/PrivateRoute";
 import NotFound from "../../general/NotFound";
 
