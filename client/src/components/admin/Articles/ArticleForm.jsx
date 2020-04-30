@@ -9,8 +9,9 @@ function ArticleForm(props) {
       <HeadFormAdmin
         titlepage={`${props.titlepage} un article`}
         isFailed={props.isFailed}
+        isSuccess={props.isSuccess}
         errorPost={props.errorPost}
-        successMessage="Article enregistré avec succés"
+        successMessage={`Article ${props.statusMessageForm} avec succés`}
         failMessage="Erreur de duplication ou champs vide, veuillez vérifier votre formulaire"
       />
       <form
@@ -18,7 +19,7 @@ function ArticleForm(props) {
         onSubmit={props.handleSubmit}
       >
         <div className="row form-group my-3 d-flex justify-content-center align-items-center">
-          <label className="col-9 col-sm-4 mt-2">Etat :</label>
+          <label className="col-12 col-sm-4 mt-2">Etat :</label>
           <BootstrapSwitchButton
             checked={props.isActive}
             onlabel="Actif"
@@ -30,6 +31,19 @@ function ArticleForm(props) {
             }}
           />
         </div>
+        {props.pictureDisplay.length > 0 && (
+          <div className="col-12 m-0 p-0 row d-flex justify-content-between">
+            {props.pictureDisplay.map((e) => (
+              <div className="col-4 col-sm-4 p-2 col-md-3 mx-auto" key={e.title}>
+                <img
+                  src={`http://localhost:5000/uploads/img/${e.path_picture}`}
+                  className="w-100"
+                  alt=""
+                />
+              </div>
+            ))}
+          </div>
+        )}
         {props.errorCategory && props.isSubmit && (
           <span className="text-danger errormessage text-center">
             Veuillez sélectionner une catégorie
@@ -40,7 +54,7 @@ function ArticleForm(props) {
           <select
             name="id_category"
             id="category"
-            className="p-1"
+            className="p-1 col-9 col-sm-6 col-md-5"
             value={props.idCategory}
             onChange={(e) => props.setIdCategory(e.target.value)}
           >
@@ -52,25 +66,36 @@ function ArticleForm(props) {
             ))}
           </select>
         </div>
+
         {props.errorGrasp && (
           <span className="text-danger errormessage text-center">
-            Veuillez saisir le nom ou le prénom de l'utilisateur en toute lettre et le sélectionner sur la liste
+            Veuillez saisir le nom ou le prénom de l'utilisateur en toute lettre
+            et le sélectionner sur la liste
           </span>
         )}
+
         <div className="position-relative">
-          <DivInputForm
-            label={"Propriétaire :"}
-            name="owner"
-            type="text"
-            value={props.grasp}
-            change={(e) => {
-              props.setGrasp(e.target.value);
-              props.getList(e.target.value);
-              props.setIsShow(true);
-              props.setOwner("")
-              props.setErrorGrasp(true)
-            }}
-          />
+          {props.idParams ? (
+            <div className="row form-group my-3 d-flex justify-content-center align-items-center">
+              <label className="col-9 col-sm-4 mt-2">Propriétaire :</label>
+              <p className="col-9 col-sm-6 col-md-5">{props.grasp}</p>
+            </div>
+          ) : (
+            <DivInputForm
+              label={"Propriétaire :"}
+              name="owner"
+              type="text"
+              value={props.grasp}
+              change={(e) => {
+                props.setGrasp(e.target.value);
+                props.getList(e.target.value);
+                props.setIsShow(true);
+                props.setOwner("");
+                props.setErrorGrasp(true);
+              }}
+            />
+          )}
+
           {props.isShow && props.grasp !== "" && (
             <ul className="list-unstyled bg-white autocomplete">
               {props.users.map((e) => (
@@ -80,8 +105,8 @@ function ArticleForm(props) {
                   onClick={() => {
                     props.setGrasp(`${e.lastName} ${e.firstName}`);
                     props.setIsShow(false);
-                    props.setOwner(e._id)
-                    props.setErrorGrasp(false)
+                    props.setOwner(e._id);
+                    props.setErrorGrasp(false);
                   }}
                 >{`${e.clientId} ${e.lastName} ${e.firstName}`}</li>
               ))}
@@ -110,6 +135,7 @@ function ArticleForm(props) {
           <textarea
             type="text"
             name="description"
+            rows="6"
             value={props.description}
             className="form-control col-9 col-sm-6 col-md-5"
             onChange={(e) => {
@@ -135,7 +161,7 @@ function ArticleForm(props) {
         />
         {props.errorFile > 0 && props.isSubmit && (
           <span className="text-danger errormessage text-center">
-          L'article doit contenir 3 images sous le format png ou jpg/jpeg
+            L'article doit contenir 3 images sous le format png ou jpg/jpeg
           </span>
         )}
         <div className="row form-group my-3 d-flex justify-content-center align-items-center">
@@ -147,7 +173,7 @@ function ArticleForm(props) {
             value={props.picture}
             className="form-control-file col-9 col-sm-6 col-md-5"
             onChange={(e) => {
-                props.setPicture(e.target.files)
+              props.setPicture(e.target.files);
             }}
           />
         </div>

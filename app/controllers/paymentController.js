@@ -150,7 +150,7 @@ exports.putPaymentById = async function(req, res) {
 
     await payment.save();
 
-    return res.status(201).send({
+    return res.status(200).send({
       error: false,
       message: `The payment has been modified`
     });

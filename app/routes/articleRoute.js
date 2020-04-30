@@ -22,7 +22,7 @@ router.post(
 
 router.put(
   "/:id",
-  [objectvalid, isemptybody, ifexistadminuser],
+  [objectvalid, ifexistadminuser],
   articleController.putArticleById
 );
 

@@ -14,6 +14,7 @@ function ListArticle() {
         { description: "Nom" },
         { category: "Catégorie" },
         { price: "Prix" },
+        { isActive: "Etat" },
         { seeMore: "Voir" },
         { date_register: "Date d'ajout" },
         { delete: "Supprimer" },

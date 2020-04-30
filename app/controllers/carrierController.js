@@ -140,7 +140,7 @@ exports.putCarrierById = async function (req, res) {
 
     // If all the checks is passing, send back a 200 response status code with succesfull message.
 
-    return res.status(201).send({
+    return res.status(200).send({
       error: false,
       message: `The carrier has been modified`,
     });

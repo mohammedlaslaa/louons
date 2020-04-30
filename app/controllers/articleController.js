@@ -6,7 +6,7 @@ const {
 const jwt = require("jsonwebtoken");
 const formidable = require("formidable");
 const fs = require("fs");
-const UPLOAD_IMG_PATH = "uploads/img/";
+const UPLOAD_IMG_PATH = "public/uploads/img/";
 const crypto = require("crypto");
 
 exports.getAllArticle = async function (req, res) {
@@ -36,8 +36,8 @@ exports.getArticleById = async function (req, res) {
     // Find an article by id, then return it to the client.
 
     const article = await Article.findById(req.params.id)
-      .select("id_user title description price pictures")
-      .populate("id_category", "title description -_id")
+      .select("id_user title description price pictures isActive")
+      .populate("id_category", "title description _id")
       .populate("id_user", "lastName firstName email");
 
     // If there are not article with this id return a 400 response status code with a message.
@@ -59,6 +59,8 @@ exports.getArticleById = async function (req, res) {
 exports.postArticle = async function (req, res) {
   try {
     // Only an existing admin or an existing user can perform this action.
+
+    // parse the formdata incoming with formidable
     const form = new formidable.IncomingForm();
     let objdata = {};
     const formdata = await new Promise((resolve, reject) => {
@@ -144,34 +146,6 @@ exports.putArticleById = async function (req, res) {
   try {
     // Only an existing admin or an existing owner user can perform this action.
 
-    // Validation put article.
-
-    const { error } = schemaPutValidationArticle.validate(req.body);
-    if (error)
-      return res.status(400).send({ error: true, message: error.message });
-
-    // If req.body.id_user is sent, return a 400 response status sode with a message.
-
-    if (req.body.id_user)
-      return res.status(400).send({
-        error: true,
-        message: "Error your are not authorized to modify user ID",
-      });
-
-    // Check if the article title is already existing.
-
-    const isTitleExist = await Article.findOne({
-      title: { $regex: `^${req.body.title}$`, $options: "i" },
-    });
-
-    // If the article title is already existing send a 400 response status code with a message.
-
-    if (isTitleExist)
-      return res.status(400).send({
-        error: true,
-        message: "Error duplicating article title or no change detected",
-      });
-
     // Check if the article is existing.
 
     let article = await Article.findOne({ _id: req.params.id });
@@ -184,26 +158,98 @@ exports.putArticleById = async function (req, res) {
         message: "There are not article with the id provided",
       });
 
-    // If the article exist, if the user is not owner and it is not an admin or a superadmin, send back a 400 response status code with a message.
+    // this condition will be triggerred only when the user would activate or desactivate one article
 
-    if (
-      article.id_user.toString() !== res.locals.owner.id &&
-      res.locals.owner.adminLevel !== "admin" &&
-      res.locals.owner.adminLevel !== "superadmin"
-    )
-      return res.status(400).send({
-        error: true,
-        message: "Error you don't have the permission to modify this article",
+    if (Object.keys(req.body).length !== 0 && Object.keys(req.body.isActive)) {
+      // Update the isactive, then, send back a 200 response status code with succesfull message.
+
+      article = await Article.findByIdAndUpdate(req.params.id, {
+        $set: req.body,
+        date_update: Date.now(),
       });
 
-    // If all the checks is passing, update the article, then send back a 200 response status code with succesfull message.
+      return res
+        .status(200)
+        .send({ error: false, message: `The article has been modified` });
+    }
+    
+    // parse the formdata incoming with formidable
+    const form = new formidable.IncomingForm();
+    let objdata = {};
+    const formdata = await new Promise((resolve, reject) => {
+      form.parse(req, (err, fields, files) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        // store the fields sended by the client in the objdata
+        objdata = fields;
 
-    article = await Article.findByIdAndUpdate(req.params.id, {
-      $set: req.body,
-      date_update: Date.now(),
+        if (Object.keys(files).length === 3) {
+          objdata["pictures"] = [];
+          // initialize the name of the picture and the path
+          for (const file of Object.entries(files)) {
+            const title = file[1].name;
+            const ext = title.split(".");
+            const random = Math.random().toString();
+            const path = `${crypto
+              .createHash("sha1")
+              .update(ext[0] + random)
+              .digest("hex")}.${ext[1]}`;
+            objdata["pictures"] = [
+              ...objdata["pictures"],
+              {
+                title: title,
+                path_picture: path,
+              },
+            ];
+
+            fs.rename(file[1].path, `${UPLOAD_IMG_PATH}/${path}`, (err) => {
+              if (err) throw err;
+            });
+          }
+        }
+        resolve("done");
+      });
     });
 
-    return res.status(201).send(`The article has been modified`);
+    if (formdata === "done") {
+      // Validation put article.
+      const { error } = schemaPutValidationArticle.validate(objdata);
+      if (error)
+        return res.status(400).send({ error: true, message: error.message });
+
+      // If req.body.id_user is sent, return a 400 response status sode with a message.
+
+      if (objdata.id_user)
+        return res.status(400).send({
+          error: true,
+          message: "Error your are not authorized to modify user ID",
+        });
+
+      // If the article exist, if the user is not owner and it is not an admin or a superadmin, send back a 400 response status code with a message.
+
+      if (
+        article.id_user.toString() !== res.locals.owner.id &&
+        res.locals.owner.adminLevel !== "admin" &&
+        res.locals.owner.adminLevel !== "superadmin"
+      )
+        return res.status(400).send({
+          error: true,
+          message: "Error you don't have the permission to modify this article",
+        });
+
+      // If all the checks is passing, update the article, then send back a 200 response status code with succesfull message.
+
+      article = await Article.findByIdAndUpdate(req.params.id, {
+        $set: objdata,
+        date_update: Date.now(),
+      });
+
+      return res
+        .status(200)
+        .send({ error: false, message: `The article has been modified` });
+    }
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }

@@ -132,7 +132,7 @@ exports.postAddress = async (req, res) => {
 
     await address.save();
 
-    return res.status(200).send({ message: "Address added with success" });
+    return res.status(201).send({ message: "Address added with success" });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }

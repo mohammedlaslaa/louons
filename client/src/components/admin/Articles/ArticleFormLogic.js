@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import ArticleForm from "./ArticleForm";
 
 function ArticleFormLogic(props) {
-  const [isFetched, setIsFetched] = useState(false);
+  const [method, setMethod] = useState("POST");
+  const [isFetchedCategory, setIsFetchedCategory] = useState(false);
+  const [isFetchedArticle, setIsFetchedArticle] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
   const [errorPost, setErrorPost] = useState(false);
@@ -17,6 +20,7 @@ function ArticleFormLogic(props) {
   const [description, setDescription] = useState("");
   const [isSubmit, setIsSubmit] = useState("");
   const [price, setPrice] = useState(0);
+  const [pictureDisplay, setPictureDisplay] = useState([]);
   const [picture, setPicture] = useState([]);
   const [errorForm, setErrorForm] = useState(false);
   const [errorCategory, setErrorCategory] = useState(false);
@@ -26,17 +30,24 @@ function ArticleFormLogic(props) {
   const [errorFile, setErrorFile] = useState(0);
   const [errorGrasp, setErrorGrasp] = useState(true);
   const [isShow, setIsShow] = useState(false);
+  const [statusMessageForm, setStatusMessageForm] = useState("enregistré");
   const dataform = new FormData();
+  const [idParams] = useState(useParams().id);
 
   useEffect(() => {
     // reset the number error of the form and the error file
-    setNumberErrorForm(0);
-    setErrorFile(0);
+    if (numberErrorForm > 0) {
+      setNumberErrorForm(0);
+    }
+
+    if (errorFile > 0) {
+      setErrorFile(0);
+    }
 
     // fetch the datas if isFetched is false, then set this to true
     // if there are not error set the category state with the result.data value
 
-    if (!isFetched) {
+    if (!isFetchedCategory) {
       fetch("http://localhost:5000/louons/api/v1/category/all/activecategory", {
         credentials: "include",
       })
@@ -44,7 +55,29 @@ function ArticleFormLogic(props) {
         .then((result) => {
           if (!result.error) {
             setCategory(result.data);
-            setIsFetched(true);
+            setIsFetchedCategory(true);
+          }
+        });
+    }
+
+    if (idParams && !isFetchedArticle) {
+      setStatusMessageForm("modifié")
+      setMethod("PUT");
+      fetch(`http://localhost:5000/louons/api/v1/article/${idParams}`, {
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          if (!result.error) {
+            setIsFetchedArticle(true);
+            setIdCategory(result.id_category._id);
+            setPrice(result.price);
+            setTitle(result.title);
+            setDescription(result.description);
+            setGrasp(`${result.id_user.lastName} ${result.id_user.firstName}`);
+            setPictureDisplay(result.pictures);
+            setIsActive(result.isActive);
+            setErrorGrasp(false);
           }
         });
     }
@@ -70,7 +103,7 @@ function ArticleFormLogic(props) {
           dataform.append(`file${i}`, picture[i]);
         }
       }
-    } else {
+    } else if (method === "POST") {
       setErrorFile(true);
       setNumberErrorForm((prev) => prev + 1);
     }
@@ -110,17 +143,26 @@ function ArticleFormLogic(props) {
     description,
     idCategory,
     numberErrorForm,
-    isFetched,
+    isFetchedCategory,
     users,
     price,
     grasp,
     errorGrasp,
     picture,
     dataform,
+    idParams,
+    isFetchedArticle,
+    errorFile,
+    method,
   ]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const url =
+      method === "POST"
+        ? "http://localhost:5000/louons/api/v1/article"
+        : `http://localhost:5000/louons/api/v1/article/${idParams}`;
 
     // set the state isSubmit to true in order to display some error in the form
 
@@ -132,13 +174,14 @@ function ArticleFormLogic(props) {
     dataform.append("description", description);
     dataform.append("price", price);
     dataform.append("isActive", isActive);
-    dataform.append("id_user", owner);
+    method === "POST" && dataform.append("id_user", owner);
     dataform.append("id_category", idCategory);
 
-    // if error form is settled to false post the data to the api 
+    // if error form is settled to false post the data to the api
+
     if (!errorForm) {
-      fetch(`http://localhost:5000/louons/api/v1/article`, {
-        method: "POST",
+      fetch(url, {
+        method: method,
         credentials: "include",
         body: dataform,
       })
@@ -146,20 +189,34 @@ function ArticleFormLogic(props) {
         .then((result) => {
           if (!result.error) {
             setIsSuccess(true);
-            setTimeout(() => setIsSuccess(false), 2000);
-            setGrasp("")
-            setTitle("")
-            setDescription("")
-            setPrice(0)
-            setOwner("")
-            setPicture([])
-            setIdCategory("")
-            setIsSubmit(false)
+            setTimeout(() => {
+              setIsSuccess(false);
+            }, 2000);
+            if (method === "POST") {
+              setGrasp("");
+              setTitle("");
+              setDescription("");
+              setPrice(0);
+              setOwner("");
+              setPicture([]);
+              setIdCategory("");
+              setIsSubmit(false);
+            } else {
+              fetch(`http://localhost:5000/louons/api/v1/article/${idParams}`, {
+                credentials: "include",
+              })
+                .then((res) => res.json())
+                .then((result) => {
+                  if (!result.error) {
+                    setPictureDisplay(result.pictures);
+                  }
+                });
+            }
           } else {
             setIsFailed(true);
             setTimeout(() => setIsFailed(false), 2000);
-            if(result.message === "\"id_user\" is not allowed to be empty"){
-              setErrorGrasp(true)
+            if (result.message === '"id_user" is not allowed to be empty') {
+              setErrorGrasp(true);
             }
           }
         });
@@ -167,14 +224,13 @@ function ArticleFormLogic(props) {
   };
 
   // get the list of user depending the parameter sended by the client
-  
+
   const getList = (occ) => {
     fetch(`http://localhost:5000/louons/api/v1/user/all/${occ}`, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((result) => {
-        setIsFetched(true);
         if (!result.error) {
           setUsers(result.data);
         }
@@ -217,6 +273,9 @@ function ArticleFormLogic(props) {
       isShow={isShow}
       setPicture={setPicture}
       isSubmit={isSubmit}
+      pictureDisplay={pictureDisplay}
+      idParams={idParams}
+      statusMessageForm={statusMessageForm}
     />
   );
 }

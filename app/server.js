@@ -8,6 +8,8 @@ const port = process.env.PORT || 5000;
 // Charging all routes of the app.
 require("./startup/route")(app);
 
+app.use(express.static('public'));
+
 // Connection to the Database.
 require("./startup/database.js");
 
