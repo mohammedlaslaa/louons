@@ -2,6 +2,7 @@ import React from "react";
 import moment from "moment";
 import DivInputForm from "../Form/DivInputForm";
 import HeadFormAdmin from "../Form/HeadFormAdmin";
+import SubmitButton from "../Form/SubmitButton";
 
 function AddUserForm(props) {
   return (
@@ -10,7 +11,6 @@ function AddUserForm(props) {
         titlepage={`${props.titlepage} un utilisateur`}
         isSuccess={props.isSuccess}
         isFailed={props.isFailed}
-        errorPost={props.errorPost}
         successMessage="Utilisateur enregistré avec succés"
         failMessage="Erreur de duplication utilisateur ou champs vide, veuillez vérifier votre formulaire"
       />
@@ -48,9 +48,8 @@ function AddUserForm(props) {
           value={props.lastName}
           change={(e) => {
             props.handleName(e);
-            props.setErrorPost(false);
           }}
-          errorcondition={props.errorLastName}
+          errorcondition={props.errorLastName && props.isSubmit}
           errormessage="Le nom ne peut pas contenir de chiffre ou de charactère spécial"
         />
         <DivInputForm
@@ -60,9 +59,8 @@ function AddUserForm(props) {
           value={props.firstName}
           change={(e) => {
             props.handleName(e);
-            props.setErrorPost(false);
           }}
-          errorcondition={props.errorFirstName}
+          errorcondition={props.errorFirstName && props.isSubmit}
           errormessage="Le prénom ne peut pas contenir de chiffre ou de charactère spécial"
         />
         <div className="row form-group my-3 d-flex justify-content-center align-items-center">
@@ -92,7 +90,6 @@ function AddUserForm(props) {
           value={props.email}
           change={(e) => {
             props.setEmail(e.target.value);
-            props.setErrorPost(false);
           }}
           errorcondition={props.errorMail && props.isSubmit}
           errormessage="L'email doit être au format johndoe@louons.fr"
@@ -104,9 +101,12 @@ function AddUserForm(props) {
           value={props.password}
           change={(e) => {
             props.setPassword(e.target.value);
-            props.setErrorPost(false);
           }}
-          errorcondition={props.errorPassword}
+          errorcondition={
+            props.method === "PUT"
+              ? props.errorPassword && props.isSubmit
+              : props.errorPassword
+          }
           errormessage=" Le mot de passe doit contenir au moins 8 charactères, une majuscule
           un chiffre et un caractère spécial"
         />
@@ -117,9 +117,12 @@ function AddUserForm(props) {
           value={props.confirmationPassword}
           change={(e) => {
             props.setConfirmationPassword(e.target.value);
-            props.setErrorPost(false);
           }}
-          errorcondition={props.errorConfirmation}
+          errorcondition={
+            props.method === "PUT"
+              ? props.errorConfirmation && props.isSubmit
+              : props.errorConfirmation
+          }
           errormessage="Le mot de passe de confirmation doit être identique"
         />
         <div className="row form-group my-3 d-flex justify-content-center align-items-center">
@@ -147,13 +150,7 @@ function AddUserForm(props) {
             />
           </div>
         </div>
-        <div className="col-12 form-group my-3">
-          <input
-            type="submit"
-            value="Envoyer"
-            className="btn text-white bgcolor3c8ce4"
-          />
-        </div>
+        <SubmitButton />
       </form>
     </>
   );

@@ -13,7 +13,6 @@ function AddUser(props) {
   const [password, setPassword] = useState("");
   const [confirmationPassword, setConfirmationPassword] = useState("");
   const [errorForm, setErrorForm] = useState(false);
-  const [errorPost, setErrorPost] = useState(false);
   const [numberErrorForm, setNumberErrorForm] = useState(0);
   const [errorLastName, setErrorLastName] = useState(false);
   const [errorFirstName, setErrorFirstName] = useState(false);
@@ -63,35 +62,41 @@ function AddUser(props) {
 
     // set the error depending the value of the fields
 
-    if (!regexName.test(lastName) && lastName !== "") {
+    if (!regexName.test(lastName) || lastName === "") {
       setErrorLastName(true);
       setNumberErrorForm((prev) => prev + 1);
     } else {
       setErrorLastName(false);
     }
 
-    if (!regexName.test(firstName) && firstName !== "") {
+    if (!regexName.test(firstName) || firstName === "") {
       setErrorFirstName(true);
       setNumberErrorForm((prev) => prev + 1);
     } else {
       setErrorFirstName(false);
     }
 
-    if (!regexMail.test(email) && email !== "") {
+    if (!regexMail.test(email) || email === "") {
       setErrorMail(true);
       setNumberErrorForm((prev) => prev + 1);
     } else {
       setErrorMail(false);
     }
 
-    if (!regexPassword.test(password) && password !== "") {
+    if (
+      (!regexPassword.test(password) && password !== "") ||
+      (password === "" && method === "POST")
+    ) {
       setErrorPassword(true);
       setNumberErrorForm((prev) => prev + 1);
     } else {
       setErrorPassword(false);
     }
 
-    if (confirmationPassword !== password && password !== "") {
+    if (
+      confirmationPassword !== password ||
+      (confirmationPassword === "" && method === "POST")
+    ) {
       setErrorConfirmation(true);
       setNumberErrorForm((prev) => prev + 1);
     } else {
@@ -144,22 +149,9 @@ function AddUser(props) {
         ? "http://localhost:5000/louons/api/v1/user"
         : `http://localhost:5000/louons/api/v1/user/${idParams}`;
 
-    // fetch only if there are not errorPost,
-    // if the lastname the firstname or the datebirth... are empty set the errorpost state to true, else if there are no error, send the data form to the api
+    // fetch only if there are not errorform
 
-    if (
-      lastName === "" ||
-      firstName === "" ||
-      dateBirth === undefined ||
-      email === ""
-    ) {
-      setErrorPost(true);
-    } else if (
-      method === "POST" &&
-      (password === "" || confirmationPassword === "")
-    ) {
-      setErrorPost(true);
-    } else if (!errorForm) {
+    if (!errorForm) {
       fetch(getLink, {
         method: method,
         credentials: "include",
@@ -187,6 +179,7 @@ function AddUser(props) {
               setConfirmationPassword("");
               setIsSubscribe(false);
             }
+            setIsSubmit(false);
           } else if (result.error) {
             // set isfailed to false if there are an error
             setIsFailed(true);
@@ -232,9 +225,8 @@ function AddUser(props) {
       isSubscribe={isSubscribe}
       setIsSubscribe={setIsSubscribe}
       titlepage={props.title}
-      errorPost={errorPost}
-      setErrorPost={setErrorPost}
       isSubmit={isSubmit}
+      method={method}
     />
   );
 }

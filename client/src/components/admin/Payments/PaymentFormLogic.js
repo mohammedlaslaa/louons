@@ -7,29 +7,20 @@ function PaymentFormLogic(props) {
   const [isSuccess, setIssuccess] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
   const [isFetched, setIsFetched] = useState(false);
-  const [owner, setOwner] = useState("");
   const [title, setTitle] = useState("");
   const [errorTitle, setErrorTitle] = useState(false);
-  const [address, setAddress] = useState("");
-  const [errorAddress, setErrorAddress] = useState(false);
-  const [zipCode, setZipCode] = useState("");
-  const [errorZipCode, setErrorZipCode] = useState(false);
-  const [city, setCity] = useState("");
-  const [errorCity, setErrorCity] = useState(false);
-  const [country, setCountry] = useState("");
-  const [errorCountry, setErrorCountry] = useState(false);
-  const [isShow, setIsShow] = useState(false);
-  const [errorPost, setErrorPost] = useState(false);
-  const [errorGrasp, setErrorGrasp] = useState(true);
+  const [description, setDescription] = useState("");
+  const [errorDescription, setErrorDescription] = useState(false);
+  const [picture, setPicture] = useState("");
+  const [errorPicture, setErrorPicture] = useState("");
   const [numberErrorForm, setNumberErrorForm] = useState(0);
   const [errorForm, setErrorForm] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [isSubmit, setIsSubmit] = useState(false);
-  const [grasp, setGrasp] = useState("");
   const [method, setMethod] = useState("POST");
+  const dataform = new FormData();
   const [idParams] = useState(useParams().id);
   const regexp = new RegExp(/^[\w\d\séùàüäîçïèêôö]*$/);
-  const regexpCountryCity = new RegExp(/^[a-zA-Z\s-éùàüäîçïèêôö]*$/);
 
   useEffect(() => {
     setNumberErrorForm(0);
@@ -43,23 +34,11 @@ function PaymentFormLogic(props) {
         .then((result) => {
           if (!result.error) {
             setIsFetched(true);
-            setErrorGrasp(false);
-            setGrasp(
-              `${result.data.id_user.firstName} ${result.data.id_user.lastName}`
-            );
-            setAddress(result.data.address);
+            setDescription(result.data.address);
             setTitle(result.data.title);
-            setZipCode(result.data.zipcode);
-            setCity(result.data.city);
-            setCountry(result.data.country);
             setIsActive(result.data.isActive);
-            setOwner(result.data.id_user._id);
           }
         });
-    }
-
-    if (errorGrasp) {
-      setNumberErrorForm((prev) => prev + 1);
     }
 
     if (
@@ -75,54 +54,15 @@ function PaymentFormLogic(props) {
     }
 
     if (
-      !regexp.test(address) ||
-      address === "" ||
-      address.length < 10 ||
-      address.length > 80
+      !regexp.test(description) ||
+      description === "" ||
+      description.length < 10 ||
+      description.length > 200
     ) {
-      setErrorAddress(true);
+      setErrorDescription(true);
       setNumberErrorForm((prevNumber) => prevNumber + 1);
     } else {
-      setErrorAddress(false);
-    }
-
-    if (
-      !regexpCountryCity.test(city) ||
-      city === "" ||
-      city.length < 3 ||
-      city.length > 50
-    ) {
-      setErrorCity(true);
-      setNumberErrorForm((prevNumber) => prevNumber + 1);
-    } else {
-      setErrorCity(false);
-    }
-
-    if (
-      !regexpCountryCity.test(country) ||
-      country === "" ||
-      country.length < 3 ||
-      country.length > 20
-    ) {
-      setErrorCountry(true);
-      setNumberErrorForm((prevNumber) => prevNumber + 1);
-    } else {
-      setErrorCountry(false);
-    }
-
-    if (
-      zipCode === 0 ||
-      zipCode === "" ||
-      typeof zipCode === String ||
-      zipCode > 99999 ||
-      zipCode < 0 ||
-      zipCode.length < 4 ||
-      zipCode.length > 5
-    ) {
-      setErrorZipCode(true);
-      setNumberErrorForm((prevNumber) => prevNumber + 1);
-    } else {
-      setErrorZipCode(false);
+      setErrorDescription(false);
     }
 
     if (numberErrorForm > 0) {
@@ -130,37 +70,15 @@ function PaymentFormLogic(props) {
     } else {
       setErrorForm(false);
     }
-  }, [
-    idParams,
-    numberErrorForm,
-    regexp,
-    regexpCountryCity,
-    title,
-    address,
-    city,
-    country,
-    zipCode,
-    errorGrasp,
-    isFetched
-  ]);
+  }, [idParams, numberErrorForm, regexp, title, description, isFetched]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const body = JSON.stringify({
-      isActive,
-      id_user: owner,
-      title,
-      address,
-      zipcode: zipCode,
-      city,
-      country,
-    });
-
     const url =
       method === "POST"
-        ? `http://localhost:5000/louons/api/v1/address`
-        : `http://localhost:5000/louons/api/v1/address/${idParams}`;
+        ? `http://localhost:5000/louons/api/v1/payment`
+        : `http://localhost:5000/louons/api/v1/payment/${idParams}`;
 
     if (!errorForm) {
       fetch(url, {
@@ -169,7 +87,7 @@ function PaymentFormLogic(props) {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body,
+        dataform,
       })
         .then((res) => res.json())
         .then((result) => {
@@ -180,12 +98,8 @@ function PaymentFormLogic(props) {
             }, 1500);
             if (method === "POST") {
               setTitle("");
-              setAddress("");
-              setZipCode("");
-              setCity("");
-              setCountry("");
+              setDescription("");
               setIsSubmit(false);
-              setGrasp("");
             }
           } else {
             setIsFailed(true);
@@ -201,38 +115,21 @@ function PaymentFormLogic(props) {
   return (
     <PaymentForm
       titlepage={props.title}
-      isSuccess={isSuccess}
       isFailed={isFailed}
-      errorPost={errorPost}
-      errorGrasp={errorGrasp}
-      setErrorPost={setErrorPost}
-      isActive={isActive}
-      isShow={isShow}
-      setIsShow={setIsShow}
-      setIsActive={setIsActive}
-      handleSubmit={handleSubmit}
-      isSubmit={isSubmit}
-      idParams={idParams}
+      isSuccess={isSuccess}
       statusMessageForm={statusMessageForm}
-      grasp={grasp}
-      setGrasp={setGrasp}
-      setOwner={setOwner}
-      setErrorGrasp={setErrorGrasp}
+      handleSubmit={handleSubmit}
+      isActive={isActive}
       title={title}
       setTitle={setTitle}
       errorTitle={errorTitle}
-      address={address}
-      setAddress={setAddress}
-      errorAddress={errorAddress}
-      zipCode={zipCode}
-      setZipCode={setZipCode}
-      errorZipCode={errorZipCode}
-      city={city}
-      setCity={setCity}
-      errorCity={errorCity}
-      country={country}
-      setCountry={setCountry}
-      errorCountry={errorCountry}
+      isSubmit={isSubmit}
+      errorDescription={errorDescription}
+      description={description}
+      setDescription={setDescription}
+      errorPicture={errorPicture}
+      picture={picture}
+      setPicture={setPicture}
     />
   );
 }

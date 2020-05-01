@@ -3,6 +3,7 @@ import DivInputForm from "../../admin/Form/DivInputForm";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
 import HeadFormAdmin from "../Form/HeadFormAdmin";
 import AutoCompleteUserId from "../../admin/Form/AutoCompleteUserId";
+import SubmitButton from "../Form/SubmitButton";
 
 function AddressForm(props) {
   return (
@@ -11,7 +12,6 @@ function AddressForm(props) {
         titlepage={`${props.titlepage} une adresse`}
         isFailed={props.isFailed}
         isSuccess={props.isSuccess}
-        errorPost={props.errorPost}
         successMessage={`Addresse ${props.statusMessageForm} avec succés`}
         failMessage="Erreur de duplication ou champs vide, veuillez vérifier votre formulaire"
       />
@@ -49,7 +49,6 @@ function AddressForm(props) {
           value={props.title}
           change={(e) => {
             props.setTitle(e.target.value);
-            props.setErrorPost(false);
           }}
           errorcondition={props.errorTitle && props.isSubmit}
           errormessage="Ce champ doit contenir entre 5 et 30 caractères, et sans caractères spéciaux"
@@ -61,7 +60,6 @@ function AddressForm(props) {
           value={props.address}
           change={(e) => {
             props.setAddress(e.target.value);
-            props.setErrorPost(false);
           }}
           errorcondition={props.errorAddress && props.isSubmit}
           errormessage="Ce champ doit contenir entre 10 et 80 caractères, et sans caractères spéciaux"
@@ -73,7 +71,6 @@ function AddressForm(props) {
           value={props.zipCode}
           change={(e) => {
             props.setZipCode(e.target.value);
-            props.setErrorPost(false);
           }}
           errorcondition={props.errorZipCode && props.isSubmit}
           errormessage="Ce champ doit contenir entre 4 et 5 caractères numériques"
@@ -85,7 +82,6 @@ function AddressForm(props) {
           value={props.city}
           change={(e) => {
             props.setCity(e.target.value);
-            props.setErrorPost(false);
           }}
           errorcondition={props.errorCity && props.isSubmit}
           errormessage="Ce champ doit contenir entre 3 et 50 caractères, et sans caractères spéciaux ni chiffre"
@@ -97,18 +93,11 @@ function AddressForm(props) {
           value={props.country}
           change={(e) => {
             props.setCountry(e.target.value);
-            props.setErrorPost(false);
           }}
           errorcondition={props.errorCountry && props.isSubmit}
           errormessage="Ce champ doit contenir entre 3 et 20 caractères, et sans caractères spéciaux ni chiffre"
         />
-        <div className="col-12 form-group my-3">
-          <input
-            type="submit"
-            value="Envoyer"
-            className="btn text-white bgcolor3c8ce4"
-          />
-        </div>
+        <SubmitButton />
       </form>
     </>
   );

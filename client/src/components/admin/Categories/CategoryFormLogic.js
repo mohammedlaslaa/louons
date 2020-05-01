@@ -14,11 +14,11 @@ function CategoryFormLogic() {
   const [description, setDescription] = useState("");
   const [errorDescription, setErrorDescription] = useState(false);
   const [errorForm, setErrorForm] = useState(false);
-  const [errorPost, setErrorPost] = useState(false);
   const [numberErrorForm, setNumberErrorForm] = useState(0);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
   const [redirect, setRedirect] = useState(false);
+  const [isSubmit, setIsSubmit] = useState(false);
   const idParams = useParams().id;
   const stringRegex = new RegExp(/[a-zA-Z\séùàüäîçïèêôö-]+$/);
   const linkRegex = new RegExp(/^[a-zA-Z-]+$/);
@@ -27,7 +27,6 @@ function CategoryFormLogic() {
   // fetch the data to the api at the first loading
 
   useEffect(() => {
-
     // initialize the value method and the number of error form
 
     setMethod("PUT");
@@ -57,14 +56,14 @@ function CategoryFormLogic() {
 
     // condition to display some error in the form
 
-    if (!stringRegex.test(title) && title !== "") {
+    if (!stringRegex.test(title) || title === "") {
       setErrorTitle(true);
       setNumberErrorForm((prev) => prev + 1);
     } else {
       setErrorTitle(false);
     }
 
-    if (!linkRegex.test(link) && link !== "") {
+    if (!linkRegex.test(link) || link === "") {
       setErrorLink(true);
       setNumberErrorForm((prev) => prev + 1);
     } else {
@@ -72,8 +71,9 @@ function CategoryFormLogic() {
     }
 
     if (
-      description !== "" &&
-      (description.length < 10 || description.length > 150)
+      description === "" ||
+      description.length < 10 ||
+      description.length > 150
     ) {
       setErrorDescription(true);
       setNumberErrorForm((prev) => prev + 1);
@@ -82,8 +82,8 @@ function CategoryFormLogic() {
     }
     if (numberErrorForm > 0) {
       setErrorForm(true);
-    }else{
-      setErrorForm(false)
+    } else {
+      setErrorForm(false);
     }
   }, [
     idParams,
@@ -94,7 +94,6 @@ function CategoryFormLogic() {
     stringRegex,
     linkRegex,
     numberErrorForm,
-    errorPost,
   ]);
 
   // if the form is submitted call the handleFetchPut function
@@ -107,6 +106,7 @@ function CategoryFormLogic() {
   // send fetch put method depending the argument passed in function
 
   const handleFetchPut = (arg = "") => {
+    setIsSubmit(true);
     const dataForm =
       arg === "isActive"
         ? JSON.stringify({
@@ -136,6 +136,7 @@ function CategoryFormLogic() {
             if (arg === "isActive") {
               setIsActive(!isActive);
             }
+            setIsSubmit(false)
           } else {
             setIsFailed(true);
             setTimeout(() => {
@@ -151,6 +152,8 @@ function CategoryFormLogic() {
   // send fetch post method to create a new category
 
   const handleFetchPost = () => {
+    setIsSubmit(true);
+
     const dataForm = JSON.stringify({
       title,
       description,
@@ -158,11 +161,9 @@ function CategoryFormLogic() {
       isActive,
     });
 
-    // if the description the title or the link are empty set the errorpost state to true, else if there are no error, send the data form to the api
+    // if there are not error post the data to the api
 
-    if (description === "" || title === "" || link === "") {
-      setErrorPost(true);
-    } else if (!errorForm) {
+    if (!errorForm) {
       fetch(`http://localhost:5000/louons/api/v1/category`, {
         method: "POST",
         credentials: "include",
@@ -174,13 +175,21 @@ function CategoryFormLogic() {
         .then((res) => res.json())
         .then((result) => {
           if (!result.error) {
+            setIsSuccess(true);
+            setTimeout(() => {
+              setIsSuccess(false);
+            }, 1500);
             setTitle("");
             setLink("");
             setDescription("");
             PopupContext.setToggle(false);
             setRedirect(true);
+            setIsSubmit(false)
           } else {
-            setErrorPost(true);
+            setIsFailed(true);
+            setTimeout(() => {
+              setIsFailed(false);
+            }, 1500);
           }
         });
     }
@@ -205,9 +214,8 @@ function CategoryFormLogic() {
       errorTitle={errorTitle}
       errorLink={errorLink}
       errorDescription={errorDescription}
-      errorPost={errorPost}
-      setErrorPost={setErrorPost}
       redirect={redirect}
+      isSubmit={isSubmit}
     />
   );
 }

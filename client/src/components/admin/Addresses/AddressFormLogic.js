@@ -19,7 +19,6 @@ function AddressFormLogic(props) {
   const [country, setCountry] = useState("");
   const [errorCountry, setErrorCountry] = useState(false);
   const [isShow, setIsShow] = useState(false);
-  const [errorPost, setErrorPost] = useState(false);
   const [errorGrasp, setErrorGrasp] = useState(true);
   const [numberErrorForm, setNumberErrorForm] = useState(0);
   const [errorForm, setErrorForm] = useState(false);
@@ -203,9 +202,7 @@ function AddressFormLogic(props) {
       titlepage={props.title}
       isSuccess={isSuccess}
       isFailed={isFailed}
-      errorPost={errorPost}
       errorGrasp={errorGrasp}
-      setErrorPost={setErrorPost}
       isActive={isActive}
       isShow={isShow}
       setIsShow={setIsShow}

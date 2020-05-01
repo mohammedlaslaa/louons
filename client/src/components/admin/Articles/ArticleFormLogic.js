@@ -8,7 +8,6 @@ function ArticleFormLogic(props) {
   const [isFetchedArticle, setIsFetchedArticle] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
-  const [errorPost, setErrorPost] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [category, setCategory] = useState([]);
   const [idCategory, setIdCategory] = useState("");
@@ -227,8 +226,6 @@ function ArticleFormLogic(props) {
       titlepage={props.title}
       isSuccess={isSuccess}
       isFailed={isFailed}
-      errorPost={errorPost}
-      setErrorPost={setErrorPost}
       isActive={isActive}
       setIsActive={setIsActive}
       grasp={grasp}

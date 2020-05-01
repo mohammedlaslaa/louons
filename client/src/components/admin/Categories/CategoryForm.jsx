@@ -4,6 +4,7 @@ import BootstrapSwitchButton from "bootstrap-switch-button-react";
 import { PopupAddContext } from "../../../context/PopupAddContext";
 import DivInputForm from "../../admin/Form/DivInputForm";
 import HeadFormAdmin from "../Form/HeadFormAdmin";
+import SubmitButton from "../Form/SubmitButton";
 
 function CategoryForm(props) {
   const PopupContext = useContext(PopupAddContext);
@@ -16,15 +17,17 @@ function CategoryForm(props) {
   return (
     <>
       <HeadFormAdmin
-        titlepage={PopupContext.isToggle ? 
-          "Ajouter une catégorie"
-          :"Modifier une catégorie"}
+        titlepage={
+          PopupContext.isToggle
+            ? "Ajouter une catégorie"
+            : "Modifier une catégorie"
+        }
         isFailed={props.isFailed}
         isSuccess={props.isSuccess}
-        errorPost={props.errorPost}
-        successMessage={PopupContext.isToggle ?
-          "Article enregistré avec succés" :
-          "Modification enregistré avec succés"
+        successMessage={
+          PopupContext.isToggle
+            ? "Article enregistré avec succés"
+            : "Modification enregistré avec succés"
         }
         failMessage="Erreur de duplication ou champs vide, veuillez vérifier votre formulaire"
       />
@@ -62,10 +65,9 @@ function CategoryForm(props) {
           value={props.title}
           change={(e) => {
             props.setTitle(e.target.value);
-            props.setErrorPost(false);
           }}
-          errorcondition={props.errorTitle}
-          errormessage="Ce champ ne peut pas contenir de chiffre"
+          errorcondition={props.errorTitle && props.isSubmit}
+          errormessage="Ce champ ne peut pas contenir de chiffre ou être vide"
         />
         <DivInputForm
           label={"Lien :"}
@@ -74,12 +76,11 @@ function CategoryForm(props) {
           type="text"
           change={(e) => {
             props.setLink(e.target.value);
-            props.setErrorPost(false);
           }}
-          errorcondition={props.errorLink}
-          errormessage="Ce champ ne peut pas contenir d'espace ou de chiffre"
+          errorcondition={props.errorLink && props.isSubmit}
+          errormessage="Ce champ ne peut pas contenir d'espace ou de chiffre ou être vide"
         />
-        {props.errorDescription && (
+        {props.errorDescription && props.isSubmit && (
           <span className="text-danger errormessage text-center">
             Ce champ doit contenir entre 10 et 150 caractères
           </span>
@@ -93,17 +94,10 @@ function CategoryForm(props) {
             className="form-control col-9 col-sm-6 col-md-5"
             onChange={(e) => {
               props.setDescription(e.target.value);
-              props.setErrorPost(false);
             }}
           />
         </div>
-        <div className="col-12 form-group my-4">
-          <input
-            type="submit"
-            value="Envoyer"
-            className="btn text-white bgcolor3c8ce4"
-          />
-        </div>
+        <SubmitButton />
       </form>
     </>
   );

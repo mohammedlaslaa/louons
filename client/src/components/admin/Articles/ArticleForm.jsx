@@ -3,6 +3,9 @@ import DivInputForm from "../../admin/Form/DivInputForm";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
 import HeadFormAdmin from "../Form/HeadFormAdmin";
 import AutoCompleteUserId from "../../admin/Form/AutoCompleteUserId";
+import TextAreaInputForm from "../Form/TextAreaInputForm";
+import InputFileForm from "../Form/InputFileForm";
+import SubmitButton from "../Form/SubmitButton";
 
 function ArticleForm(props) {
   return (
@@ -11,7 +14,6 @@ function ArticleForm(props) {
         titlepage={`${props.titlepage} un article`}
         isFailed={props.isFailed}
         isSuccess={props.isSuccess}
-        errorPost={props.errorPost}
         successMessage={`Article ${props.statusMessageForm} avec succés`}
         failMessage="Erreur de duplication ou champs vide, veuillez vérifier votre formulaire"
       />
@@ -87,30 +89,18 @@ function ArticleForm(props) {
           value={props.title}
           change={(e) => {
             props.setTitle(e.target.value);
-            props.setErrorPost(false);
           }}
           errorcondition={props.errorTitle && props.isSubmit}
           errormessage="Ce champ doit contenir entre 3 et 30 caractères"
         />
-        {props.errorDescription && props.isSubmit && (
-          <span className="text-danger errormessage text-center">
-            Ce champ doit contenir entre 10 et 250 caractères
-          </span>
-        )}
-        <div className="row form-group my-3 d-flex justify-content-center align-items-center">
-          <label className="col-9 col-sm-4 mt-2">Description :</label>
-          <textarea
-            type="text"
-            name="description"
-            rows="6"
-            value={props.description}
-            className="form-control col-9 col-sm-6 col-md-5"
-            onChange={(e) => {
-              props.setDescription(e.target.value);
-              props.setErrorPost(false);
-            }}
-          />
-        </div>
+        <TextAreaInputForm
+          errorDescription={props.errorDescription}
+          isSubmit={props.isSubmit}
+          description={props.description}
+          setDescription={props.setDescription}
+          errorMessage="Ce champ doit contenir entre 10 et 250 caractères"
+          label="Description :"
+        />
         {props.errorPrice && props.isSubmit && (
           <span className="text-danger errormessage text-center">
             Veuillez saisir un prix valide compris entre 0 et 2000
@@ -123,34 +113,17 @@ function ArticleForm(props) {
           value={props.price}
           change={(e) => {
             props.setPrice(e.target.value);
-            props.setErrorPost(false);
           }}
         />
-        {props.errorFile > 0 && props.isSubmit && (
-          <span className="text-danger errormessage text-center">
-            L'article doit contenir 3 images sous le format png ou jpg/jpeg
-          </span>
-        )}
-        <div className="row form-group my-3 d-flex justify-content-center align-items-center">
-          <label className="col-9 col-sm-4 mt-2">Images :</label>
-          <input
-            type="file"
-            name="file"
-            multiple={true}
-            value={props.picture}
-            className="form-control-file col-9 col-sm-6 col-md-5"
-            onChange={(e) => {
-              props.setPicture(e.target.files);
-            }}
-          />
-        </div>
-        <div className="col-12 form-group my-3">
-          <input
-            type="submit"
-            value="Envoyer"
-            className="btn text-white bgcolor3c8ce4"
-          />
-        </div>
+        <InputFileForm
+          errorFile={props.errorFile}
+          isSubmit={props.isSubmit}
+          picture={props.picture}
+          setPicture={props.setPicture}
+          errorMessage="L'article doit contenir 3 images sous le format png ou jpg/jpeg"
+          isMultiple={true}
+        />
+        <SubmitButton />
       </form>
     </>
   );

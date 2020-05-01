@@ -15,11 +15,6 @@ function HeadFormAdmin(props) {
       ) : (
         true
       )}
-      {props.errorPost && (
-        <p className="bg-danger text-white text-center p-2">
-          {props.failMessage}
-        </p>
-      )}
     </>
   );
 }
