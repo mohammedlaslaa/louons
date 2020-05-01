@@ -86,6 +86,7 @@ function AddressForm(props) {
           errorcondition={props.errorCity && props.isSubmit}
           errormessage="Ce champ doit contenir entre 3 et 50 caractères, et sans caractères spéciaux ni chiffre"
         />
+        
         <DivInputForm
           label={"Pays :"}
           name="country"
