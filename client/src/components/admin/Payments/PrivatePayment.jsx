@@ -1,17 +1,20 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import ListPayment from "./ListPayment";
-import PrivateRoute from "../../general/PrivateRoute";
 import NotFound from "../../general/NotFound";
+import PaymentFormLogic from "./PaymentFormLogic"
 
 function PrivatePayment() {
   return (
     <Switch>
       <Route exact path="/admin/payments">
-        <PrivateRoute component={ListPayment} pageifnotauth="/adminlogin" />
+        <ListPayment />
       </Route>
       <Route exact path="/admin/payments/add">
-        <p>coucou</p>
+        <PaymentFormLogic  title="Ajouter"/>
+      </Route>
+      <Route exact path="/admin/payments/:id">
+        <PaymentFormLogic  title="Modifier"/>
       </Route>
       <Route>
         <NotFound />

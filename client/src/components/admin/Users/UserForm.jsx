@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
-import DivInputForm from "../../general/DivInputForm";
-import HeadFormAdmin from "../HeadFormAdmin";
+import DivInputForm from "../Form/DivInputForm";
+import HeadFormAdmin from "../Form/HeadFormAdmin";
 
 function AddUserForm(props) {
   return (

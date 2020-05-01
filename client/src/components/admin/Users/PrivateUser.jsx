@@ -2,14 +2,13 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 import ListUser from "./ListUser";
 import UserFormLogic from "./UserFormLogic.js";
-import PrivateRoute from "../../general/PrivateRoute";
 import NotFound from "../../general/NotFound";
 
 function PrivateUser() {
   return (
     <Switch>
       <Route exact path="/admin/users">
-        <PrivateRoute component={ListUser} pageifnotauth="/adminlogin" />
+        <ListUser />
       </Route>
       <Route exact path="/admin/users/add">
         <UserFormLogic title="Ajouter"/>

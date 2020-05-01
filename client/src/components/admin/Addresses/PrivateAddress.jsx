@@ -1,17 +1,20 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import ListAddress from "./ListAddress";
-import PrivateRoute from "../../general/PrivateRoute";
 import NotFound from "../../general/NotFound";
+import AddressFormLogic from "./AddressFormLogic.js";
 
 function PrivateAddress() {
   return (
     <Switch>
       <Route exact path="/admin/addresses">
-        <PrivateRoute component={ListAddress} pageifnotauth="/adminlogin" />
+        <ListAddress />
       </Route>
       <Route exact path="/admin/addresses/add">
-        <p>coucou</p>
+        <AddressFormLogic title="Ajouter"/>
+      </Route>
+      <Route exact path="/admin/addresses/:id">
+        <AddressFormLogic title="Modifier"/>
       </Route>
       <Route>
         <NotFound />

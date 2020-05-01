@@ -15,7 +15,9 @@ exports.getAllAddresses = async (req, res) => {
 
     // If there is an existing address, send back a 200 response status code with a this address.
 
-    return res.status(200).send({ adminLevel: res.locals.admin.adminLevel, data: address });
+    return res
+      .status(200)
+      .send({ adminLevel: res.locals.admin.adminLevel, data: address });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -56,7 +58,7 @@ exports.getAddressById = async (req, res) => {
     const address = res.locals.owner.adminLevel
       ? await Address.findOne({
           _id: req.params.id,
-        })
+        }).populate("id_user", "firstName lastName")
       : await Address.findOne({
           _id: req.params.id,
           id_user: res.locals.owner.id,
@@ -71,7 +73,7 @@ exports.getAddressById = async (req, res) => {
 
     // If there is an existing address, send back a 200 response status code with a this address.
 
-    return res.send(address);
+    return res.send({ error: false, data: address });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -92,7 +94,7 @@ exports.postAddress = async (req, res) => {
     // Check if the address title is already existing with the id_user provided in the ownerId.
 
     const isTitleExist = await Address.findOne({
-      title: { $regex: req.body.title, $options: "i" },
+      title: { $regex: `^${req.body.title}$`, $options: "i" },
       id_user: ownerId,
     });
 
@@ -122,6 +124,7 @@ exports.postAddress = async (req, res) => {
       addressId: valueId,
       id_user: ownerId,
       title: req.body.title,
+      isActive: req.body.isActive,
       address: req.body.address,
       zipcode: req.body.zipcode,
       city: req.body.city,
@@ -166,23 +169,23 @@ exports.putAddressById = async (req, res) => {
           "Empty list, you are not the owner of this address or you do not have admin rights",
       });
 
+    // Check if the client is an admin and the id_user is specify.
+
+    if (res.locals.owner.adminLevel && !ownerId) {
+      return res.status(400).send({
+        error: true,
+        message: "Id_user is required",
+      });
+    } else if (!res.locals.owner.adminLevel && req.body.id_user) {
+      // The client who is not an admin does not have to specify an id_user field.
+
+      return res.status(400).send({
+        error: true,
+        message: "You don't have to specify the user id",
+      });
+    }
+
     if (req.body.title) {
-      // Check if the client is an admin and the id_user is specify.
-
-      if (res.locals.owner.adminLevel && !ownerId) {
-        return res.status(400).send({
-          error: true,
-          message: "Id_user is required",
-        });
-      } else if (!res.locals.owner.adminLevel && req.body.id_user) {
-        // The client who is not an admin does not have to specify an id_user field.
-
-        return res.status(400).send({
-          error: true,
-          message: "You do not have to specify the user id",
-        });
-      }
-
       // Check if this title exist in the list of the client, if the same title exist, send back an 400 response status code with message.
 
       const isTitleExist = await Address.findOne({
@@ -190,11 +193,12 @@ exports.putAddressById = async (req, res) => {
         id_user: ownerId,
       });
 
-      if (isTitleExist)
+      if (isTitleExist && isTitleExist._id != req.params.id) {
         return res.status(400).send({
           error: true,
           message: "Error duplicating address title or no change detected",
         });
+      }
     }
 
     // If all the checks is passing, update the address, then send back a 200 response status code with succesfull message.

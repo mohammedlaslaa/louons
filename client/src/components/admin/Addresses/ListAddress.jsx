@@ -17,7 +17,8 @@ function ListAddress() {
         { delete: "Supprimer" },
       ]}
       titlebutton="Ajouter une adresse"
-      link="address"
+      link="addresses"
+      linkbutton={true}
     />
   );
 }

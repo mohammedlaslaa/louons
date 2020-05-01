@@ -1,7 +1,8 @@
 import React from "react";
-import DivInputForm from "../../general/DivInputForm";
+import DivInputForm from "../../admin/Form/DivInputForm";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
-import HeadFormAdmin from "../HeadFormAdmin";
+import HeadFormAdmin from "../Form/HeadFormAdmin";
+import AutoCompleteUserId from "../../admin/Form/AutoCompleteUserId";
 
 function ArticleForm(props) {
   return (
@@ -34,7 +35,10 @@ function ArticleForm(props) {
         {props.pictureDisplay.length > 0 && (
           <div className="col-12 m-0 p-0 row d-flex justify-content-between">
             {props.pictureDisplay.map((e) => (
-              <div className="col-4 col-sm-4 p-2 col-md-3 mx-auto" key={e.title}>
+              <div
+                className="col-4 col-sm-4 p-2 col-md-3 mx-auto"
+                key={e.title}
+              >
                 <img
                   src={`http://localhost:5000/uploads/img/${e.path_picture}`}
                   className="w-100"
@@ -66,53 +70,16 @@ function ArticleForm(props) {
             ))}
           </select>
         </div>
-
-        {props.errorGrasp && (
-          <span className="text-danger errormessage text-center">
-            Veuillez saisir le nom ou le prénom de l'utilisateur en toute lettre
-            et le sélectionner sur la liste
-          </span>
-        )}
-
-        <div className="position-relative">
-          {props.idParams ? (
-            <div className="row form-group my-3 d-flex justify-content-center align-items-center">
-              <label className="col-9 col-sm-4 mt-2">Propriétaire :</label>
-              <p className="col-9 col-sm-6 col-md-5">{props.grasp}</p>
-            </div>
-          ) : (
-            <DivInputForm
-              label={"Propriétaire :"}
-              name="owner"
-              type="text"
-              value={props.grasp}
-              change={(e) => {
-                props.setGrasp(e.target.value);
-                props.getList(e.target.value);
-                props.setIsShow(true);
-                props.setOwner("");
-                props.setErrorGrasp(true);
-              }}
-            />
-          )}
-
-          {props.isShow && props.grasp !== "" && (
-            <ul className="list-unstyled bg-white autocomplete">
-              {props.users.map((e) => (
-                <li
-                  className="p-1 border-black listcomplete"
-                  key={e._id}
-                  onClick={() => {
-                    props.setGrasp(`${e.lastName} ${e.firstName}`);
-                    props.setIsShow(false);
-                    props.setOwner(e._id);
-                    props.setErrorGrasp(false);
-                  }}
-                >{`${e.clientId} ${e.lastName} ${e.firstName}`}</li>
-              ))}
-            </ul>
-          )}
-        </div>
+        <AutoCompleteUserId
+          errorGrasp={props.errorGrasp}
+          idParams={props.idParams}
+          grasp={props.grasp}
+          isShow={props.isShow}
+          setGrasp={props.setGrasp}
+          setIsShow={props.setIsShow}
+          setOwner={props.setOwner}
+          setErrorGrasp={props.setErrorGrasp}
+        />
         <DivInputForm
           label={"Titre :"}
           name="title"

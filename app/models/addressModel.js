@@ -29,15 +29,15 @@ const addressSchema = new mongoose.Schema({
   zipcode: {
     type: String,
     required: true,
-    minlength: 3,
-    maxlength: 10
+    minlength: 4,
+    maxlength: 5
   },
 
   city: {
     type: String,
     required: true,
     minlength: 3,
-    maxlength: 20
+    maxlength: 50
   },
 
   country: {
@@ -89,14 +89,14 @@ const schemaValidationAddress = Joi.object({
 
   zipcode: Joi.string()
     .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
-    .min(3)
-    .max(10)
+    .min(4)
+    .max(5)
     .required(),
 
   city: Joi.string()
     .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
     .min(3)
-    .max(20)
+    .max(50)
     .required(),
 
   country: Joi.string()
@@ -131,7 +131,7 @@ const schemaPutValidationAddress = Joi.object({
   city: Joi.string()
     .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
     .min(3)
-    .max(20),
+    .max(50),
 
   country: Joi.string()
     .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))

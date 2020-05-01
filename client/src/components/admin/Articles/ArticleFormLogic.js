@@ -15,13 +15,12 @@ function ArticleFormLogic(props) {
   const [numberErrorForm, setNumberErrorForm] = useState(0);
   const [grasp, setGrasp] = useState("");
   const [owner, setOwner] = useState("");
-  const [users, setUsers] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isSubmit, setIsSubmit] = useState("");
   const [price, setPrice] = useState(0);
   const [pictureDisplay, setPictureDisplay] = useState([]);
-  const [picture, setPicture] = useState([]);
+  const [picture, setPicture] = useState("");
   const [errorForm, setErrorForm] = useState(false);
   const [errorCategory, setErrorCategory] = useState(false);
   const [errorTitle, setErrorTitle] = useState(false);
@@ -108,6 +107,10 @@ function ArticleFormLogic(props) {
       setNumberErrorForm((prev) => prev + 1);
     }
 
+    if (errorGrasp) {
+      setNumberErrorForm((prev) => prev + 1);
+    }
+
     if (idCategory === "") {
       setErrorCategory(true);
       setNumberErrorForm((prev) => prev + 1);
@@ -129,10 +132,6 @@ function ArticleFormLogic(props) {
       setErrorDescription(false);
     }
 
-    if (errorGrasp) {
-      setNumberErrorForm((prev) => prev + 1);
-    }
-
     if (numberErrorForm > 0) {
       setErrorForm(true);
     } else {
@@ -144,9 +143,9 @@ function ArticleFormLogic(props) {
     idCategory,
     numberErrorForm,
     isFetchedCategory,
-    users,
     price,
     grasp,
+    isSubmit,
     errorGrasp,
     picture,
     dataform,
@@ -198,7 +197,7 @@ function ArticleFormLogic(props) {
               setDescription("");
               setPrice(0);
               setOwner("");
-              setPicture([]);
+              setPicture("");
               setIdCategory("");
               setIsSubmit(false);
             } else {
@@ -221,20 +220,6 @@ function ArticleFormLogic(props) {
           }
         });
     }
-  };
-
-  // get the list of user depending the parameter sended by the client
-
-  const getList = (occ) => {
-    fetch(`http://localhost:5000/louons/api/v1/user/all/${occ}`, {
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        if (!result.error) {
-          setUsers(result.data);
-        }
-      });
   };
 
   return (
@@ -264,8 +249,6 @@ function ArticleFormLogic(props) {
       errorTitle={errorTitle}
       errorCategory={errorCategory}
       errorFile={errorFile}
-      users={users}
-      getList={getList}
       errorGrasp={errorGrasp}
       setErrorGrasp={setErrorGrasp}
       errorPrice={errorPrice}

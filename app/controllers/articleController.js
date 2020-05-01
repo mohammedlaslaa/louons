@@ -172,10 +172,12 @@ exports.putArticleById = async function (req, res) {
         .status(200)
         .send({ error: false, message: `The article has been modified` });
     }
-    
+
     // parse the formdata incoming with formidable
     const form = new formidable.IncomingForm();
+
     let objdata = {};
+
     const formdata = await new Promise((resolve, reject) => {
       form.parse(req, (err, fields, files) => {
         if (err) {
@@ -186,6 +188,12 @@ exports.putArticleById = async function (req, res) {
         objdata = fields;
 
         if (Object.keys(files).length === 3) {
+          // delete all previous pictures associated with the article
+
+          article.pictures.forEach((e) => {
+            fs.unlinkSync(`${UPLOAD_IMG_PATH}/${e.path_picture}`);
+          });
+
           objdata["pictures"] = [];
           // initialize the name of the picture and the path
           for (const file of Object.entries(files)) {
@@ -251,7 +259,7 @@ exports.putArticleById = async function (req, res) {
         .send({ error: false, message: `The article has been modified` });
     }
   } catch (e) {
-    return res.status(404).send({ error: true, message: e.message });
+    return res.status(400).send({ error: true, message: e.message });
   }
 };
 
@@ -274,7 +282,10 @@ exports.deleteArticleById = async function (req, res) {
     // delete all picture associated with the article
 
     article.pictures.forEach((e) => {
-      fs.unlinkSync(`${UPLOAD_IMG_PATH}/${e.path_picture}`);
+      const path = `${UPLOAD_IMG_PATH}/${e.path_picture}`;
+      if (fs.existsSync(path)) {
+        fs.unlinkSync(path);
+      }
     });
 
     await Article.findByIdAndRemove(req.params.id);

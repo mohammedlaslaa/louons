@@ -18,6 +18,7 @@ function ListPayment() {
       ]}
       titlebutton="Ajouter un paiement"
       link="payments"
+      linkbutton={true}
     />
   );
 }

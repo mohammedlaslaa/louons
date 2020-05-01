@@ -34,28 +34,52 @@ function Admin() {
                 <PrivateRoute component={Home} pageifnotauth="/adminlogin" />
               </Route>
               <Route path="/admin/users">
-                <PrivateUser />
+                <PrivateRoute
+                  component={PrivateUser}
+                  pageifnotauth="/adminlogin"
+                />
               </Route>
               <Route path="/admin/categories">
-                <PrivateCategory />
+                <PrivateRoute
+                  component={PrivateCategory}
+                  pageifnotauth="/adminlogin"
+                />
               </Route>
               <Route path="/admin/articles">
-                <PrivateArticle />
+                <PrivateRoute
+                  component={PrivateArticle}
+                  pageifnotauth="/adminlogin"
+                />
               </Route>
               <Route path="/admin/rentals">
-                <PrivateRental />
+                <PrivateRoute
+                  component={PrivateRental}
+                  pageifnotauth="/adminlogin"
+                />
               </Route>
               <Route path="/admin/addresses">
-                <PrivateAddress />
+                <PrivateRoute
+                  component={PrivateAddress}
+                  pageifnotauth="/adminlogin"
+                />
               </Route>
               <Route path="/admin/payments">
-                <PrivatePayment />
+                <PrivateRoute
+                  component={PrivatePayment}
+                  pageifnotauth="/adminlogin"
+                />
               </Route>
               <Route path="/admin/deliveries">
-                <PrivateDelivery />
+                <PrivateRoute
+                  component={PrivateDelivery}
+                  pageifnotauth="/adminlogin"
+                />
               </Route>
               <Route path="/admin/admins">
-                <PrivateAdmin />
+                <PrivateRoute
+                  component={PrivateAdmin}
+                  pageifnotauth="/adminlogin"
+                />
               </Route>
             </PopupAddProvider>
             <Route>

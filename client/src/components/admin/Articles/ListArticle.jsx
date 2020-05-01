@@ -11,7 +11,7 @@ function ListArticle() {
       th={[
         { articleId: "ID" },
         { title: "Titre" },
-        { description: "Nom" },
+        { description: "Description" },
         { category: "Catégorie" },
         { price: "Prix" },
         { isActive: "Etat" },

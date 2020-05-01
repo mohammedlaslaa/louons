@@ -8,15 +8,24 @@ const jwt = require("jsonwebtoken");
 exports.getAllCategory = async function (req, res) {
   try {
     // Find all the active categories, then return them to the client.
-    const verify = jwt.verify(
-      req.cookies["x-auth-token"],
-      process.env.PRIVATE_KEY
-    );
+
+    let verify = {
+      adminLevel: "",
+    };
+
+    if (Object.keys(req.cookies).length > 0) {
+      verify = jwt.verify(
+        req.cookies["x-auth-token"],
+        process.env.PRIVATE_KEY
+      );
+    }
 
     const allCategory =
       req.params.isactive === "activecategory"
-        ? await Category.find({ isActive: true }).select("categoryId title")
-        : verify.adminLevel
+        ? await Category.find({ isActive: true }).select(
+            "categoryId isActive title link"
+          )
+        : verify.adminLevel == "admin" || verify.adminLevel == "superadmin"
         ? await Category.find().select("categoryId isActive title link")
         : await Category.find({ isActive: true }).select(
             "categoryId isActive title link"

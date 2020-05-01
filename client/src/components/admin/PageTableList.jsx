@@ -243,6 +243,8 @@ class PageTableList extends Component {
                                     id={eltData["_id"]}
                                     handleIsActive={this.handleRequestFetch}
                                   />
+                                ) : subTh === "description" ? (
+                                    `${eltData.description.slice(0,30)}...`
                                 ) : subTh === "date_register" ||
                                   subTh === "start_date" ||
                                   subTh === "end_date" ? (
