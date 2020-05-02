@@ -6,15 +6,17 @@ const jwtsuperadmin = require("../middleware/jwtSuperAdmin");
 const isemptybody = require("../middleware/isEmptyBody");
 const paymentController = require("../controllers/paymentController");
 
-// Get all payment or payment by id, this route is available for everyone.
+// Get all payment, this route is available for everyone.
 
 router.get("/", paymentController.getAllPayment);
 
-router.get("/:id", objectvalid, paymentController.getPaymentById);
+// Get payment by id, this route is available only for an admin.
+
+router.get("/:id", [objectvalid, jwtverify], paymentController.getPaymentById);
 
 // Only the admin can post or update a payment.
 
-router.post("/", [isemptybody, jwtverify], paymentController.postPayment);
+router.post("/", jwtverify, paymentController.postPayment);
 
 router.put(
   "/:id",

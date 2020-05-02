@@ -13,6 +13,7 @@ function PaymentFormLogic(props) {
   const [errorDescription, setErrorDescription] = useState(false);
   const [picture, setPicture] = useState("");
   const [errorPicture, setErrorPicture] = useState("");
+  const [pictureDisplay, setPictureDisplay] = useState("");
   const [numberErrorForm, setNumberErrorForm] = useState(0);
   const [errorForm, setErrorForm] = useState(false);
   const [isActive, setIsActive] = useState(false);
@@ -24,6 +25,7 @@ function PaymentFormLogic(props) {
 
   useEffect(() => {
     setNumberErrorForm(0);
+
     if (idParams && !isFetched) {
       setMethod("PUT");
       setStatusMessageForm("modifiée");
@@ -34,9 +36,10 @@ function PaymentFormLogic(props) {
         .then((result) => {
           if (!result.error) {
             setIsFetched(true);
-            setDescription(result.data.address);
+            setDescription(result.data.description);
             setTitle(result.data.title);
             setIsActive(result.data.isActive);
+            setPictureDisplay(result.data.path_picture)
           }
         });
     }
@@ -65,15 +68,48 @@ function PaymentFormLogic(props) {
       setErrorDescription(false);
     }
 
+    if (Object.keys(picture).length === 1) {
+      for (let i = 0; i < picture.length; i++) {
+        if (
+          picture[i].type !== "image/png" &&
+          picture[i].type !== "image/jpeg"
+        ) {
+          setErrorPicture(true);
+          setNumberErrorForm((prev) => prev + 1);
+        } else {
+          setErrorPicture(false);
+          dataform.append(`file${i}`, picture[i]);
+        }
+      }
+    } else if (method === "POST") {
+      setErrorPicture(true);
+      setNumberErrorForm((prev) => prev + 1);
+    }
+
     if (numberErrorForm > 0) {
       setErrorForm(true);
     } else {
       setErrorForm(false);
     }
-  }, [idParams, numberErrorForm, regexp, title, description, isFetched]);
+  }, [
+    idParams,
+    numberErrorForm,
+    regexp,
+    title,
+    description,
+    isFetched,
+    dataform,
+    method,
+    picture,
+  ]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsSubmit(true);
+
+    dataform.append("title", title);
+    dataform.append("description", description);
+    dataform.append("isActive", isActive);
 
     const url =
       method === "POST"
@@ -83,11 +119,8 @@ function PaymentFormLogic(props) {
     if (!errorForm) {
       fetch(url, {
         method,
-        headers: {
-          "Content-Type": "application/json",
-        },
         credentials: "include",
-        dataform,
+        body: dataform,
       })
         .then((res) => res.json())
         .then((result) => {
@@ -100,6 +133,7 @@ function PaymentFormLogic(props) {
               setTitle("");
               setDescription("");
               setIsSubmit(false);
+              setIsActive(false);
             }
           } else {
             setIsFailed(true);
@@ -109,7 +143,6 @@ function PaymentFormLogic(props) {
           }
         });
     }
-    setIsSubmit(true);
   };
 
   return (
@@ -120,6 +153,7 @@ function PaymentFormLogic(props) {
       statusMessageForm={statusMessageForm}
       handleSubmit={handleSubmit}
       isActive={isActive}
+      setIsActive={setIsActive}
       title={title}
       setTitle={setTitle}
       errorTitle={errorTitle}
@@ -130,6 +164,7 @@ function PaymentFormLogic(props) {
       errorPicture={errorPicture}
       picture={picture}
       setPicture={setPicture}
+      pictureDisplay={pictureDisplay}
     />
   );
 }

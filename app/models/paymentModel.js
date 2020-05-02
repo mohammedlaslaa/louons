@@ -69,6 +69,8 @@ const schemaValidationPayment = Joi.object({
     .required(),
 
   description: Joi.string().min(10).max(200).required(),
+  
+  path_picture: Joi.string().required(),
 
   isActive: Joi.boolean(),
 });
@@ -84,6 +86,8 @@ const schemaPutValidationPayment = Joi.object({
     .max(30),
 
   description: Joi.string().min(10).max(200),
+
+  path_picture: Joi.string(),
 
   isActive: Joi.boolean(),
 });

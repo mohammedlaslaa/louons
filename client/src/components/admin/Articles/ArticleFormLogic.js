@@ -18,7 +18,7 @@ function ArticleFormLogic(props) {
   const [description, setDescription] = useState("");
   const [isSubmit, setIsSubmit] = useState("");
   const [price, setPrice] = useState(0);
-  const [pictureDisplay, setPictureDisplay] = useState([]);
+  const [pictureDisplay, setPictureDisplay] = useState([]);            
   const [picture, setPicture] = useState("");
   const [errorForm, setErrorForm] = useState(false);
   const [errorCategory, setErrorCategory] = useState(false);

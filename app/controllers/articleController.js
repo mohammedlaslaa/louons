@@ -61,8 +61,11 @@ exports.postArticle = async function (req, res) {
     // Only an existing admin or an existing user can perform this action.
 
     // parse the formdata incoming with formidable
+
     const form = new formidable.IncomingForm();
+
     let objdata = {};
+    
     const formdata = await new Promise((resolve, reject) => {
       form.parse(req, (err, fields, files) => {
         if (err) {

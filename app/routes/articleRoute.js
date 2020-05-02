@@ -3,7 +3,6 @@ const router = express.Router();
 const objectvalid = require("../middleware/objectidvalid");
 const ifexistadminuser = require("../middleware/ifExistAdminUser");
 const jwtsuperadmin = require("../middleware/jwtSuperAdmin");
-const isemptybody = require("../middleware/isEmptyBody");
 const articleController = require("../controllers/articleController");
 
 // Get all article or article by id, this route is available for everyone.

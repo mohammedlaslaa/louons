@@ -14,7 +14,6 @@ function InputFileForm(props) {
           type="file"
           name="file"
           multiple={props.isMultiple}
-          value={props.picture}
           className="form-control-file col-9 col-sm-6 col-md-5"
           onChange={(e) => {
             props.setPicture(e.target.files);

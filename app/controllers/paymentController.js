@@ -1,11 +1,15 @@
 const {
   Payment,
   schemaValidationPayment,
-  schemaPutValidationPayment
+  schemaPutValidationPayment,
 } = require("../models/paymentModel");
 const jwt = require("jsonwebtoken");
+const formidable = require("formidable");
+const fs = require("fs");
+const UPLOAD_IMG_PATH = "public/uploads/img/";
+const crypto = require("crypto");
 
-exports.getAllPayment = async function(req, res) {
+exports.getAllPayment = async function (req, res) {
   try {
     // Find all the payments, then return them to the client.
     const verify = jwt.verify(
@@ -13,13 +17,15 @@ exports.getAllPayment = async function(req, res) {
       process.env.PRIVATE_KEY
     );
     const allPayment = await Payment.find();
-    return res.status(200).send({adminLevel : verify.adminLevel, data : allPayment});
+    return res
+      .status(200)
+      .send({ adminLevel: verify.adminLevel, data: allPayment });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
 };
 
-exports.getPaymentById = async function(req, res) {
+exports.getPaymentById = async function (req, res) {
   try {
     // Find a payment by id, then return it to the client.
 
@@ -32,74 +38,106 @@ exports.getPaymentById = async function(req, res) {
     if (!payment)
       return res.status(400).send({
         error: true,
-        message: "There are not payment with the id provided"
+        message: "There are not payment with the id provided",
       });
 
     // If there is an existing payment, send back a 200 response status code with a this payment.
 
-    return res.send(payment);
+    return res.send({error: false, data: payment});
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
 };
 
-exports.postPayment = async function(req, res) {
+exports.postPayment = async function (req, res) {
   try {
     // Only an existing admin can perform this action.
 
-    // Validation post payment.
+    // parse the formdata incoming with formidable
 
-    const { error } = schemaValidationPayment.validate(req.body);
-    if (error)
-      return res.status(400).send({ error: true, message: error.message });
+    const form = new formidable.IncomingForm();
 
-    // Get the max value of paymentId and increment it to the next payment registered.
+    let objdata = {};
 
-    const maxId = await Payment.find()
-      .sort({ paymentId: -1 })
-      .limit(1)
-      .select("paymentId");
+    const formdata = await new Promise((resolve, reject) => {
+      form.parse(req, (err, fields, files) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        // store the fields sended by the client in the objdata
+        objdata = fields;
+        // initialize the name of the picture and the path
+        for (const file of Object.entries(files)) {
+          const title = file[1].name;
+          const ext = title.split(".");
+          const random = Math.random().toString();
+          const path = `${crypto
+            .createHash("sha1")
+            .update(ext[0] + random)
+            .digest("hex")}.${ext[1]}`;
+          objdata["path_picture"] = path;
 
-    let valueId;
-
-    // If the maxId does not return a value set the valueId to 1 by default.
-
-    maxId.length == 0 ? (valueId = 1) : (valueId = maxId[0].paymentId + 1);
-
-    // Check if the payment title is already existing.
-
-    const isTitleExist = await Payment.findOne({
-      title: { $regex: `^${req.body.title}$`, $options: "i" }
+          fs.rename(file[1].path, `${UPLOAD_IMG_PATH}/${path}`, (err) => {
+            if (err) throw err;
+          });
+        }
+        resolve("done");
+      });
     });
 
-    // If the payment title is already existing send a 400 response status code with a message.
+    if (formdata === "done") {
+      // Validation post payment.
 
-    if (isTitleExist)
-      return res
-        .status(400)
-        .send({ error: true, message: "Error duplicating payment title" });
+      const { error } = schemaValidationPayment.validate(objdata);
+      if (error)
+        return res.status(400).send({ error: true, message: error.message });
 
-    // Create a new payment document.
+      // Get the max value of paymentId and increment it to the next payment registered.
 
-    const payment = new Payment({
-      id_admin: res.locals.admin.id,
-      carrierId: valueId,
-      title: req.body.title,
-      description: req.body.description,
-      path_picture: req.body.path_picture
-    });
+      const maxId = await Payment.find()
+        .sort({ paymentId: -1 })
+        .limit(1)
+        .select("paymentId");
 
-    // If all the checks is passing, save the payment, then send back a 200 response status code with a successfull message.
+      let valueId;
 
-    await payment.save();
+      // If the maxId does not return a value set the valueId to 1 by default.
 
-    return res.status(201).send(`The payment has been created`);
+      maxId.length == 0 ? (valueId = 1) : (valueId = maxId[0].paymentId + 1);
+
+      objdata["carrierId"] = valueId;
+      objdata["id_admin"] = res.locals.admin.id;
+
+      // Check if the payment title is already existing.
+
+      const isTitleExist = await Payment.findOne({
+        title: { $regex: `^${objdata.title}$`, $options: "i" },
+      });
+
+      // If the payment title is already existing send a 400 response status code with a message.
+
+      if (isTitleExist)
+        return res
+          .status(400)
+          .send({ error: true, message: "Error duplicating payment title" });
+
+      // Create a new payment document.
+
+      const payment = new Payment(objdata);
+
+      // If all the checks is passing, save the payment, then send back a 200 response status code with a successfull message.
+
+      await payment.save();
+
+      return res.status(201).send({ error: false, message: `The payment has been created` });
+    }
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
 };
 
-exports.putPaymentById = async function(req, res) {
+exports.putPaymentById = async function (req, res) {
   try {
     // Only an existing admin can perform this action.
 
@@ -114,13 +152,13 @@ exports.putPaymentById = async function(req, res) {
     if (req.body.id_admin)
       return res.status(400).send({
         error: true,
-        message: "Error your are not authorized to modify admin ID"
+        message: "Error your are not authorized to modify admin ID",
       });
 
     // Check if the payment title is already existing.
 
     const isTitleExist = await Payment.findOne({
-      title: { $regex: `^${req.body.title}$`, $options: "i" }
+      title: { $regex: `^${req.body.title}$`, $options: "i" },
     });
 
     // If the payment title is already existing send a 400 response status code with a message.
@@ -128,14 +166,14 @@ exports.putPaymentById = async function(req, res) {
     if (isTitleExist)
       return res.status(400).send({
         error: true,
-        message: "Error duplicating payment title or no change detected"
+        message: "Error duplicating payment title or no change detected",
       });
 
     // Check if the payment is existing and update.
 
     let payment = await Payment.findByIdAndUpdate(req.params.id, {
       $set: req.body,
-      date_update: Date.now()
+      date_update: Date.now(),
     });
 
     // If there is not payment with the id provided, send back a 400 response status code with a message.
@@ -143,7 +181,7 @@ exports.putPaymentById = async function(req, res) {
     if (!payment)
       return res.status(400).send({
         error: true,
-        message: "There are not payment with the id provided"
+        message: "There are not payment with the id provided",
       });
 
     // If all the checks is passing, send back a 200 response status code with succesfull message.
@@ -152,15 +190,15 @@ exports.putPaymentById = async function(req, res) {
 
     return res.status(200).send({
       error: false,
-      message: `The payment has been modified`
+      message: `The payment has been modified`,
     });
   } catch (e) {
-    console.log('error')
+    console.log("error");
     return res.status(404).send({ error: true, message: e.message });
   }
 };
 
-exports.deletePaymentById = async function(req, res) {
+exports.deletePaymentById = async function (req, res) {
   try {
     // Only an existing superadmin can perform this action.
 
@@ -173,14 +211,21 @@ exports.deletePaymentById = async function(req, res) {
     if (!payment)
       return res.status(400).send({
         error: true,
-        message: "There are not payment with the id provided"
+        message: "There are not payment with the id provided",
       });
+
+    // delete the picture associated with the payment
+
+    const path = `${UPLOAD_IMG_PATH}/${payment.path_picture}`;
+    if (fs.existsSync(path)) {
+      fs.unlinkSync(path);
+    }
 
     // If all the checks is passing, delete the payment, then send back a 200 response status code with succesfull message.
 
     return res.send({
       error: false,
-      message: `The ${payment.title} has been removed`
+      message: `The ${payment.title} has been removed`,
     });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });

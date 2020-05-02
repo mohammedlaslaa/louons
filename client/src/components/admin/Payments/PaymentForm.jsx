@@ -10,10 +10,10 @@ function PaymentForm(props) {
   return (
     <>
       <HeadFormAdmin
-        titlepage={`${props.titlepage} une adresse`}
+        titlepage={`${props.titlepage} un paiement`}
         isFailed={props.isFailed}
         isSuccess={props.isSuccess}
-        successMessage={`Addresse ${props.statusMessageForm} avec succés`}
+        successMessage={`Paiement ${props.statusMessageForm} avec succés`}
         failMessage="Erreur de duplication ou champs vide, veuillez vérifier votre formulaire"
       />
       <form
@@ -33,6 +33,20 @@ function PaymentForm(props) {
             }}
           />
         </div>
+        {props.pictureDisplay !== "" && (
+          <div className="col-12 m-0 p-0 row d-flex justify-content-between">
+              <div
+                className="col-6 col-sm-4 p-2 mx-auto"
+                key={props.pictureDisplay}
+              >
+                <img
+                  src={`http://localhost:5000/uploads/img/${props.pictureDisplay}`}
+                  className="w-100"
+                  alt=""
+                />
+              </div>
+          </div>
+        )}
         <DivInputForm
           label={"Titre :"}
           name="title"
@@ -53,11 +67,10 @@ function PaymentForm(props) {
           label="Description :"
         />
         <InputFileForm
-          errorPicture={props.errorPicture}
+          errorFile={props.errorPicture}
           isSubmit={props.isSubmit}
-          picture={props.picture}
           setPicture={props.setPicture}
-          errorMessage="L'article doit contenir 3 images sous le format png ou jpg/jpeg"
+          errorMessage="Un paiement doit contenir au moins une image sous le format png ou jpg/jpeg"
           isMultiple={false}
         />
         <SubmitButton />
