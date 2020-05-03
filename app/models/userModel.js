@@ -46,6 +46,12 @@ const userSchema = new mongoose.Schema({
     minlength: 8,
   },
 
+  path_picture: {
+    type: String,
+    minlength: 10,
+    maxlength: 50,
+  },
+
   date_register: {
     type: Date,
     default: Date.now(),
@@ -117,6 +123,8 @@ const schemaValidationUser = Joi.object({
     )
     .required(),
 
+  path_picture: Joi.string(),
+
   isSubscribe: Joi.boolean(),
 
   isActive: Joi.boolean(),
@@ -150,6 +158,8 @@ const schemaPutValidationUser = Joi.object({
       /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[#$%^&*()+=!?\-';,.\/{}|:<>?~]).{8,20})/
     )
   ),
+
+  path_picture: Joi.string(),
 
   isSubscribe: Joi.boolean(),
 

@@ -5,26 +5,32 @@ const Joi = require("@hapi/joi");
 const adminSchema = new mongoose.Schema({
   adminId: {
     type: Number,
-    default: 1
+    default: 1,
+  },
+
+  gender: {
+    type: String,
+    required: true,
+    enum: ["mr", "mrs"],
   },
 
   lastName: {
     type: String,
     required: true,
     minlength: 3,
-    maxlength: 50
+    maxlength: 50,
   },
 
   firstName: {
     type: String,
     required: true,
     minlength: 3,
-    maxlength: 50
+    maxlength: 50,
   },
 
-  dateBirth: {
+  date_birth: {
     type: Date,
-    default: null
+    default: null,
   },
 
   email: {
@@ -32,51 +38,57 @@ const adminSchema = new mongoose.Schema({
     unique: true,
     required: true,
     minlength: 10,
-    maxlength: 50
+    maxlength: 50,
   },
 
   password: {
     type: String,
     required: true,
-    minlength: 8
+    minlength: 8,
+  },
+
+  path_picture: {
+    type: String,
+    minlength: 10,
+    maxlength: 50,
   },
 
   date_register: {
     type: Date,
-    default: new Date()
+    default: new Date(),
   },
 
   date_update: {
     type: Date,
-    default: new Date()
+    default: new Date(),
   },
 
   date_delete: {
     type: Date,
-    default: null
+    default: null,
   },
 
   adminLevel: {
     type: String,
     enum: ["admin", "superadmin"],
     default: "user",
-    required: true
+    required: true,
   },
 
   isActive: {
     type: Boolean,
-    default: true
-  }
+    default: true,
+  },
 });
 
 // Generate token method with the private key, the expiresIn option is used to set the token validity period.
 
-adminSchema.methods.generateToken = function() {
+adminSchema.methods.generateToken = function () {
   const token = jwt.sign(
     { id: this._id, adminLevel: this.adminLevel },
     process.env.PRIVATE_KEY,
     {
-      expiresIn: 604800
+      expiresIn: 604800,
     }
   );
   return token;
@@ -87,6 +99,8 @@ adminSchema.methods.generateToken = function() {
 // Validator with the required fields.
 
 const schemaValidationAdmin = Joi.object({
+  gender: Joi.string().required(),
+
   lastName: Joi.string()
     .pattern(new RegExp(/[a-zA-Z\séùàüäîçïèêôö-]+$/))
     .min(3)
@@ -99,7 +113,7 @@ const schemaValidationAdmin = Joi.object({
     .max(50)
     .required(),
 
-  dateBirth: Joi.date().iso(),
+    date_birth: Joi.date().iso(),
 
   email: Joi.string()
     .email({ minDomainSegments: 2 })
@@ -116,14 +130,18 @@ const schemaValidationAdmin = Joi.object({
     )
     .required(),
 
-  adminLevel: Joi.string().valid('admin','superadmin').required(),
+  path_picture: Joi.string(),
 
-  isActive: Joi.boolean()
+  adminLevel: Joi.string().valid("admin", "superadmin").required(),
+
+  isActive: Joi.boolean(),
 });
 
 // Validator put with the required fields.
 
 const schemaPutValidationAdmin = Joi.object({
+  gender: Joi.string(),
+
   lastName: Joi.string()
     .pattern(new RegExp(/[a-zA-Z\séùàüäîçïèêôö-]+$/))
     .min(3)
@@ -134,7 +152,7 @@ const schemaPutValidationAdmin = Joi.object({
     .min(3)
     .max(50),
 
-  dateBirth: Joi.date().iso(),
+    date_birth: Joi.date().iso(),
 
   email: Joi.string()
     .email({ minDomainSegments: 2 })
@@ -148,9 +166,11 @@ const schemaPutValidationAdmin = Joi.object({
     )
   ),
 
-  adminLevel: Joi.string().valid('admin','superadmin'),
+  path_picture: Joi.string(),
 
-  isActive: Joi.boolean()
+  adminLevel: Joi.string().valid("admin", "superadmin"),
+
+  isActive: Joi.boolean(),
 });
 
 const Admin = mongoose.model("Admin", adminSchema);

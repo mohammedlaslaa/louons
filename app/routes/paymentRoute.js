@@ -20,7 +20,7 @@ router.post("/", jwtverify, paymentController.postPayment);
 
 router.put(
   "/:id",
-  [isemptybody, objectvalid, jwtverify],
+  [ objectvalid, jwtverify],
   paymentController.putPaymentById
 );
 

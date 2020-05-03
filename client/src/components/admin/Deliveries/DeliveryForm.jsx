@@ -6,11 +6,11 @@ import TextAreaInputForm from "../Form/TextAreaInputForm";
 import InputFileForm from "../Form/InputFileForm";
 import SubmitButton from "../Form/SubmitButton";
 
-function PaymentForm(props) {
+function DeliveryForm(props) {
   return (
     <>
       <HeadFormAdmin
-        titlepage={`${props.titlepage} un paiement`}
+        titlepage={`${props.titlepage} une livraison`}
         isFailed={props.isFailed}
         isSuccess={props.isSuccess}
         successMessage={`Paiement ${props.statusMessageForm} avec succés`}
@@ -66,11 +66,33 @@ function PaymentForm(props) {
           errorMessage="Ce champ doit contenir entre 10 et 200 caractères"
           label="Description :"
         />
+        <DivInputForm
+          label={"Prix :"}
+          name="price"
+          type="number"
+          value={props.price}
+          change={(e) => {
+            props.setPrice(e.target.value);
+          }}
+          errorcondition={props.errorPrice && props.isSubmit}
+          errormessage="Le prix doit être supérieur à 0 et ne peut pas excéder 500€"
+        />
+        <DivInputForm
+          label={"Délai de livraison :"}
+          name="delay"
+          type="number"
+          value={props.delay}
+          change={(e) => {
+            props.setDelay(e.target.value);
+          }}
+          errorcondition={props.errorDelay && props.isSubmit}
+          errormessage="Le délai de livraison doit être compris entre 0 et 10"
+        />
         <InputFileForm
           errorFile={props.errorPicture}
           isSubmit={props.isSubmit}
           setPicture={props.setPicture}
-          errorMessage="Un paiement doit contenir au moins une image sous le format png ou jpg/jpeg"
+          errorMessage="Une livraison doit contenir au moins une image sous le format png ou jpg/jpeg"
           isMultiple={false}
         />
         <SubmitButton />
@@ -79,4 +101,4 @@ function PaymentForm(props) {
   );
 }
 
-export default PaymentForm;
+export default DeliveryForm;

@@ -16,7 +16,8 @@ const paymentSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
-    minlength: 5,
+    unique: true,
+    minlength: 3,
     maxlength: 30,
   },
 
@@ -64,7 +65,7 @@ const schemaValidationPayment = Joi.object({
 
   title: Joi.string()
     .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
-    .min(5)
+    .min(3)
     .max(30)
     .required(),
 
@@ -82,7 +83,7 @@ const schemaPutValidationPayment = Joi.object({
 
   title: Joi.string()
     .pattern(new RegExp(/[\w\d\séùàüäîçïèêôö]*$/))
-    .min(5)
+    .min(3)
     .max(30),
 
   description: Joi.string().min(10).max(200),

@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import UserForm from "./UserForm";
+import AdminForm from "./AdminForm";
 
-function UserFormLogic(props) {
+function AdminFormLogic(props) {
   const [method, setMethod] = useState("POST");
+  const [picture, setPicture] = useState("");
   const [gender, setGender] = useState("mr");
-  const [isSubscribe, setIsSubscribe] = useState(false);
   const [lastName, setLastName] = useState("");
   const [firstName, setFirstName] = useState("");
   const [dateBirth, setDateBirth] = useState();
   const [email, setEmail] = useState("");
-  const [picture, setPicture] = useState("");
-  const [pictureDisplay, setPictureDisplay] = useState("");
-  const [errorPicture, setErrorPicture] = useState(false);
   const [password, setPassword] = useState("");
+  const [adminLevel, setAdminLevel] = useState("");
   const [confirmationPassword, setConfirmationPassword] = useState("");
+  const [pictureDisplay, setPictureDisplay] = useState("");
   const [errorForm, setErrorForm] = useState(false);
   const [numberErrorForm, setNumberErrorForm] = useState(0);
   const [errorLastName, setErrorLastName] = useState(false);
@@ -22,6 +21,8 @@ function UserFormLogic(props) {
   const [errorMail, setErrorMail] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
   const [errorConfirmation, setErrorConfirmation] = useState(false);
+  const [errorAdminLevel, setErrorAdminLevel] = useState(false);
+  const [errorPicture, setErrorPicture] = useState(false);
   const [isSubmit, setIsSubmit] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
@@ -33,7 +34,7 @@ function UserFormLogic(props) {
     // if the method is not equal to true and there are an idparams, fetch the data to the api and set the state
     if (idParams && method !== "PUT") {
       setMethod("PUT");
-      fetch(`http://localhost:5000/louons/api/v1/user/${idParams}`, {
+      fetch(`http://localhost:5000/louons/api/v1/admin/${idParams}`, {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
@@ -43,12 +44,12 @@ function UserFormLogic(props) {
         .then((result) => {
           if (!result.error) {
             setGender(result.gender.toLowerCase());
+            setAdminLevel(result.adminLevel);
             setLastName(result.lastName);
             setFirstName(result.firstName);
             setDateBirth(result.date_birth);
             setEmail(result.email);
-            setIsSubscribe(result.isSubscribe);
-            setPictureDisplay(result.path_picture)
+            setPictureDisplay(result.path_picture);
           }
         });
     }
@@ -66,24 +67,6 @@ function UserFormLogic(props) {
     );
 
     // set the error depending the value of the fields
-
-    if (Object.keys(picture).length === 1) {
-      for (let i = 0; i < picture.length; i++) {
-        if (
-          picture[i].type !== "image/png" &&
-          picture[i].type !== "image/jpeg"
-        ) {
-          setErrorPicture(true);
-          setNumberErrorForm((prev) => prev + 1);
-        } else {
-          setErrorPicture(false);
-          dataform.append(`file${i}`, picture[i]);
-        }
-      }
-    } else if (Object.keys(picture).length > 1) {
-      setErrorPicture(true);
-      setNumberErrorForm((prev) => prev + 1);
-    }
 
     if (!regexName.test(lastName) || lastName === "") {
       setErrorLastName(true);
@@ -126,6 +109,31 @@ function UserFormLogic(props) {
       setErrorConfirmation(false);
     }
 
+    if (adminLevel !== "superadmin" && adminLevel !== "admin") {
+      setErrorAdminLevel(true);
+      setNumberErrorForm((prev) => prev + 1);
+    } else {
+      setErrorAdminLevel(false);
+    }
+
+    if (Object.keys(picture).length === 1) {
+      for (let i = 0; i < picture.length; i++) {
+        if (
+          picture[i].type !== "image/png" &&
+          picture[i].type !== "image/jpeg"
+        ) {
+          setErrorPicture(true);
+          setNumberErrorForm((prev) => prev + 1);
+        } else {
+          setErrorPicture(false);
+          dataform.append(`file${i}`, picture[i]);
+        }
+      }
+    } else if (Object.keys(picture).length > 1) {
+      setErrorPicture(true);
+      setNumberErrorForm((prev) => prev + 1);
+    }
+
     if (numberErrorForm > 0) {
       setErrorForm(true);
     } else {
@@ -140,8 +148,11 @@ function UserFormLogic(props) {
     confirmationPassword,
     idParams,
     method,
+    adminLevel,
+    errorAdminLevel,
     dataform,
     picture,
+    pictureDisplay,
   ]);
 
   const handleSubmit = (e) => {
@@ -154,16 +165,15 @@ function UserFormLogic(props) {
     dataform.append("lastName", lastName);
     dataform.append("firstName", firstName);
     dataform.append("date_birth", dateBirth);
+    dataform.append("adminLevel", adminLevel);
     dataform.append("email", email);
-    dataform.append("isSubscribe", isSubscribe);
     password !== "" && dataform.append("password", password);
 
     // adapt the link according to the method
-
     const getLink =
       method === "POST"
-        ? "http://localhost:5000/louons/api/v1/user"
-        : `http://localhost:5000/louons/api/v1/user/${idParams}`;
+        ? "http://localhost:5000/louons/api/v1/admin"
+        : `http://localhost:5000/louons/api/v1/admin/${idParams}`;
 
     // fetch only if there are not errorform
 
@@ -183,15 +193,13 @@ function UserFormLogic(props) {
             }, 1500);
             if (method === "POST") {
               // reset all value of the form if the value method is equal to POST
-              setGender("");
               setLastName("");
               setFirstName("");
               setDateBirth("");
               setEmail("");
               setPassword("");
               setConfirmationPassword("");
-              setPicture("")
-              setIsSubscribe(false);
+              setAdminLevel("");
             } else {
               setPictureDisplay(result.picture);
               setPassword("");
@@ -217,8 +225,9 @@ function UserFormLogic(props) {
       setFirstName(e.target.value);
     }
   };
+
   return (
-    <UserForm
+    <AdminForm
       isSuccess={isSuccess}
       isFailed={isFailed}
       handleSubmit={handleSubmit}
@@ -240,12 +249,12 @@ function UserFormLogic(props) {
       errorMail={errorMail}
       errorPassword={errorPassword}
       errorConfirmation={errorConfirmation}
-      isSubscribe={isSubscribe}
-      setIsSubscribe={setIsSubscribe}
       titlepage={props.title}
       isSubmit={isSubmit}
       method={method}
-      picture={picture}
+      adminLevel={adminLevel}
+      errorAdminLevel={errorAdminLevel}
+      setAdminLevel={setAdminLevel}
       setPicture={setPicture}
       errorPicture={errorPicture}
       pictureDisplay={pictureDisplay}
@@ -254,4 +263,4 @@ function UserFormLogic(props) {
   );
 }
 
-export default UserFormLogic;
+export default AdminFormLogic;

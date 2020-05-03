@@ -185,6 +185,7 @@ function CategoryFormLogic() {
             PopupContext.setToggle(false);
             setRedirect(true);
             setIsSubmit(false)
+            
           } else {
             setIsFailed(true);
             setTimeout(() => {

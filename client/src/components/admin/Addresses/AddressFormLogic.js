@@ -31,7 +31,12 @@ function AddressFormLogic(props) {
   const regexpCountryCity = new RegExp(/^[a-zA-Z\s-éùàüäîçïèêôö]*$/);
 
   useEffect(() => {
+    // initialize the number of error form
+
     setNumberErrorForm(0);
+
+    // get the data depending if the isFetched state is settled to false and if there are an idParams
+
     if (idParams && !isFetched) {
       setMethod("PUT");
       setStatusMessageForm("modifiée");

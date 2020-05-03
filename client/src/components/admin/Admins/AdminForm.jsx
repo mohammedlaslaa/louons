@@ -5,11 +5,11 @@ import HeadFormAdmin from "../Form/HeadFormAdmin";
 import SubmitButton from "../Form/SubmitButton";
 import InputFileForm from "../Form/InputFileForm";
 
-function UserForm(props) {
+function AdminForm(props) {
   return (
     <>
       <HeadFormAdmin
-        titlepage={`${props.titlepage} un utilisateur`}
+        titlepage={`${props.titlepage} un admin`}
         isSuccess={props.isSuccess}
         isFailed={props.isFailed}
         successMessage="Utilisateur enregistré avec succés"
@@ -49,7 +49,6 @@ function UserForm(props) {
         <InputFileForm
           errorPicture={props.errorPicture}
           isSubmit={props.isSubmit}
-          reset={props.picture}
           setPicture={props.setPicture}
           label={"Photo de profil"}
           errorMessage="Seule une image sous le format png ou jpg/jpeg est accepté"
@@ -81,6 +80,27 @@ function UserForm(props) {
               />
             </label>
           </div>
+        </div>
+        {props.errorAdminLevel && props.isSubmit && (
+          <span className="text-danger errormessage text-center">
+            Veuillez sélectionner un rôle
+          </span>
+        )}
+        <div className="row form-group my-3 d-flex justify-content-center align-items-center">
+          <label className="col-9 col-sm-4 mt-2">Rôle :</label>
+          <select
+            name="adminlevel"
+            id="adminlevel"
+            className="p-1 col-9 col-sm-6 col-md-5"
+            value={props.adminLevel}
+            onChange={(e) => {
+              props.setAdminLevel(e.target.value);
+            }}
+          >
+            <option value="">--Rôle admin--</option>
+            <option value="superadmin">superadmin</option>
+            <option value="admin">admin</option>
+          </select>
         </div>
         <DivInputForm
           label={"Nom :"}
@@ -149,7 +169,7 @@ function UserForm(props) {
               : props.errorPassword
           }
           errormessage=" Le mot de passe doit contenir au moins 8 charactères, une majuscule
-          un chiffre et un caractère spécial"
+        un chiffre et un caractère spécial"
         />
         <DivInputForm
           label={"Confirmation :"}
@@ -166,39 +186,14 @@ function UserForm(props) {
           }
           errormessage="Le mot de passe de confirmation doit être identique"
         />
-        <div className="row form-group my-3 d-flex justify-content-center align-items-center">
-          <label className="col-9 col-sm-4 mt-2">
-            Inscription à la newsletter :
-          </label>
-          <div>
-            <label className="col-9 col-sm-4 mt-2">Oui</label>
-            <input
-              type="radio"
-              name="issubscribe"
-              checked={props.isSubscribe}
-              id="subscribe"
-              key="subscribe"
-              onChange={() => props.setIsSubscribe(true)}
-            />
-            <label className="col-9 col-sm-4 mt-2">Non</label>
-            <input
-              type="radio"
-              name="issubscribe"
-              id="notsubscribe"
-              key="notsubscribe"
-              checked={!props.isSubscribe}
-              onChange={() => props.setIsSubscribe(false)}
-            />
-          </div>
-        </div>
         <SubmitButton />
       </form>
     </>
   );
 }
 
-UserForm.defaultProps = {
+AdminForm.defaultProps = {
   dateBirth: "",
 };
 
-export default UserForm;
+export default AdminForm;

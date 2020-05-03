@@ -19,6 +19,7 @@ function ListAdmin() {
       ]}
       titlebutton="Ajouter un Admin"
       link="admins"
+      linkbutton={true}
     />
   );
 }

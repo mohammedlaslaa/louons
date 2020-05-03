@@ -14,11 +14,11 @@ router.get("/:id", objectvalid, carrierController.getCarrierById);
 
 // Only the admin can, post or update a carrier.
 
-router.post("/", [isemptybody, jwtverify], carrierController.postCarrier);
+router.post("/", jwtverify, carrierController.postCarrier);
 
 router.put(
   "/:id",
-  [isemptybody, objectvalid, jwtverify],
+  [objectvalid, jwtverify],
   carrierController.putCarrierById
 );
 

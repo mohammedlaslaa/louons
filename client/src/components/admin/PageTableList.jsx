@@ -7,7 +7,6 @@ class PageTableList extends Component {
   // Component that render a list table with the props he receives
   // isLoading = message displayed when the user change the current page
   // isLoadingUpdate = message displayed when the user try to update
-  // isUnAuthorized = message displayed when the user is not authorized to access to this route
   // listOfTh = object of data received in props. This data corresponds to what we want to display in the table header.
   // listOfData = empty array which will be replaced by the data received by the fetch API (the link is also provided in props)
 
@@ -16,7 +15,6 @@ class PageTableList extends Component {
     this.state = {
       isLoading: false,
       isLoadingUpdate: false,
-      isUnAuthorized: false,
       listOfTh: props.th,
       listOfData: [],
       adminLevel: "",
@@ -28,7 +26,7 @@ class PageTableList extends Component {
   static contextType = PopupAddContext;
 
   // When the component is mount, the isloading state is set to true and fetch the data to the api (link provided in props)
-  // if there are not error, set the listOfData, else if there are error and the message is "Not authorized..." set the isUnauthorized to true.
+  // if there are not error, set the listOfData
   // then set the isloading to false
 
   componentDidMount() {
@@ -57,13 +55,9 @@ class PageTableList extends Component {
             adminLevel: result.adminLevel,
             isLoading: false,
           });
-        } else if (
-          (result.error && result.message === "Not authorized admin level") ||
-          result.message === "Not Authorized"
-        ) {
+        } else {
           if (this._isMounted) {
             this.setState({
-              isUnAuthorized: true,
               isLoading: false,
             });
           }
@@ -115,14 +109,11 @@ class PageTableList extends Component {
       listOfTh,
       isLoading,
       isLoadingUpdate,
-      isUnAuthorized,
       adminLevel,
     } = this.state;
 
     return isLoading ? (
       <p className="bg-success text-white p-2">Loading....</p>
-    ) : isUnAuthorized ? (
-      <p className="bg-danger text-white p-2">Non Autorisé</p>
     ) : (
       <>
         <h4 className="titlepage">{this.props.titlepage}</h4>
@@ -244,7 +235,7 @@ class PageTableList extends Component {
                                     handleIsActive={this.handleRequestFetch}
                                   />
                                 ) : subTh === "description" ? (
-                                    `${eltData.description.slice(0,30)}...`
+                                  `${eltData.description.slice(0, 30)}...`
                                 ) : subTh === "date_register" ||
                                   subTh === "start_date" ||
                                   subTh === "end_date" ? (

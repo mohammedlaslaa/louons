@@ -2,6 +2,7 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 import ListDelivery from "./ListDelivery";
 import NotFound from "../../general/NotFound";
+import DeliveryFormLogic from "./DeliveryFormLogic";
 
 function PrivateDelivery() {
   return (
@@ -10,7 +11,10 @@ function PrivateDelivery() {
         <ListDelivery />
       </Route>
       <Route exact path="/admin/deliveries/add">
-        <p>coucou</p>
+        <DeliveryFormLogic title="Ajouter"/>
+      </Route>
+      <Route exact path="/admin/deliveries/:id">
+        <DeliveryFormLogic title="Modifier"/>
       </Route>
       <Route>
         <NotFound />

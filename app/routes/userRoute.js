@@ -15,7 +15,7 @@ router.put("/me", isemptybody, userController.putSelf);
 
 // User inscription
 
-router.post("/", isemptybody, userController.postInscription);
+router.post("/", userController.postInscription);
 
 // Only the admins can get or update in all the users ! The jwtverify middleware comes to ensure that the client is an admin.
 
@@ -23,11 +23,7 @@ router.get("/all/:searchuser?", jwtverify, userController.getAllUsers);
 
 router.get("/:id", [objectvalid, jwtverify], userController.getUserById);
 
-router.put(
-  "/:id",
-  [isemptybody, objectvalid, jwtverify],
-  userController.putUserById
-);
+router.put("/:id", [objectvalid, jwtverify], userController.putUserById);
 
 // Only the superadmin can delete users.
 

@@ -5,14 +5,15 @@ function InputFileForm(props) {
     <>
       {props.errorFile > 0 && props.isSubmit && (
         <span className="text-danger errormessage text-center">
-         {props.errorMessage}
+          {props.errorMessage}
         </span>
       )}
       <div className="row form-group my-3 d-flex justify-content-center align-items-center">
-        <label className="col-9 col-sm-4 mt-2">Images :</label>
+        <label className="col-9 col-sm-4 mt-2">{props.label} :</label>
         <input
           type="file"
           name="file"
+          reset={props.reset}
           multiple={props.isMultiple}
           className="form-control-file col-9 col-sm-6 col-md-5"
           onChange={(e) => {
@@ -24,4 +25,8 @@ function InputFileForm(props) {
   );
 }
 
-export default InputFileForm
+InputFileForm.defaultProps = {
+  label: "Images",
+};
+
+export default InputFileForm;

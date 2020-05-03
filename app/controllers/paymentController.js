@@ -6,7 +6,6 @@ const {
 const jwt = require("jsonwebtoken");
 const formidable = require("formidable");
 const fs = require("fs");
-const UPLOAD_IMG_PATH = "public/uploads/img/";
 const crypto = require("crypto");
 
 exports.getAllPayment = async function (req, res) {
@@ -30,7 +29,7 @@ exports.getPaymentById = async function (req, res) {
     // Find a payment by id, then return it to the client.
 
     const payment = await Payment.findById(req.params.id).select(
-      "id_admin title description path_picture"
+      "id_admin title description path_picture isActive"
     );
 
     // If there are not payment with this id return a 400 response status code with a message.
@@ -43,7 +42,7 @@ exports.getPaymentById = async function (req, res) {
 
     // If there is an existing payment, send back a 200 response status code with a this payment.
 
-    return res.send({error: false, data: payment});
+    return res.send({ error: false, data: payment });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -65,9 +64,25 @@ exports.postPayment = async function (req, res) {
           reject(err);
           return;
         }
+
+        if (Object.keys(files).length == 0) {
+          return res.status(400).send({
+            error: true,
+            message: "File(s) is needed",
+          });
+        } else if (Object.keys(files).length > 1) {
+          return res.status(400).send({
+            error: true,
+            message: "The number of files sending is wrong",
+          });
+        }
+
         // store the fields sended by the client in the objdata
+
         objdata = fields;
+
         // initialize the name of the picture and the path
+
         for (const file of Object.entries(files)) {
           const title = file[1].name;
           const ext = title.split(".");
@@ -78,9 +93,13 @@ exports.postPayment = async function (req, res) {
             .digest("hex")}.${ext[1]}`;
           objdata["path_picture"] = path;
 
-          fs.rename(file[1].path, `${UPLOAD_IMG_PATH}/${path}`, (err) => {
-            if (err) throw err;
-          });
+          fs.rename(
+            file[1].path,
+            `${process.env.UPLOAD_IMG_PATH}/${path}`,
+            (err) => {
+              if (err) throw err;
+            }
+          );
         }
         resolve("done");
       });
@@ -109,19 +128,6 @@ exports.postPayment = async function (req, res) {
       objdata["carrierId"] = valueId;
       objdata["id_admin"] = res.locals.admin.id;
 
-      // Check if the payment title is already existing.
-
-      const isTitleExist = await Payment.findOne({
-        title: { $regex: `^${objdata.title}$`, $options: "i" },
-      });
-
-      // If the payment title is already existing send a 400 response status code with a message.
-
-      if (isTitleExist)
-        return res
-          .status(400)
-          .send({ error: true, message: "Error duplicating payment title" });
-
       // Create a new payment document.
 
       const payment = new Payment(objdata);
@@ -130,7 +136,9 @@ exports.postPayment = async function (req, res) {
 
       await payment.save();
 
-      return res.status(201).send({ error: false, message: `The payment has been created` });
+      return res
+        .status(201)
+        .send({ error: false, message: `The payment has been created` });
     }
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
@@ -141,42 +149,11 @@ exports.putPaymentById = async function (req, res) {
   try {
     // Only an existing admin can perform this action.
 
-    // Validation put payment.
+    // Check if the article is existing.
 
-    const { error } = schemaPutValidationPayment.validate(req.body);
-    if (error)
-      return res.status(400).send({ error: true, message: error.message });
+    let payment = await Payment.findOne({ _id: req.params.id });
 
-    // If req.body.id_admin is sent, return a 400 response status sode with a message.
-
-    if (req.body.id_admin)
-      return res.status(400).send({
-        error: true,
-        message: "Error your are not authorized to modify admin ID",
-      });
-
-    // Check if the payment title is already existing.
-
-    const isTitleExist = await Payment.findOne({
-      title: { $regex: `^${req.body.title}$`, $options: "i" },
-    });
-
-    // If the payment title is already existing send a 400 response status code with a message.
-
-    if (isTitleExist)
-      return res.status(400).send({
-        error: true,
-        message: "Error duplicating payment title or no change detected",
-      });
-
-    // Check if the payment is existing and update.
-
-    let payment = await Payment.findByIdAndUpdate(req.params.id, {
-      $set: req.body,
-      date_update: Date.now(),
-    });
-
-    // If there is not payment with the id provided, send back a 400 response status code with a message.
+    // If there is not article with the id provided, send back a 400 response status code with a message.
 
     if (!payment)
       return res.status(400).send({
@@ -184,16 +161,113 @@ exports.putPaymentById = async function (req, res) {
         message: "There are not payment with the id provided",
       });
 
-    // If all the checks is passing, send back a 200 response status code with succesfull message.
+    // this condition will be triggerred only when the user would activate or desactivate one payment
 
-    await payment.save();
+    if (Object.keys(req.body).length !== 0 && Object.keys(req.body.isActive)) {
+      // Update the isactive, then, send back a 200 response status code with succesfull message.
 
-    return res.status(200).send({
-      error: false,
-      message: `The payment has been modified`,
+      payment = await Payment.findByIdAndUpdate(req.params.id, {
+        $set: req.body,
+        date_update: Date.now(),
+      });
+
+      return res
+        .status(200)
+        .send({ error: false, message: `The payment has been modified` });
+    }
+
+    // parse the formdata incoming with formidable
+
+    const form = new formidable.IncomingForm();
+
+    let objdata = {};
+
+    const formdata = await new Promise((resolve, reject) => {
+      form.parse(req, (err, fields, files) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        // store the fields sended by the client in the objdata
+
+        objdata = fields;
+
+        if (Object.keys(files).length === 1) {
+          const path = `${process.env.UPLOAD_IMG_PATH}/${payment.path_picture}`;
+          if (fs.existsSync(path)) {
+            fs.unlinkSync(path);
+          }
+          // initialize the name of the picture and the path
+
+          for (const file of Object.entries(files)) {
+            const title = file[1].name;
+            const ext = title.split(".");
+            const random = Math.random().toString();
+            const path = `${crypto
+              .createHash("sha1")
+              .update(ext[0] + random)
+              .digest("hex")}.${ext[1]}`;
+            objdata["path_picture"] = path;
+
+            fs.rename(
+              file[1].path,
+              `${process.env.UPLOAD_IMG_PATH}/${path}`,
+              (err) => {
+                if (err) throw err;
+              }
+            );
+          }
+        }else if (Object.keys(files).length > 1){
+          return res.status(400).send({
+            error: true,
+            message: "The number of files sending is wrong",
+          });
+        }
+        resolve("done");
+      });
     });
+
+    if (formdata === "done") {
+      // Validation put payment.
+      const { error } = schemaPutValidationPayment.validate(objdata);
+      if (error)
+        return res.status(400).send({ error: true, message: error.message });
+
+      // If req.body.id_admin is sent, return a 400 response status sode with a message.
+
+      if (objdata.id_admin)
+        return res.status(400).send({
+          error: true,
+          message: "Error your are not authorized to modify admin ID",
+        });
+
+      // Update the payment.
+
+      payment = await Payment.findByIdAndUpdate(req.params.id, {
+        $set: objdata,
+        date_update: Date.now(),
+      });
+
+      // If there is not payment with the id provided, send back a 400 response status code with a message.
+
+      if (!payment)
+        return res.status(400).send({
+          error: true,
+          message: "There are not payment with the id provided",
+        });
+
+      // If all the checks is passing, send back a 200 response status code with succesfull message.
+
+      await payment.save();
+
+      return res.status(200).send({
+        error: false,
+        message: `The payment has been modified`,
+        picture : objdata.path_picture
+      });
+    }
   } catch (e) {
-    console.log("error");
     return res.status(404).send({ error: true, message: e.message });
   }
 };
@@ -216,7 +290,7 @@ exports.deletePaymentById = async function (req, res) {
 
     // delete the picture associated with the payment
 
-    const path = `${UPLOAD_IMG_PATH}/${payment.path_picture}`;
+    const path = `${process.env.UPLOAD_IMG_PATH}/${payment.path_picture}`;
     if (fs.existsSync(path)) {
       fs.unlinkSync(path);
     }

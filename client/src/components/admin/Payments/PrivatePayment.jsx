@@ -2,7 +2,7 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 import ListPayment from "./ListPayment";
 import NotFound from "../../general/NotFound";
-import PaymentFormLogic from "./PaymentFormLogic"
+import SimpleFormFileLogic from "./PaymentFormLogic"
 
 function PrivatePayment() {
   return (
@@ -11,10 +11,10 @@ function PrivatePayment() {
         <ListPayment />
       </Route>
       <Route exact path="/admin/payments/add">
-        <PaymentFormLogic  title="Ajouter"/>
+        <SimpleFormFileLogic title="Ajouter"/>
       </Route>
       <Route exact path="/admin/payments/:id">
-        <PaymentFormLogic  title="Modifier"/>
+        <SimpleFormFileLogic title="Modifier"/>
       </Route>
       <Route>
         <NotFound />

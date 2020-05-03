@@ -17,12 +17,12 @@ const AuthProvider = ({ children }) => {
         credentials: "include", // ensure that the header can include cookie.
       })
         .then((res) => res.json())
-        .then((json) => {
-          if (!json.error) {
+        .then((result) => {
+          if (!result.error) {
             setIsAuth(true);
             setIsLoading(false);
-            setDataUser(json.user)
-          } else if (json.error) {
+            setDataUser(result.user)
+          } else if (result.error) {
             setIsAuth(false);
             setIsLoading(false);
           }

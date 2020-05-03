@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import PaymentForm from "./PaymentForm";
+import DeliveryForm from "./DeliveryForm";
 
-function PaymentFormLogic(props) {
+function DeliveryFormLogic(props) {
   const [statusMessageForm, setStatusMessageForm] = useState("enregistré");
   const [isSuccess, setIssuccess] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
@@ -11,6 +11,10 @@ function PaymentFormLogic(props) {
   const [errorTitle, setErrorTitle] = useState(false);
   const [description, setDescription] = useState("");
   const [errorDescription, setErrorDescription] = useState(false);
+  const [price, setPrice] = useState(0);
+  const [errorPrice, setErrorPrice] = useState(false);
+  const [delay, setDelay] = useState(0);
+  const [errorDelay, setErrorDelay] = useState(false);
   const [picture, setPicture] = useState("");
   const [errorPicture, setErrorPicture] = useState("");
   const [pictureDisplay, setPictureDisplay] = useState("");
@@ -33,7 +37,7 @@ function PaymentFormLogic(props) {
     if (idParams && !isFetched) {
       setMethod("PUT");
       setStatusMessageForm("modifié");
-      fetch(`http://localhost:5000/louons/api/v1/payment/${idParams}`, {
+      fetch(`http://localhost:5000/louons/api/v1/carrier/${idParams}`, {
         credentials: "include",
       })
         .then((res) => res.json())
@@ -42,13 +46,13 @@ function PaymentFormLogic(props) {
             setIsFetched(true);
             setDescription(result.data.description);
             setTitle(result.data.title);
+            setPrice(result.data.price);
+            setDelay(result.data.delay_delivery);
             setIsActive(result.data.isActive);
             setPictureDisplay(result.data.path_picture);
           }
         });
     }
-
-    // condition to display some error in the form
 
     if (
       !regexp.test(title) ||
@@ -72,6 +76,32 @@ function PaymentFormLogic(props) {
       setNumberErrorForm((prevNumber) => prevNumber + 1);
     } else {
       setErrorDescription(false);
+    }
+
+    if (
+      price === 0 ||
+      price === "" ||
+      typeof price === String ||
+      price > 500 ||
+      price < 0
+    ) {
+      setErrorPrice(true);
+      setNumberErrorForm((prev) => prev + 1);
+    } else {
+      setErrorPrice(false);
+    }
+
+    if (
+      delay === 0 ||
+      price === "" ||
+      typeof delay === String ||
+      delay > 10 ||
+      delay < 0
+    ) {
+      setErrorDelay(true);
+      setNumberErrorForm((prev) => prev + 1);
+    } else {
+      setErrorDelay(false);
     }
 
     if (Object.keys(picture).length === 1) {
@@ -107,6 +137,8 @@ function PaymentFormLogic(props) {
     dataform,
     method,
     picture,
+    delay,
+    price,
   ]);
 
   const handleSubmit = (e) => {
@@ -120,12 +152,14 @@ function PaymentFormLogic(props) {
 
     dataform.append("title", title);
     dataform.append("description", description);
+    dataform.append("price", price);
+    dataform.append("delay_delivery", delay);
     dataform.append("isActive", isActive);
 
     const url =
       method === "POST"
-        ? "http://localhost:5000/louons/api/v1/payment"
-        : `http://localhost:5000/louons/api/v1/payment/${idParams}`;
+        ? "http://localhost:5000/louons/api/v1/carrier"
+        : `http://localhost:5000/louons/api/v1/carrier/${idParams}`;
 
     if (!errorForm) {
       fetch(url, {
@@ -144,6 +178,8 @@ function PaymentFormLogic(props) {
             if (method === "POST") {
               setTitle("");
               setDescription("");
+              setPrice(0);
+              setDelay(0);
               setIsSubmit(false);
               setIsActive(false);
             } else {
@@ -160,7 +196,7 @@ function PaymentFormLogic(props) {
   };
 
   return (
-    <PaymentForm
+    <DeliveryForm
       titlepage={props.title}
       isFailed={isFailed}
       isSuccess={isSuccess}
@@ -179,8 +215,14 @@ function PaymentFormLogic(props) {
       picture={picture}
       setPicture={setPicture}
       pictureDisplay={pictureDisplay}
+      price={price}
+      setPrice={setPrice}
+      errorPrice={errorPrice}
+      delay={delay}
+      setDelay={setDelay}
+      errorDelay={errorDelay}
     />
   );
 }
 
-export default PaymentFormLogic;
+export default DeliveryFormLogic;

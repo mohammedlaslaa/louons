@@ -6,7 +6,6 @@ const {
 const jwt = require("jsonwebtoken");
 const formidable = require("formidable");
 const fs = require("fs");
-const UPLOAD_IMG_PATH = "public/uploads/img/";
 const crypto = require("crypto");
 
 exports.getAllArticle = async function (req, res) {
@@ -65,17 +64,33 @@ exports.postArticle = async function (req, res) {
     const form = new formidable.IncomingForm();
 
     let objdata = {};
-    
+
     const formdata = await new Promise((resolve, reject) => {
       form.parse(req, (err, fields, files) => {
         if (err) {
           reject(err);
           return;
         }
+
+        if (Object.keys(files).length == 0) {
+          return res.status(400).send({
+            error: true,
+            message: "File(s) is needed",
+          });
+        } else if (Object.keys(files).length > 1) {
+          return res.status(400).send({
+            error: true,
+            message: "The number of files sending is wrong",
+          });
+        }
+
         // store the fields sended by the client in the objdata
+
         objdata = fields;
         objdata["pictures"] = [];
+
         // initialize the name of the picture and the path
+
         for (const file of Object.entries(files)) {
           const title = file[1].name;
           const ext = title.split(".");
@@ -92,9 +107,13 @@ exports.postArticle = async function (req, res) {
             },
           ];
 
-          fs.rename(file[1].path, `${UPLOAD_IMG_PATH}/${path}`, (err) => {
-            if (err) throw err;
-          });
+          fs.rename(
+            file[1].path,
+            `${process.env.UPLOAD_IMG_PATH}/${path}`,
+            (err) => {
+              if (err) throw err;
+            }
+          );
         }
         resolve("done");
       });
@@ -194,7 +213,7 @@ exports.putArticleById = async function (req, res) {
           // delete all previous pictures associated with the article
 
           article.pictures.forEach((e) => {
-            fs.unlinkSync(`${UPLOAD_IMG_PATH}/${e.path_picture}`);
+            fs.unlinkSync(`${process.env.UPLOAD_IMG_PATH}/${e.path_picture}`);
           });
 
           objdata["pictures"] = [];
@@ -215,10 +234,19 @@ exports.putArticleById = async function (req, res) {
               },
             ];
 
-            fs.rename(file[1].path, `${UPLOAD_IMG_PATH}/${path}`, (err) => {
-              if (err) throw err;
-            });
+            fs.rename(
+              file[1].path,
+              `${process.env.UPLOAD_IMG_PATH}/${path}`,
+              (err) => {
+                if (err) throw err;
+              }
+            );
           }
+        } else if (Object.keys(files).length > 3){
+          return res.status(400).send({
+            error: true,
+            message: "The number of files sending is wrong",
+          });
         }
         resolve("done");
       });
@@ -285,7 +313,7 @@ exports.deleteArticleById = async function (req, res) {
     // delete all picture associated with the article
 
     article.pictures.forEach((e) => {
-      const path = `${UPLOAD_IMG_PATH}/${e.path_picture}`;
+      const path = `${process.env.UPLOAD_IMG_PATH}/${e.path_picture}`;
       if (fs.existsSync(path)) {
         fs.unlinkSync(path);
       }

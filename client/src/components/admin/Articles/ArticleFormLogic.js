@@ -18,14 +18,14 @@ function ArticleFormLogic(props) {
   const [description, setDescription] = useState("");
   const [isSubmit, setIsSubmit] = useState("");
   const [price, setPrice] = useState(0);
-  const [pictureDisplay, setPictureDisplay] = useState([]);            
+  const [pictureDisplay, setPictureDisplay] = useState([]);
   const [picture, setPicture] = useState("");
   const [errorForm, setErrorForm] = useState(false);
   const [errorCategory, setErrorCategory] = useState(false);
   const [errorTitle, setErrorTitle] = useState(false);
   const [errorPrice, setErrorPrice] = useState(false);
   const [errorDescription, setErrorDescription] = useState(false);
-  const [errorFile, setErrorFile] = useState(0);
+  const [errorFile, setErrorFile] = useState(false);
   const [errorGrasp, setErrorGrasp] = useState(true);
   const [isShow, setIsShow] = useState(false);
   const [statusMessageForm, setStatusMessageForm] = useState("enregistré");
@@ -36,10 +36,6 @@ function ArticleFormLogic(props) {
     // reset the number error of the form and the error file
     if (numberErrorForm > 0) {
       setNumberErrorForm(0);
-    }
-
-    if (errorFile > 0) {
-      setErrorFile(0);
     }
 
     // fetch the datas if isFetched is false, then set this to true
@@ -59,7 +55,7 @@ function ArticleFormLogic(props) {
     }
 
     if (idParams && !isFetchedArticle) {
-      setStatusMessageForm("modifié")
+      setStatusMessageForm("modifié");
       setMethod("PUT");
       fetch(`http://localhost:5000/louons/api/v1/article/${idParams}`, {
         credentials: "include",
@@ -90,18 +86,24 @@ function ArticleFormLogic(props) {
     }
 
     if (Object.keys(picture).length === 3) {
+      let countError = 0;
       for (let i = 0; i < picture.length; i++) {
         if (
           picture[i].type !== "image/png" &&
           picture[i].type !== "image/jpeg"
         ) {
-          setErrorFile(true);
+          countError++;
           setNumberErrorForm((prev) => prev + 1);
         } else {
           dataform.append(`file${i}`, picture[i]);
         }
       }
-    } else if (method === "POST") {
+      if (countError > 0) {
+        setErrorFile(true);
+      } else {
+        setErrorFile(false);
+      }
+    } else if (method === "POST" && !idParams) {
       setErrorFile(true);
       setNumberErrorForm((prev) => prev + 1);
     }
@@ -117,7 +119,13 @@ function ArticleFormLogic(props) {
       setErrorCategory(false);
     }
 
-    if (price === 0 || typeof price === String || price > 2000 || price < 0) {
+    if (
+      price === 0 ||
+      price === "" ||
+      typeof price === String ||
+      price > 2000 ||
+      price < 0
+    ) {
       setErrorPrice(true);
       setNumberErrorForm((prev) => prev + 1);
     } else {

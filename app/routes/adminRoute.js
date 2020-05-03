@@ -16,13 +16,13 @@ router.put("/me", isemptybody, adminController.putSelf);
 
 router.get("/", jwtsuperadmin, adminController.getAllAdmins);
 
-router.post("/", [isemptybody, jwtsuperadmin], adminController.postNewAdmin);
+router.post("/", jwtsuperadmin, adminController.postNewAdmin);
 
 router.get("/:id", [objectvalid, jwtsuperadmin], adminController.getAdminById);
 
 router.put(
   "/:id",
-  [objectvalid, isemptybody, jwtsuperadmin],
+  [objectvalid, jwtsuperadmin],
   adminController.putAdminById
 );
 

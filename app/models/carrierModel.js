@@ -5,68 +5,69 @@ const carrierSchema = new mongoose.Schema({
   id_admin: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Admin",
-    required: true
+    required: true,
   },
 
   carrierId: {
     type: Number,
-    default: 1
+    default: 1,
   },
 
   title: {
     type: String,
     required: true,
+    unique: true,
     minlength: 3,
-    maxlength: 30
+    maxlength: 30,
   },
 
   description: {
     type: String,
     required: true,
     minlength: 10,
-    maxlength: 200
+    maxlength: 200,
   },
 
   price: {
     type: Number,
     required: true,
-    min: 3,
-    max: 50
+    min: 0,
+    max: 500,
   },
 
   delay_delivery: {
     type: Number,
     required: true,
-    min: 1,
-    max: 10
+    min: 0,
+    max: 10,
   },
 
   path_picture: {
     type: String,
     required: true,
     minlength: 10,
-    maxlength: 50
+    maxlength: 50,
   },
 
   date_register: {
     type: Date,
-    default: new Date()
+    default: new Date(),
   },
 
   date_update: {
     type: Date,
-    default: new Date()
+    default: new Date(),
   },
 
   date_delete: {
     type: Date,
-    default: null
+    default: null,
   },
 
   isActive: {
     type: Boolean,
-    default: true
-  }
+    default: true,
+  },
 });
 
 // Note that the fields send in the request that are not in this JOI Object will automatically throw a rejected request.
@@ -82,27 +83,15 @@ const schemaValidationCarrier = Joi.object({
     .max(30)
     .required(),
 
-  description: Joi.string()
-    .min(10)
-    .max(200)
-    .required(),
+  description: Joi.string().min(10).max(200).required(),
 
-  price: Joi.number()
-    .min(3)
-    .max(50)
-    .required(),
+  price: Joi.number().min(0).max(500).required(),
 
-  delay_delivery: Joi.number()
-    .min(1)
-    .max(10)
-    .required(),
+  delay_delivery: Joi.number().min(0).max(10).required(),
 
-  path_picture: Joi.string()
-    .min(10)
-    .max(50)
-    .required(),
+  path_picture: Joi.string().required(),
 
-  isActive: Joi.boolean()
+  isActive: Joi.boolean(),
 });
 
 // Validator put with the required fields.
@@ -115,23 +104,15 @@ const schemaPutValidationCarrier = Joi.object({
     .min(3)
     .max(30),
 
-  description: Joi.string()
-    .min(10)
-    .max(200),
+  description: Joi.string().min(10).max(200),
 
-  price: Joi.number()
-    .min(3)
-    .max(50),
+  price: Joi.number().min(0).max(500),
 
-  delay_delivery: Joi.number()
-    .min(1)
-    .max(10),
+  delay_delivery: Joi.number().min(0).max(10),
 
-  path_picture: Joi.string()
-    .min(10)
-    .max(50),
+  path_picture: Joi.string(),
 
-  isActive: Joi.boolean()
+  isActive: Joi.boolean(),
 });
 
 const Carrier = mongoose.model("Carrier", carrierSchema);

@@ -12,12 +12,15 @@ function ListDelivery() {
         { carrierId: "ID" },
         { title: "Nom" },
         { description: "Description" },
+        { delay_delivery: "Délai de livraison" },
+        { price: "Prix" },
         { isActive: "Activer" },
         { seeMore: "Voir" },
         { delete: "Supprimer" },
       ]}
-      titlebutton="Ajouter une catégorie"
+      titlebutton="Ajouter une livraison"
       link="deliveries"
+      linkbutton={true}
     />
   );
 }
