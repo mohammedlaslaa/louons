@@ -12,10 +12,10 @@ function PrivateAdmin() {
         <PrivateAccessSuperAdmin component={ListAdmin} />
       </Route>
       <Route exact path="/admin/admins/add">
-        <PrivateAccessSuperAdmin title="Ajouter" component={AdminFormLogic} />
+        <PrivateAccessSuperAdmin title="Ajouter un" component={AdminFormLogic} />
       </Route>
       <Route exact path="/admin/admins/:id">
-        <PrivateAccessSuperAdmin title="Modifier" component={AdminFormLogic} />
+        <PrivateAccessSuperAdmin title="Modifier un" component={AdminFormLogic} />
       </Route>
       <Route>
         <NotFound />

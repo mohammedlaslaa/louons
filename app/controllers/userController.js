@@ -332,7 +332,7 @@ exports.putUserById = async (req, res) => {
       return res.send({
         error: false,
         message: "User modified with success",
-        picture : objdata.path_picture
+        picture : user.path_picture
       });
     }
   } catch (e) {

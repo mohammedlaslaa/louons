@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import AdminForm from "./AdminForm";
+import { AuthContext } from "../../../context/AuthContext";
 
 function AdminFormLogic(props) {
   const [method, setMethod] = useState("POST");
@@ -26,13 +27,15 @@ function AdminFormLogic(props) {
   const [isSubmit, setIsSubmit] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
-  const [idParams] = useState(useParams().id);
+  const { dataUser } = useContext(AuthContext);
+  const idParams =useParams().id || dataUser._id;
   const dataform = new FormData();
 
   useEffect(() => {
     setErrorForm(false);
     // if the method is not equal to true and there are an idparams, fetch the data to the api and set the state
-    if (idParams && method !== "PUT") {
+
+    if ((idParams) && method !== "PUT") {
       setMethod("PUT");
       fetch(`http://localhost:5000/louons/api/v1/admin/${idParams}`, {
         credentials: "include",
@@ -152,7 +155,7 @@ function AdminFormLogic(props) {
     errorAdminLevel,
     dataform,
     picture,
-    pictureDisplay,
+    pictureDisplay
   ]);
 
   const handleSubmit = (e) => {
@@ -201,6 +204,7 @@ function AdminFormLogic(props) {
               setConfirmationPassword("");
               setAdminLevel("");
             } else {
+              console.log(result)
               setPictureDisplay(result.picture);
               setPassword("");
               setConfirmationPassword("");

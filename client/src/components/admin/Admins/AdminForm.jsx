@@ -9,7 +9,7 @@ function AdminForm(props) {
   return (
     <>
       <HeadFormAdmin
-        titlepage={`${props.titlepage} un admin`}
+        titlepage={`${props.titlepage} admin`}
         isSuccess={props.isSuccess}
         isFailed={props.isFailed}
         successMessage="Utilisateur enregistré avec succés"

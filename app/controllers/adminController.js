@@ -331,7 +331,7 @@ exports.putAdminById = async (req, res) => {
       return res.send({
         modified: true,
         message: "Modified with success",
-        picture: objdata.path_picture,
+        picture: admin.path_picture,
       });
     }
   } catch (e) {
