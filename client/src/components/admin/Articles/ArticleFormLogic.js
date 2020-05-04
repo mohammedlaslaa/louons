@@ -62,7 +62,6 @@ function ArticleFormLogic(props) {
         .then((res) => res.json())
         .then((result) => {
           if (!result.error) {
-            console.log(result)
             setIsFetchedArticle(true);
             setIdCategory(result.id_category._id);
             setPrice(result.price);

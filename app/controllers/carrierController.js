@@ -10,12 +10,26 @@ const crypto = require("crypto");
 
 exports.getAllCarrier = async function (req, res) {
   try {
-    // Find all the carriers, then return them to the client.
-    const verify = jwt.verify(
-      req.cookies["x-auth-token"],
-      process.env.PRIVATE_KEY
-    );
-    const allCarrier = await Carrier.find();
+    let verify = {
+      adminLevel: "",
+    };
+    // Find all the payments, then return them to the client.
+
+    if (Object.keys(req.cookies).length > 0) {
+      verify = jwt.verify(req.cookies["x-auth-token"], process.env.PRIVATE_KEY);
+    }
+
+    const allCarrier =
+      req.params.isactive === "activecarrier"
+        ? await Carrier.find({ isActive: true }).select(
+            "carrierId isActive delay_delivery title price link"
+          )
+        : verify.adminLevel == "admin" || verify.adminLevel == "superadmin"
+        ? await Carrier.find().select("carrierId description delay_delivery isActive title price link")
+        : await Carrier.find({ isActive: true }).select(
+            "carrierId isActive delay_delivery title price link"
+          );
+
     return res.status(200).send({
       adminLevel: verify.adminLevel,
       data: allCarrier,

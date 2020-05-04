@@ -1,10 +1,9 @@
 import React from "react";
 import DivInputForm from "../../admin/Form/DivInputForm";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
-import AutoCompleteUserId from "../../admin/Form/AutoCompleteUserId";
+import AutoCompleteField from "../Form/AutoCompleteField";
 import TextAreaInputForm from "../Form/TextAreaInputForm";
 import InputFileForm from "../Form/InputFileForm";
-import SubmitButton from "../Form/SubmitButton";
 import Form from "../Form/Form";
 
 function ArticleForm(props) {
@@ -65,7 +64,7 @@ function ArticleForm(props) {
           ))}
         </select>
       </div>
-      <AutoCompleteUserId
+      <AutoCompleteField
         errorGrasp={props.errorGrasp}
         idParams={props.idParams}
         grasp={props.grasp}

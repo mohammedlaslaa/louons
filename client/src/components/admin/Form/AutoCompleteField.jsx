@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import DivInputForm from "./DivInputForm";
 
-function AutoCompleteUser(props) {
+function AutoCompleteField(props) {
   const [data, setData] = useState([]);
   const [isShow, setIsShow] = useState(false);
 
@@ -38,6 +38,7 @@ function AutoCompleteUser(props) {
             label={`${props.titleLabel} :`}
             name="owner"
             type="text"
+            inputClass="form-control col-9 col-sm-6"
             value={props.grasp}
             change={(e) => {
               props.setGrasp(e.target.value);
@@ -49,7 +50,7 @@ function AutoCompleteUser(props) {
           />
         )}
         {isShow && props.grasp !== "" && (
-          <ul className="list-unstyled bg-white autocomplete">
+          <ul className="list-unstyled bg-secondary text-white autocomplete">
             {data.map((e) => {
               if (e.clientId) {
                 return (
@@ -88,8 +89,8 @@ function AutoCompleteUser(props) {
   );
 }
 
-AutoCompleteUser.defaultProps = {
+AutoCompleteField.defaultProps = {
   divclass: "col-12",
 };
 
-export default AutoCompleteUser;
+export default AutoCompleteField;

@@ -3,6 +3,7 @@ const {
   schemaValidationRental,
   schemaPutValidationRental,
 } = require("../models/rentalModel");
+const moment = require("moment");
 const { User } = require("../models/userModel");
 const { Payment } = require("../models/paymentModel");
 const { Carrier } = require("../models/carrierModel");
@@ -26,7 +27,9 @@ exports.getAllRentals = async function (req, res) {
 
     // If the request succeeded, return a 200 response status code with all users.
 
-    return res.status(200).send({adminLevel : res.locals.admin.adminLevel, data : allRental});
+    return res
+      .status(200)
+      .send({ adminLevel: res.locals.admin.adminLevel, data: allRental });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -57,7 +60,44 @@ exports.getAllMyRental = async function (req, res) {
 
     // If all the checks is passing, return the rentals to the client, with a 200 response status code.
 
-    return res.send({aminLevel : res.locals.admin, data : myRental});
+    return res.send({ aminLevel: res.locals.admin, data: myRental });
+  } catch (e) {
+    return res.status(404).send({ error: true, message: e.message });
+  }
+};
+
+exports.getAvailableDate = async function (req, res) {
+  try {
+    const result = [];
+    let findRental;
+    let dateStart = new Date();
+    let dateEnd = new Date();
+    dateEnd.setDate(dateStart.getDate()+req.params.number); 
+    while (result.length !== 5) {
+console.log(moment(dateEnd).format("YYYY-MM-DD"))
+      // Check if the same Rental exist at this start date.
+
+      findRental = await Rental.find({
+        id_article: req.params.id,
+        start_date: { $gte: moment(dateStart).format("YYYY-MM-DD") },
+        end_date: { $lte: moment(dateEnd).format("YYYY-MM-DD") },
+        isActive: true,
+      });
+
+      // If the same rental exist at this start date, send a 400 response status code with a message.
+
+      if (findRental.length > 0) {
+        return false;
+      } else {
+        result.push({
+          dateStart,
+          dateEnd,
+        });
+      }
+    dateStart.setDate(dateStart.getDate()++)
+    dateEnd.setDate(dateStart.getDate()+req.params.id); 
+    }
+    return res.status(200).send(result);
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -102,7 +142,7 @@ exports.postRental = async function (req, res) {
     // Check if the user exist, to ensure that the req.body.id_user is right.
 
     if (req.body.id_user && res.locals.owner.adminLevel) {
-      const ifUserExist = await User.findOne({ id: req.body.id_user });
+      const ifUserExist = await User.findOne({ _id: req.body.id_user });
       if (!ifUserExist)
         return res.status(400).send({
           error: true,
@@ -188,6 +228,12 @@ exports.postRental = async function (req, res) {
       ? req.body.id_user
       : res.locals.owner.id;
 
+    if (ownerId === isArticle.id_user)
+      return res.status(400).send({
+        error: true,
+        message: "A user cannot rent their own item",
+      });
+
     // Get the max value of rentalId and increment it to the next user registered.
 
     const maxId = await Rental.find()
@@ -218,7 +264,7 @@ exports.postRental = async function (req, res) {
     await rental.save();
 
     return res.status(201).send({
-      error: true,
+      error: false,
       message: "`The rental has been placed`",
     });
   } catch (e) {

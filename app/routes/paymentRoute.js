@@ -8,7 +8,7 @@ const paymentController = require("../controllers/paymentController");
 
 // Get all payment, this route is available for everyone.
 
-router.get("/", paymentController.getAllPayment);
+router.get("/all/:isactive?", paymentController.getAllPayment);
 
 // Get payment by id, this route is available only for an admin.
 

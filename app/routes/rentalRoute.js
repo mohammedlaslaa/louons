@@ -10,6 +10,10 @@ const rentalController = require("../controllers/rentalController");
 
 router.get("/self", ifExistAdminUser, rentalController.getAllMyRental);
 
+// All User can get the available date for an article
+
+router.get("/date/:id/:number", rentalController.getAvailableDate);
+
 // An owner or an admin can get or put a rental by id.
 
 router.get("/detail/:id", [objectvalid, ifExistAdminUser], rentalController.getRentalById);

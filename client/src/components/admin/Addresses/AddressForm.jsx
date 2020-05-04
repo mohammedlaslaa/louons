@@ -2,7 +2,7 @@ import React from "react";
 import Form from "../Form/Form";
 import DivInputForm from "../../admin/Form/DivInputForm";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
-import AutoCompleteUserId from "../../admin/Form/AutoCompleteUserId";
+import AutoCompleteField from "../../admin/Form/AutoCompleteField";
 
 function AddressForm(props) {
   return (
@@ -27,7 +27,7 @@ function AddressForm(props) {
           }}
         />
       </div>
-      <AutoCompleteUserId
+      <AutoCompleteField
         errorGrasp={props.errorGrasp}
         idParams={props.idParams}
         grasp={props.grasp}

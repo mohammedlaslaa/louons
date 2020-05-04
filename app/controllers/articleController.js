@@ -45,7 +45,7 @@ exports.getArticleById = async function (req, res) {
       .populate("id_user", "lastName firstName email");
 
     // If there are not article with this id return a 400 response status code with a message.
-console.log("article")
+
     if (!article)
       return res.status(400).send({
         error: true,

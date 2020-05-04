@@ -10,15 +10,30 @@ const crypto = require("crypto");
 
 exports.getAllPayment = async function (req, res) {
   try {
+    let verify = {
+      adminLevel: "",
+    };
     // Find all the payments, then return them to the client.
-    const verify = jwt.verify(
-      req.cookies["x-auth-token"],
-      process.env.PRIVATE_KEY
-    );
-    const allPayment = await Payment.find();
-    return res
-      .status(200)
-      .send({ adminLevel: verify.adminLevel, data: allPayment });
+
+    if (Object.keys(req.cookies).length > 0) {
+      verify = jwt.verify(req.cookies["x-auth-token"], process.env.PRIVATE_KEY);
+    }
+
+    const allPayment =
+      req.params.isactive === "activepayment"
+        ? await Payment.find({ isActive: true }).select(
+            "paymentId isActive title link"
+          )
+        : verify.adminLevel == "admin" || verify.adminLevel == "superadmin"
+        ? await Payment.find().select("paymentId description isActive title link")
+        : await Payment.find({ isActive: true }).select(
+            "paymentId isActive title link"
+          );
+
+    return res.status(200).send({
+      adminLevel: verify.adminLevel,
+      data: allPayment,
+    });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -218,7 +233,7 @@ exports.putPaymentById = async function (req, res) {
               }
             );
           }
-        }else if (Object.keys(files).length > 1){
+        } else if (Object.keys(files).length > 1) {
           return res.status(400).send({
             error: true,
             message: "The number of files sending is wrong",
@@ -264,7 +279,7 @@ exports.putPaymentById = async function (req, res) {
       return res.status(200).send({
         error: false,
         message: `The payment has been modified`,
-        picture : objdata.path_picture
+        picture: objdata.path_picture,
       });
     }
   } catch (e) {

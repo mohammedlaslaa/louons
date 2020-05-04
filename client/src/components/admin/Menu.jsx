@@ -50,7 +50,7 @@ function Menu() {
         className={`${isShown} menuadmincontainer d-lg-flex col-6 col-md-4 col-lg-2 bgcolor9cd1ff`}
       >
         <nav className="navadmin bg d-flex w-100">
-          <ul className="list-unstyled w-100">{listNav}</ul>
+          <ul className="list-unstyled w-100 d-flex flex-column justify-content-center justify-content-lg-start">{listNav}</ul>
         </nav>
       </div>
     </CSSTransition>

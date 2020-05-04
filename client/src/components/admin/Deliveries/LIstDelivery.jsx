@@ -7,7 +7,8 @@ function ListDelivery() {
   return (
     <PageTableList
       titlepage="Liste des livraisons"
-      linkapi="http://localhost:5000/louons/api/v1/carrier"
+      linkapi="http://localhost:5000/louons/api/v1/carrier/all"
+      linkputapi="http://localhost:5000/louons/api/v1/carrier"
       th={[
         { carrierId: "ID" },
         { title: "Nom" },

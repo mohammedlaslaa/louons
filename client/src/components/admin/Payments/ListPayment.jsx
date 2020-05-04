@@ -7,7 +7,8 @@ function ListPayment() {
   return (
     <PageTableList
       titlepage="Liste des paiements"
-      linkapi="http://localhost:5000/louons/api/v1/payment"
+      linkapi="http://localhost:5000/louons/api/v1/payment/all"
+      linkputapi="http://localhost:5000/louons/api/v1/payment"
       th={[
         { paymentId: "ID" },
         { title: "Titre" },

@@ -3,12 +3,11 @@ const router = express.Router();
 const objectvalid = require("../middleware/objectidvalid");
 const jwtverify = require("../middleware/jwtVerify");
 const jwtsuperadmin = require("../middleware/jwtSuperAdmin");
-const isemptybody = require("../middleware/isEmptyBody");
 const carrierController = require("../controllers/carrierController");
 
 // Get all carrier or carrier by id, this route is available for everyone.
 
-router.get("/", carrierController.getAllCarrier);
+router.get("/all/:isactive?", carrierController.getAllCarrier);
 
 router.get("/detail/:id", objectvalid, carrierController.getCarrierById);
 
