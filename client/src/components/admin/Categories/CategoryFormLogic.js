@@ -35,7 +35,7 @@ function CategoryFormLogic() {
     // fetch the data depending if the method state is settled to 'GET' and if there are an idParams
 
     if (method === "GET" && idParams) {
-      fetch(`http://localhost:5000/louons/api/v1/category/${idParams}`, {
+      fetch(`http://localhost:5000/louons/api/v1/category/detail/${idParams}`, {
         method: method,
         credentials: "include",
         headers: {

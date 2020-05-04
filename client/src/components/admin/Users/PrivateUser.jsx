@@ -11,10 +11,10 @@ function PrivateUser() {
         <ListUser />
       </Route>
       <Route exact path="/admin/users/add">
-        <UserFormLogic title="Ajouter"/>
+        <UserFormLogic title="Ajouter un"/>
       </Route>
       <Route exact path="/admin/users/:id">
-        <UserFormLogic title="Modifier"/>
+        <UserFormLogic title="Modifier un"/>
       </Route>
       <Route>
         <NotFound />

@@ -12,7 +12,7 @@ router.get("/self", ifExistAdminUser, rentalController.getAllMyRental);
 
 // An owner or an admin can get or put a rental by id.
 
-router.get("/:id", [objectvalid, ifExistAdminUser], rentalController.getRentalById);
+router.get("/detail/:id", [objectvalid, ifExistAdminUser], rentalController.getRentalById);
 
 router.put(
   "/:id",

@@ -8,7 +8,7 @@ function DivInputForm(props) {
           {props.errormessage}
         </span>
       )}
-      <div className="row form-group my-3 d-flex justify-content-center align-items-center">
+      <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100">
         <label className="col-9 col-sm-4 mt-2">{props.label}</label>
         <input
           type={props.type}

@@ -2,6 +2,7 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 import ListRental from "./ListRental";
 import NotFound from "../../general/NotFound";
+import RentalFormLogic from "./RentalFormLogic";
 
 function PrivateRental() {
   return (
@@ -10,7 +11,10 @@ function PrivateRental() {
         <ListRental />
       </Route>
       <Route exact path="/admin/rentals/add">
-        <p>coucou</p>
+        <RentalFormLogic title="Créer une"/>
+      </Route>
+      <Route exact path="/admin/rentals/:id">
+        <RentalFormLogic title="Modifier une"/>
       </Route>
       <Route>
         <NotFound />

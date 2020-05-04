@@ -2,69 +2,94 @@ import React, { useState } from "react";
 import DivInputForm from "./DivInputForm";
 
 function AutoCompleteUser(props) {
-  const [users, setUsers] = useState([]);
+  const [data, setData] = useState([]);
+  const [isShow, setIsShow] = useState(false);
+
   // get the list of user depending the parameter sended by the client
 
   const getList = (occ) => {
-    fetch(`http://localhost:5000/louons/api/v1/user/all/${occ}`, {
+    fetch(`${props.link}/${occ}`, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((result) => {
         if (!result.error) {
-          setUsers(result.data);
+          setData(result.data);
         }
       });
   };
 
   return (
-    <>
+    <div className={props.divclass}>
       {props.errorGrasp && (
         <span className="text-danger errormessage text-center">
-          Veuillez saisir le nom ou le prénom de l'utilisateur en toute lettre
-          et le sélectionner sur la liste déroulante
+          Veuillez saisir votre recherche en un mot en toute lettre puis
+          sélectionner une proposition sur la liste déroulante
         </span>
       )}
       <div className="position-relative">
         {props.idParams ? (
           <div className="row form-group my-3 d-flex justify-content-center align-items-center">
-            <label className="col-9 col-sm-4 mt-2">Propriétaire :</label>
+            <label className="col-9 col-sm-4 mt-2">{props.titleLabel} :</label>
             <p className="col-9 col-sm-6 col-md-5 m-0">{props.grasp}</p>
           </div>
         ) : (
           <DivInputForm
-            label={"Propriétaire :"}
+            label={`${props.titleLabel} :`}
             name="owner"
             type="text"
             value={props.grasp}
             change={(e) => {
               props.setGrasp(e.target.value);
               getList(e.target.value);
-              props.setIsShow(true);
-              props.setOwner("");
+              setIsShow(true);
+              props.setId("");
               props.setErrorGrasp(true);
             }}
           />
         )}
-        {props.isShow && props.grasp !== "" && (
+        {isShow && props.grasp !== "" && (
           <ul className="list-unstyled bg-white autocomplete">
-            {users.map((e) => (
-              <li
-                className="p-1 border-black listcomplete"
-                key={e._id}
-                onClick={() => {
-                  props.setGrasp(`${e.lastName} ${e.firstName}`);
-                  props.setIsShow(false);
-                  props.setOwner(e._id);
-                  props.setErrorGrasp(false);
-                }}
-              >{`${e.clientId} ${e.lastName} ${e.firstName}`}</li>
-            ))}
+            {data.map((e) => {
+              if (e.clientId) {
+                return (
+                  <li
+                    className="p-1 border-black listcomplete"
+                    key={e._id}
+                    onClick={() => {
+                      props.setGrasp(`${e.lastName} ${e.firstName}`);
+                      setIsShow(false);
+                      props.setId(e._id);
+                      props.setErrorGrasp(false);
+                    }}
+                  >{`${e.clientId} ${e.lastName} ${e.firstName}`}</li>
+                );
+              } else if (e.articleId) {
+                return (
+                  <li
+                    className="p-1 border-black listcomplete"
+                    key={e._id}
+                    onClick={() => {
+                      props.setGrasp(`${e.title}`);
+                      setIsShow(false);
+                      props.setId(e._id);
+                      props.setErrorGrasp(false);
+                    }}
+                  >{`${e.articleId} ${e.title}`}</li>
+                );
+              } else {
+                return true;
+              }
+            })}
           </ul>
         )}
       </div>
-    </>
+    </div>
   );
 }
+
+AutoCompleteUser.defaultProps = {
+  divclass: "col-12",
+};
 
 export default AutoCompleteUser;

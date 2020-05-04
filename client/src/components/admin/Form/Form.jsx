@@ -1,8 +1,9 @@
 import React from "react";
+import SubmitButton from "./SubmitButton";
 
-function HeadFormAdmin(props) {
+function Form(props) {
   return (
-    <>
+    <form className={props.class} onSubmit={props.handleSubmit}>
       <h4 className="titlepage col-12">{props.titlepage}</h4>
       {props.isSuccess ? (
         <p className="bg-success text-white text-center p-2">
@@ -15,8 +16,14 @@ function HeadFormAdmin(props) {
       ) : (
         true
       )}
-    </>
+      {props.children}
+      <SubmitButton />
+    </form>
   );
 }
 
-export default HeadFormAdmin
+Form.defaultProps={
+    class: "row mx-auto text-center widthform py-md-2"
+}
+
+export default Form;

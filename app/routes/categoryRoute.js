@@ -13,7 +13,7 @@ router.get("/all/:isactive?", categoryController.getAllCategory);
 // Only the admin can get category by id, post or update a category by id.
 
 router.get(
-  "/:id",
+  "/detail/:id",
   [objectvalid, jwtverify],
   categoryController.getCategoryById
 );

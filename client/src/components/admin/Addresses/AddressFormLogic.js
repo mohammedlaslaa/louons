@@ -40,7 +40,7 @@ function AddressFormLogic(props) {
     if (idParams && !isFetched) {
       setMethod("PUT");
       setStatusMessageForm("modifiée");
-      fetch(`http://localhost:5000/louons/api/v1/address/${idParams}`, {
+      fetch(`http://localhost:5000/louons/api/v1/address/detail/${idParams}`, {
         credentials: "include",
       })
         .then((res) => res.json())

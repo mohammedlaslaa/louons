@@ -12,7 +12,7 @@ router.get("/", paymentController.getAllPayment);
 
 // Get payment by id, this route is available only for an admin.
 
-router.get("/:id", [objectvalid, jwtverify], paymentController.getPaymentById);
+router.get("/detail/:id", [objectvalid, jwtverify], paymentController.getPaymentById);
 
 // Only the admin can post or update a payment.
 

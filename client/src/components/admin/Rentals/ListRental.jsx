@@ -17,7 +17,8 @@ function ListRental() {
         { seeMore: "Voir" },
       ]}
       titlebutton="Ajouter une location"
-      linkbutton="rentals"
+      link="rentals"
+      linkbutton={true}
     />
   );
 }

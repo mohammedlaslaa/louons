@@ -17,7 +17,7 @@ router.get("/allself", ifexistadminuser, addresscontroller.getAllSelfAddresses);
 // Get, put and delete an address by id. If the request not comes by the owner or an admin or a superadmin, it will be rejected.
 
 router.get(
-  "/:id",
+  "/detail/:id",
   [objectvalid, ifexistadminuser],
   addresscontroller.getAddressById
 );

@@ -37,7 +37,7 @@ function DeliveryFormLogic(props) {
     if (idParams && !isFetched) {
       setMethod("PUT");
       setStatusMessageForm("modifié");
-      fetch(`http://localhost:5000/louons/api/v1/carrier/${idParams}`, {
+      fetch(`http://localhost:5000/louons/api/v1/carrier/detail/${idParams}`, {
         credentials: "include",
       })
         .then((res) => res.json())

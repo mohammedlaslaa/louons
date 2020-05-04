@@ -33,7 +33,7 @@ function PaymentFormLogic(props) {
     if (idParams && !isFetched) {
       setMethod("PUT");
       setStatusMessageForm("modifié");
-      fetch(`http://localhost:5000/louons/api/v1/payment/${idParams}`, {
+      fetch(`http://localhost:5000/louons/api/v1/payment/detail/${idParams}`, {
         credentials: "include",
       })
         .then((res) => res.json())

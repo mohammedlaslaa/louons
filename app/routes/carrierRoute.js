@@ -10,7 +10,7 @@ const carrierController = require("../controllers/carrierController");
 
 router.get("/", carrierController.getAllCarrier);
 
-router.get("/:id", objectvalid, carrierController.getCarrierById);
+router.get("/detail/:id", objectvalid, carrierController.getCarrierById);
 
 // Only the admin can, post or update a carrier.
 

@@ -15,6 +15,7 @@ class PageTableList extends Component {
     this.state = {
       isLoading: false,
       isLoadingUpdate: false,
+      errorMessageAdminLevel: false,
       listOfTh: props.th,
       listOfData: [],
       adminLevel: "",
@@ -87,6 +88,18 @@ class PageTableList extends Component {
           this.setState({
             isLoadingUpdate: false,
           });
+        } else {
+          if (result.message === "Not authorized admin level") {
+            this.setState({
+              isLoadingUpdate: false,
+              errorMessageAdminLevel: true,
+            });
+            setTimeout(() => {
+              this.setState({
+                errorMessageAdminLevel: false
+              });
+            },1500)
+          }
         }
         if (method === "DELETE") {
           this.getList();
@@ -110,12 +123,16 @@ class PageTableList extends Component {
       isLoading,
       isLoadingUpdate,
       adminLevel,
+      errorMessageAdminLevel,
     } = this.state;
 
     return isLoading ? (
       <p className="bg-success text-white p-2">Loading....</p>
     ) : (
       <>
+        {errorMessageAdminLevel && (
+          <p className="bg-danger text-white p-2">Vous n'avez pas les droits nécessaires pour effectuer cette action....</p>
+        )}
         <h4 className="titlepage">{this.props.titlepage}</h4>
         {isLoadingUpdate && (
           <p className="bg-success text-white p-2">Loading....</p>

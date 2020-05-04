@@ -17,10 +17,15 @@ exports.getAllArticle = async function (req, res) {
       process.env.PRIVATE_KEY
     );
 
-    const allArticle = await Article.find().populate(
-      "id_category",
-      "title -_id"
-    );
+    const allArticle = req.params.searcharticle
+      ? await Article.find(
+          {
+            isActive: true,
+            title: { $regex: req.params.searcharticle, $options: "i" },
+          }
+        ).select("_id articleId title")
+      : await Article.find().populate("id_category", "title -_id");
+
     return res.status(200).send({
       adminLevel: verify.adminLevel,
       data: allArticle,
@@ -40,7 +45,7 @@ exports.getArticleById = async function (req, res) {
       .populate("id_user", "lastName firstName email");
 
     // If there are not article with this id return a 400 response status code with a message.
-
+console.log("article")
     if (!article)
       return res.status(400).send({
         error: true,
@@ -242,7 +247,7 @@ exports.putArticleById = async function (req, res) {
               }
             );
           }
-        } else if (Object.keys(files).length > 3){
+        } else if (Object.keys(files).length > 3) {
           return res.status(400).send({
             error: true,
             message: "The number of files sending is wrong",

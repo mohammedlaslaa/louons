@@ -27,7 +27,6 @@ function ArticleFormLogic(props) {
   const [errorDescription, setErrorDescription] = useState(false);
   const [errorFile, setErrorFile] = useState(false);
   const [errorGrasp, setErrorGrasp] = useState(true);
-  const [isShow, setIsShow] = useState(false);
   const [statusMessageForm, setStatusMessageForm] = useState("enregistré");
   const dataform = new FormData();
   const [idParams] = useState(useParams().id);
@@ -57,12 +56,13 @@ function ArticleFormLogic(props) {
     if (idParams && !isFetchedArticle) {
       setStatusMessageForm("modifié");
       setMethod("PUT");
-      fetch(`http://localhost:5000/louons/api/v1/article/${idParams}`, {
+      fetch(`http://localhost:5000/louons/api/v1/article/detail/${idParams}`, {
         credentials: "include",
       })
         .then((res) => res.json())
         .then((result) => {
           if (!result.error) {
+            console.log(result)
             setIsFetchedArticle(true);
             setIdCategory(result.id_category._id);
             setPrice(result.price);
@@ -257,8 +257,6 @@ function ArticleFormLogic(props) {
       errorGrasp={errorGrasp}
       setErrorGrasp={setErrorGrasp}
       errorPrice={errorPrice}
-      setIsShow={setIsShow}
-      isShow={isShow}
       setPicture={setPicture}
       isSubmit={isSubmit}
       pictureDisplay={pictureDisplay}
