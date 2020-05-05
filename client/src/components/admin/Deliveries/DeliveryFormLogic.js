@@ -93,7 +93,7 @@ function DeliveryFormLogic(props) {
 
     if (
       delay === 0 ||
-      price === "" ||
+      delay === "" ||
       typeof delay === String ||
       delay > 10 ||
       delay < 0

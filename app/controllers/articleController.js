@@ -82,7 +82,7 @@ exports.postArticle = async function (req, res) {
             error: true,
             message: "File(s) is needed",
           });
-        } else if (Object.keys(files).length > 1) {
+        } else if (Object.keys(files).length > 3) {
           return res.status(400).send({
             error: true,
             message: "The number of files sending is wrong",

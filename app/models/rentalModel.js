@@ -30,6 +30,11 @@ const rentalSchema = new mongoose.Schema({
     type: Number,
   },
 
+  total_price : {
+    type: Number,
+    required: true
+  },
+
   start_date: {
     type: Date,
     required: true,
@@ -74,6 +79,8 @@ const schemaValidationRental = Joi.object({
 
   id_carrier: Joi.string(),
 
+  total_price: Joi.number(),
+
   start_date: Joi.date().iso(),
 
   end_date: Joi.date().iso(),
@@ -91,6 +98,8 @@ const schemaPutValidationRental = Joi.object({
   end_date: Joi.date().iso(),
 
   date_delete: Joi.date().iso(),
+
+  total_price: Joi.number(),
 
   isActive: Joi.boolean(),
 });

@@ -46,6 +46,9 @@ function AutoCompleteField(props) {
               setIsShow(true);
               props.setId("");
               props.setErrorGrasp(true);
+              if (props.setSpec) {
+                props.setSpec();
+              }
             }}
           />
         )}

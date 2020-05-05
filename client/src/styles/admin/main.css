@@ -47,9 +47,16 @@
   z-index: 3;
 }
 
-.listcomplete:hover{
+.listcomplete:hover {
   background-color: #3c94e4;
+  color: white;
   cursor: pointer;
+}
+
+/* label of forms */
+
+label {
+  font-weight: bold;
 }
 
 @media screen and (min-width: 768px) {

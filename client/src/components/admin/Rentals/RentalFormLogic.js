@@ -4,15 +4,18 @@ import { useParams } from "react-router-dom";
 
 function RentalFormLogic(props) {
   const [method, setMethod] = useState("POST");
+  const [isActive, setIsActive] = useState(false);
   const [isSuccess, setIssuccess] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
+  const [listDate, setListDate] = useState([]);
+  const [numberListDate, setNumberListDate] = useState(0);
   const [statusMessageForm, setStatusMessageForm] = useState("enregistré");
   const [graspArticle, setGraspArticle] = useState("");
   const [graspTenant, setGraspTenant] = useState("");
   const [idTenant, setIdTenant] = useState("");
   const [idOwnerArticle, setIdOwnerArticle] = useState("");
-  const [errorSameUser, setErrorSameUser] = useState(false);
   const [owner, setOwner] = useState("");
+  const [pricePerDay, setPricePerDay] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [deliveries, setDeliveries] = useState([]);
   const [payments, setPayments] = useState([]);
@@ -21,16 +24,19 @@ function RentalFormLogic(props) {
   const [idPayment, setIdPayment] = useState("");
   const [dateStart, setDateStart] = useState("");
   const [dateEnd, setDateEnd] = useState("");
+  const [errorDate, setErrorDate] = useState(false);
   const [isSubmit, setIsSubmit] = useState(false);
+  const [errorSameUser, setErrorSameUser] = useState(false);
   const [errorGraspArticle, setErrorGraspArticle] = useState(false);
   const [errorGraspTenant, setErrorGraspTenant] = useState(false);
   const [errorDelivery, setErrorDelivery] = useState(false);
   const [errorPayment, setErrorPayment] = useState(false);
   const [errorForm, setErrorForm] = useState(false);
+  const [errorNumberListDate, setErrorNumberListDate] = useState(false);
   const [numberErrorForm, setNumberErrorForm] = useState(0);
-  const [isFetchedArticle, setIsFetchedArticle] = useState(false);
   const [isFetchedDeliveries, setIsFetchedDeliveries] = useState(false);
   const [isFetchedPayments, setIsFetchedPayments] = useState(false);
+  const [isFetchedRental, setIsFetchedRental] = useState(false);
   const idParams = useParams().id;
 
   useEffect(() => {
@@ -54,21 +60,32 @@ function RentalFormLogic(props) {
         .then((res) => res.json())
         .then((result) => {
           if (!result.error) {
+            setPricePerDay(result.price);
             setIdOwnerArticle(result.id_user._id);
             setOwner(`${result.id_user.lastName} ${result.id_user.firstName}`);
-            setIsFetchedArticle(true);
           }
         });
     }
-    // if (idArticle) {
-    //   fetch(`http://localhost:5000/louons/api/v1/rental/date/${idArticle}/5`, {
-    //     credentials: "include",
-    //   })
-    //     .then((res) => res.json())
-    //     .then((result) => {
-    //       console.log(result)
-    //     }).catch(e=> console.log(e));
-    //   }
+
+    if (graspArticle === "") {
+      setOwner("");
+    }
+
+    if (idArticle && numberListDate > 0 && method === "POST") {
+      fetch(
+        `http://localhost:5000/louons/api/v1/rental/date/${idArticle}/${numberListDate}`,
+        {
+          credentials: "include",
+        }
+      )
+        .then((res) => res.json())
+        .then((result) => {
+          if (!result.error) {
+            setListDate(result.data);
+          }
+        })
+        .catch((e) => console.log(e));
+    }
 
     // fetch the datas if isFetched is false, then set this to true
     // if there are not error set the category state with the result.data value
@@ -95,6 +112,34 @@ function RentalFormLogic(props) {
           if (!result.error) {
             setPayments(result.data);
             setIsFetchedPayments(true);
+          }
+        });
+    }
+
+    // fetch the data only if there an idparams and isfetchedrental is settled to false
+
+    if (idParams && !isFetchedRental) {
+      setMethod("PUT");
+      fetch(`http://localhost:5000/louons/api/v1/rental/detail/${idParams}`, {
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          if (!result.error) {
+            setIsFetchedRental(true);
+            setIdArticle(result.data.id_article._id);
+            setIdTenant(result.data.id_user._id);
+            setGraspTenant(
+              `${result.data.id_user.clientId} ${result.data.id_user.lastName} ${result.data.id_user.firstName}`
+            );
+            setPricePerDay(result.data.id_article.price);
+            setTotalPrice(result.data.total_price);
+            setIdDelivery(result.data.id_carrier._id);
+            setIdPayment(result.data.id_payment._id);
+            setGraspArticle(result.data.id_article.title);
+            setIsActive(result.data.isActive);
+            setDateStart(result.data.start_date);
+            setDateEnd(result.data.end_date);
           }
         });
     }
@@ -136,6 +181,32 @@ function RentalFormLogic(props) {
       setErrorGraspTenant(false);
     }
 
+    if ((dateStart === "" || dateEnd === "") && method === "POST") {
+      setErrorDate(true);
+      setNumberErrorForm((prev) => prev + 1);
+    } else {
+      setErrorDate(false);
+    }
+
+    if (
+      (numberListDate === 0 ||
+        numberListDate === "" ||
+        typeof numberListDate === String ||
+        numberListDate < 0) &&
+      !idParams
+    ) {
+      console.log(numberListDate)
+      setListDate([]);
+      setTotalPrice(0);
+      setErrorNumberListDate(true);
+      setNumberErrorForm((prev) => prev + 1);
+    } else if (numberListDate && graspArticle) {
+      setTotalPrice(pricePerDay * numberListDate);
+      setErrorNumberListDate(false);
+    } else {
+      setErrorNumberListDate(false);
+    }
+
     if (numberErrorForm > 0) {
       setErrorForm(true);
     } else {
@@ -146,16 +217,28 @@ function RentalFormLogic(props) {
     isFetchedDeliveries,
     isFetchedPayments,
     idDelivery,
+    numberListDate,
     idOwnerArticle,
     idTenant,
     idPayment,
+    dateStart,
+    dateEnd,
     numberErrorForm,
     graspTenant,
     graspArticle,
     idParams,
     method,
-    isFetchedArticle,
+    isFetchedRental,
+    pricePerDay,
   ]);
+
+  // reset the date start, date end and the list data when this function is called
+
+  const resetFields = () => {
+    setDateEnd("");
+    setDateStart("");
+    setListDate([]);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -167,14 +250,23 @@ function RentalFormLogic(props) {
         ? "http://localhost:5000/louons/api/v1/rental"
         : `http://localhost:5000/louons/api/v1/rental/${idParams}`;
 
-    const data = JSON.stringify({
-      id_payment: idPayment,
-      id_carrier: idDelivery,
-      id_article: idArticle,
-      id_user: idTenant,
-      start_date: dateStart,
-      end_date: dateEnd,
-    });
+    const data =
+      method === "PUT"
+        ? JSON.stringify({
+            id_payment: idPayment,
+            id_carrier: idDelivery,
+            total_price: totalPrice,
+            isActive,
+          })
+        : JSON.stringify({
+            id_payment: idPayment,
+            id_carrier: idDelivery,
+            id_article: idArticle,
+            id_user: idTenant,
+            total_price: totalPrice,
+            start_date: dateStart,
+            end_date: dateEnd,
+          });
 
     if (!errorForm) {
       fetch(url, {
@@ -193,6 +285,7 @@ function RentalFormLogic(props) {
               setIssuccess(false);
             }, 1500);
             if (method === "POST") {
+              setListDate([]);
               setIdArticle("");
               setIsSubmit(false);
               setGraspArticle("");
@@ -204,7 +297,9 @@ function RentalFormLogic(props) {
               setIdPayment("");
               setDateStart("");
               setDateEnd("");
-              setIsSubmit("");
+              setPricePerDay(0);
+              setTotalPrice(0);
+              setNumberListDate(0);
             }
           } else {
             setIsFailed(true);
@@ -246,10 +341,19 @@ function RentalFormLogic(props) {
       isSubmit={isSubmit}
       handleSubmit={handleSubmit}
       errorSameUser={errorSameUser}
-      dateStart={dateStart}
-      dateEnd={dateEnd}
       setDateStart={setDateStart}
       setDateEnd={setDateEnd}
+      listDate={listDate}
+      reset={resetFields}
+      setNumberListDate={setNumberListDate}
+      numberListDate={numberListDate}
+      errorNumberListDate={errorNumberListDate}
+      errorDate={errorDate}
+      pricePerDay={pricePerDay}
+      isActive={isActive}
+      setIsActive={setIsActive}
+      dateStart={dateStart}
+      dateEnd={dateEnd}
     />
   );
 }

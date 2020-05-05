@@ -225,7 +225,7 @@ class PageTableList extends Component {
                             className="text-center"
                             key={`article${indexData}`}
                           >
-                            {`eltData.id_article["title"]`}
+                            {eltData.id_article["title"]}
                           </td>
                         ) : subTh === "user" ? (
                           <td className="text-center" key={`user${indexData}`}>

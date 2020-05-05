@@ -68,36 +68,50 @@ exports.getAllMyRental = async function (req, res) {
 
 exports.getAvailableDate = async function (req, res) {
   try {
-    const result = [];
+    let result = [];
+    let i = 0;
+    let j = 0;
+    let number = parseInt(req.params.number);
     let findRental;
-    let dateStart = new Date();
-    let dateEnd = new Date();
-    dateEnd.setDate(dateStart.getDate()+req.params.number); 
-    while (result.length !== 5) {
-console.log(moment(dateEnd).format("YYYY-MM-DD"))
+    let dateStart;
+    let dateEnd;
+
+    while (result.length < 5) {
+      let obj = {};
+      j++;
+      dateStart = new Date(Date.now() + 3600 * 1000 * 24 * j);
+      dateEnd = new Date(Date.now() + 3600 * 1000 * 24 * (number + j));
+
       // Check if the same Rental exist at this start date.
 
       findRental = await Rental.find({
         id_article: req.params.id,
-        start_date: { $gte: moment(dateStart).format("YYYY-MM-DD") },
-        end_date: { $lte: moment(dateEnd).format("YYYY-MM-DD") },
+        start_date: { $lte: moment(dateStart).format("YYYY-MM-DD") },
+        end_date: { $gte: moment(dateStart).format("YYYY-MM-DD") },
         isActive: true,
       });
 
       // If the same rental exist at this start date, send a 400 response status code with a message.
 
-      if (findRental.length > 0) {
-        return false;
-      } else {
-        result.push({
-          dateStart,
-          dateEnd,
+      if (findRental.length === 0) {
+        findRental = await Rental.find({
+          id_article: req.params.id,
+          start_date: {
+            $gte: moment(dateStart).format("YYYY-MM-DD"),
+            $lte: moment(dateEnd).format("YYYY-MM-DD"),
+          },
+          isActive: true,
         });
+
+        if (findRental.length === 0) {
+          obj["dateStart"] = dateStart;
+          obj["dateEnd"] = dateEnd;
+          result[i] = obj;
+          i++;
+        }
       }
-    dateStart.setDate(dateStart.getDate()++)
-    dateEnd.setDate(dateStart.getDate()+req.params.id); 
     }
-    return res.status(200).send(result);
+    return res.status(200).send({ error: false, data: result });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -111,10 +125,18 @@ exports.getRentalById = async function (req, res) {
       ? await Rental.findOne({
           _id: req.params.id,
         })
+          .populate("id_article", "title id_user price")
+          .populate("id_user", "clientId lastName firstName")
+          .populate("id_payment", "title")
+          .populate("id_carrier", "title")
       : await Rental.findOne({
           _id: req.params.id,
           id_user: res.locals.owner.id,
-        });
+        })
+          .populate("id_article", "title")
+          .populate("id_user", "clientId lastName firstName")
+          .populate("id_payment", "title")
+          .populate("id_carrier", "title");
 
     // If there are not rental found, send a 400 response status code with a message.
 
@@ -125,7 +147,7 @@ exports.getRentalById = async function (req, res) {
 
     // If all the checks is passing, return the rental to the client, with a 200 response status code.
 
-    return res.send(rental);
+    return res.send({ error: false, data: rental });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -179,7 +201,7 @@ exports.postRental = async function (req, res) {
         message: "This rental is already reserved on this start date",
       });
 
-    // Check id the same Rental exist at this end date.
+    // Check id the same Rental exist at this date.
 
     ifSameRentalExist = await Rental.find({
       id_article: req.body.id_article,
@@ -255,6 +277,7 @@ exports.postRental = async function (req, res) {
       id_payment: req.body.id_payment,
       id_carrier: req.body.id_carrier,
       id_article: req.body.id_article,
+      total_price: req.body.total_price,
       start_date: req.body.start_date,
       end_date: req.body.end_date,
     });
@@ -393,11 +416,11 @@ exports.putRentalById = async function (req, res) {
     // Check if a Rental exist with the req.params.id provided, depending if the client is an admin or not, and update.
 
     const rental = res.locals.owner.adminLevel
-      ? await Rental.findOneAndUpdate(req.params.id, {
+      ? await Rental.findByIdAndUpdate(req.params.id, {
           $set: req.body,
           date_update: Date.now(),
         })
-      : await Rental.findOneAndUpdate(
+      : await Rental.findByIdAndUpdate(
           { _id: req.params.id, id_user: res.locals.owner.id },
           {
             $set: req.body,
@@ -414,7 +437,10 @@ exports.putRentalById = async function (req, res) {
 
     // If all the checks is passing, save the rental, then send back a 200 response status code with the rental.
 
-    return res.send(rental);
+    return res.send({
+      error: false,
+      message: "The rental has been updated with success",
+    });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }

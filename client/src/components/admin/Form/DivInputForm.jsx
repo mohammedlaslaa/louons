@@ -4,12 +4,12 @@ function DivInputForm(props) {
   return (
     <>
       {props.errorcondition && (
-        <span className="text-danger errormessage text-center">
+        <span className="text-danger errormessage text-center mx-auto">
           {props.errormessage}
         </span>
       )}
-      <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100">
-        <label className="col-9 col-sm-4 mt-2">{props.label}</label>
+      <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100 mx-auto">
+        <label className={props.labelClass}>{props.label}</label>
         <input
           type={props.type}
           name={props.name}
@@ -23,7 +23,8 @@ function DivInputForm(props) {
 }
 
 DivInputForm.defaultProps = {
-  inputClass : "form-control col-9 col-sm-6 col-md-5"
+  inputClass : "form-control col-9 col-sm-6 col-md-5",
+  labelClass : "col-9 col-sm-4 mt-2"
 }
 
 export default DivInputForm;
