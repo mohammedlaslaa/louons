@@ -12,19 +12,34 @@ exports.getAllArticle = async function (req, res) {
   try {
     // Find all the articles, then return them to the client.
     // Find all the active categories, then return them to the client.
-    const verify = jwt.verify(
-      req.cookies["x-auth-token"],
-      process.env.PRIVATE_KEY
-    );
 
-    const allArticle = req.params.searcharticle
-      ? await Article.find(
-          {
+    let verify = {
+      adminLevel: "",
+    };
+
+    if (req.cookies["x-auth-token"]) {
+      verify = jwt.verify(req.cookies["x-auth-token"], process.env.PRIVATE_KEY);
+    }
+    
+    console.log(req.params.searcharticle);
+
+    const allArticle =
+      req.params.searcharticle === "searcharticle"
+        ? await Article.find({
             isActive: true,
             title: { $regex: req.params.searcharticle, $options: "i" },
-          }
-        ).select("_id articleId title")
-      : await Article.find().populate("id_category", "title -_id");
+          }).select("_id articleId title")
+        : req.params.searcharticle === "activetop"
+        ? await Article.find({
+            isActive: true,
+            isTop: true,
+          }).select("price title pictures")
+        : verify.adminLevel
+        ? await Article.find().populate("id_category", "title -_id")
+        : await Article.find({ isActive: true }).populate(
+            "id_category",
+            "title -_id"
+          );
 
     return res.status(200).send({
       adminLevel: verify.adminLevel,
@@ -186,10 +201,11 @@ exports.putArticleById = async function (req, res) {
       });
 
     // this condition will be triggerred only when the user would activate or desactivate one article
-
-    if (Object.keys(req.body).length !== 0 && Object.keys(req.body.isActive)) {
+    if (
+      Object.keys(req.body).length === 1 &&
+      (req.body.isActive !== undefined || req.body.isTop !== undefined)
+    ) {
       // Update the isactive, then, send back a 200 response status code with succesfull message.
-
       article = await Article.findByIdAndUpdate(req.params.id, {
         $set: req.body,
         date_update: Date.now(),
@@ -290,9 +306,11 @@ exports.putArticleById = async function (req, res) {
         date_update: Date.now(),
       });
 
-      return res
-        .status(200)
-        .send({ error: false, message: `The article has been modified` });
+      return res.status(200).send({
+        error: false,
+        message: `The article has been modified`,
+        pictures: objdata.pictures,
+      });
     }
   } catch (e) {
     return res.status(400).send({ error: true, message: e.message });

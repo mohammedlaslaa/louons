@@ -11,7 +11,7 @@ function AddressForm(props) {
       titlepage={`${props.titlepage}  une adresse`}
       isFailed={props.form.isFailed}
       isSuccess={props.form.isSuccess}
-      successMessage={`Location ${props.form.statusMessageForm} avec succés`}
+      successMessage={`Adresse ${props.form.statusMessageForm} avec succés`}
       failMessage="Erreur de duplication ou champs vide, veuillez vérifier votre formulaire"
     >
       <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100">

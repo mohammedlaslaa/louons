@@ -50,6 +50,8 @@ function DeliveryFormLogic(props) {
             setDelay(result.data.delay_delivery);
             setIsActive(result.data.isActive);
             setPictureDisplay(result.data.path_picture);
+          } else if (result.error) {
+            return props.history.push("/admin/deliveries");
           }
         });
     }
@@ -139,6 +141,7 @@ function DeliveryFormLogic(props) {
     picture,
     delay,
     price,
+    props.history,
   ]);
 
   const handleSubmit = (e) => {
@@ -182,7 +185,7 @@ function DeliveryFormLogic(props) {
               setDelay(0);
               setIsSubmit(false);
               setIsActive(false);
-            } else {
+            } else if (result.picture) {
               setPictureDisplay(result.picture);
             }
           } else {

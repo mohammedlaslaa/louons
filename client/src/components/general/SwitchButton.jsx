@@ -7,17 +7,13 @@ function SwitchButton(props) {
   return (
     <BootstrapSwitchButton
       checked={isActive}
-      onlabel="Actif"
-      offlabel="Inactif"
+      onlabel={props.onlabel}
+      offlabel={props.offlabel}
       size="xs"
       width="70"
       onChange={() => {
-        props.handleIsActive(
-          props.id,
-          "PUT",
-          JSON.stringify({ isActive: !isActive })
-        );
-        setIsActive(!isActive);
+        props.change();
+        setIsActive(!isActive)
       }}
     />
   );

@@ -11,9 +11,9 @@ function PrivateRoute({ component: Component, ...rest }) {
   return (
     <Route
       {...rest}
-      render={() => {
+      render={(props) => {
         return dataUser.adminLevel === "superadmin" ? (
-          <Component {...rest} />
+          <Component {...props} />
         ) : (
           <p className="bg-danger text-white p-2">Non Autorisé</p>
         );

@@ -11,11 +11,13 @@ function PrivateDelivery() {
         <ListDelivery />
       </Route>
       <Route exact path="/admin/deliveries/add">
-        <DeliveryFormLogic title="Ajouter"/>
+        <DeliveryFormLogic title="Ajouter" />
       </Route>
-      <Route exact path="/admin/deliveries/:id">
-        <DeliveryFormLogic title="Modifier"/>
-      </Route>
+      <Route
+        exact
+        path="/admin/deliveries/:id"
+        render={(props) => <DeliveryFormLogic {...props} title="Modifier" />}
+      />
       <Route>
         <NotFound />
       </Route>

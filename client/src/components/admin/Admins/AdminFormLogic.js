@@ -28,14 +28,14 @@ function AdminFormLogic(props) {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
   const { dataUser } = useContext(AuthContext);
-  const idParams =useParams().id || dataUser._id;
+  const idParams = useParams().id || dataUser._id;
   const dataform = new FormData();
 
   useEffect(() => {
     setErrorForm(false);
     // if the method is not equal to true and there are an idparams, fetch the data to the api and set the state
 
-    if ((idParams) && method !== "PUT") {
+    if (idParams && method !== "PUT") {
       setMethod("PUT");
       fetch(`http://localhost:5000/louons/api/v1/admin/${idParams}`, {
         credentials: "include",
@@ -53,6 +53,8 @@ function AdminFormLogic(props) {
             setDateBirth(result.date_birth);
             setEmail(result.email);
             setPictureDisplay(result.path_picture);
+          } else if (result.error) {
+            return props.history.push('/admin/admins');;
           }
         });
     }
@@ -155,7 +157,8 @@ function AdminFormLogic(props) {
     errorAdminLevel,
     dataform,
     picture,
-    pictureDisplay
+    pictureDisplay,
+    props.history
   ]);
 
   const handleSubmit = (e) => {
@@ -204,7 +207,7 @@ function AdminFormLogic(props) {
               setConfirmationPassword("");
               setAdminLevel("");
             } else {
-              console.log(result)
+              console.log(result);
               setPictureDisplay(result.picture);
               setPassword("");
               setConfirmationPassword("");

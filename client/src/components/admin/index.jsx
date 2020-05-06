@@ -25,12 +25,12 @@ function Admin() {
 
   return (
     <TogglerProvider>
-      <Header />
-      <main className="row">
-        <Menu />
-        <div className="col-12 col-lg-9">
-          <Switch>
-            <PopupAddProvider>
+      <PopupAddProvider>
+        <Header />
+        <main className="row">
+          <Menu />
+          <div className="col-12 col-lg-9">
+            <Switch>
               <Route exact path="/admin">
                 <PrivateRoute component={Home} pageifnotauth="/adminlogin" />
               </Route>
@@ -88,14 +88,15 @@ function Admin() {
                   pageifnotauth="/adminlogin"
                 />
               </Route>
-            </PopupAddProvider>
-            <Route>
-              <NotFound />
-            </Route>
-          </Switch>
-        </div>
-      </main>
-      <Footer />
+
+              <Route>
+                <NotFound />
+              </Route>
+            </Switch>
+          </div>
+        </main>
+        <Footer />
+      </PopupAddProvider>
     </TogglerProvider>
   );
 }

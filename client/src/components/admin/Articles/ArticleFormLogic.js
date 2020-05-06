@@ -33,29 +33,13 @@ function ArticleFormLogic(props) {
 
   useEffect(() => {
     // reset the number error of the form and the error file
-    if (numberErrorForm > 0) {
-      setNumberErrorForm(0);
-    }
 
-    // fetch the datas if isFetched is false, then set this to true
-    // if there are not error set the category state with the result.data value
+    setNumberErrorForm(0);
 
-    if (!isFetchedCategory) {
-      fetch("http://localhost:5000/louons/api/v1/category/all/activecategory", {
-        credentials: "include",
-      })
-        .then((res) => res.json())
-        .then((result) => {
-          if (!result.error) {
-            setCategory(result.data);
-            setIsFetchedCategory(true);
-          }
-        });
-    }
-
+    // get the data depending if the isFetched state is settled to false and if there are an idParams
     if (idParams && !isFetchedArticle) {
-      setStatusMessageForm("modifié");
       setMethod("PUT");
+      setStatusMessageForm("modifié");
       fetch(`http://localhost:5000/louons/api/v1/article/detail/${idParams}`, {
         credentials: "include",
       })
@@ -71,10 +55,30 @@ function ArticleFormLogic(props) {
             setPictureDisplay(result.pictures);
             setIsActive(result.isActive);
             setErrorGrasp(false);
+          } else if (result.error) {
+            return props.history.push("/admin/articles");
           }
         });
     }
 
+    // fetch the datas if isFetched is settled to false, then set it to true
+    // if there are not error set the category state with the result.data value
+
+    if (
+      (method === "POST" && !isFetchedCategory && !idParams) ||
+      (method === "PUT" && isFetchedArticle && !isFetchedCategory)
+    ) {
+      fetch("http://localhost:5000/louons/api/v1/category/all/activecategory", {
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          if (!result.error) {
+            setCategory(result.data);
+            setIsFetchedCategory(true);
+          }
+        });
+    }
     // condition to display some error in the form
 
     if (title.length < 3 || title.length > 30) {
@@ -159,6 +163,7 @@ function ArticleFormLogic(props) {
     isFetchedArticle,
     errorFile,
     method,
+    props.history,
   ]);
 
   const handleSubmit = (e) => {
@@ -207,15 +212,9 @@ function ArticleFormLogic(props) {
               setIdCategory("");
               setIsSubmit(false);
             } else {
-              fetch(`http://localhost:5000/louons/api/v1/article/${idParams}`, {
-                credentials: "include",
-              })
-                .then((res) => res.json())
-                .then((result) => {
-                  if (!result.error) {
-                    setPictureDisplay(result.pictures);
-                  }
-                });
+              if (result.pictures) {
+                setPictureDisplay(result.pictures);
+              }
             }
           } else {
             setIsFailed(true);

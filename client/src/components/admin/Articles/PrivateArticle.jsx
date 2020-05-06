@@ -13,9 +13,11 @@ function PrivateArticle() {
       <Route exact path="/admin/articles/add">
         <ArticleFormLogic title="Ajouter" />
       </Route>
-      <Route exact path="/admin/articles/:id">
-        <ArticleFormLogic title="Modifier" />
-      </Route>
+      <Route
+        exact
+        path="/admin/articles/:id"
+        render={(props) => <ArticleFormLogic {...props} title="Modifier" />}
+      />
       <Route>
         <NotFound />
       </Route>

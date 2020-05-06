@@ -10,6 +10,7 @@ function ListAddress() {
       linkapi="http://localhost:5000/louons/api/v1/address"
       th={[
         { addressId: "ID" },
+        { title: "Titre de l'adresse" },
         { user: "Utilisateur" },
         { address: "Adresse" },
         { isActive: "Activer" },

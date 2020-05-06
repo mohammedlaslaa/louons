@@ -4,7 +4,7 @@ import AddressForm from "./AddressForm";
 
 function AddressFormLogic(props) {
   // change of states in progress
-  
+
   const [statusMessageForm, setStatusMessageForm] = useState("enregistrée");
   const [errorForm, setErrorForm] = useState(false);
   const [numberErrorForm, setNumberErrorForm] = useState(0);
@@ -40,7 +40,6 @@ function AddressFormLogic(props) {
   const regexpCountryCity = new RegExp(/^[a-zA-Z\s-éùàüäîçïèêôö]*$/);
 
   useEffect(() => {
-
     // initialize the number of error form
 
     setNumberErrorForm(0);
@@ -68,6 +67,8 @@ function AddressFormLogic(props) {
             setCountry(result.data.country);
             setIsActive(result.data.isActive);
             setOwner(result.data.id_user._id);
+          } else if (result.error) {
+            return props.history.push('/admin/addresses');
           }
         });
     }
@@ -167,6 +168,7 @@ function AddressFormLogic(props) {
     errorGrasp,
     isFetched,
     Form,
+    props.history
   ]);
 
   const handleSubmit = (e) => {

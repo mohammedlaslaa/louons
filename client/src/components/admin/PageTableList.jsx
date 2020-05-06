@@ -96,9 +96,9 @@ class PageTableList extends Component {
             });
             setTimeout(() => {
               this.setState({
-                errorMessageAdminLevel: false
+                errorMessageAdminLevel: false,
               });
-            },1500)
+            }, 1500);
           }
         }
         if (method === "DELETE") {
@@ -131,7 +131,10 @@ class PageTableList extends Component {
     ) : (
       <>
         {errorMessageAdminLevel && (
-          <p className="bg-danger text-white p-2">Vous n'avez pas les droits nécessaires pour effectuer cette action....</p>
+          <p className="bg-danger text-white p-2">
+            Vous n'avez pas les droits nécessaires pour effectuer cette
+            action....
+          </p>
         )}
         <h4 className="titlepage">{this.props.titlepage}</h4>
         {isLoadingUpdate && (
@@ -247,8 +250,36 @@ class PageTableList extends Component {
                                   )
                                 ) : subTh === "isActive" ? (
                                   <SwitchButton
+                                    onlabel="Actif"
+                                    offlabel="Inactif"
                                     isActive={eltData["isActive"]}
                                     id={eltData["_id"]}
+                                    change={() => {
+                                      this.handleRequestFetch(
+                                        eltData["_id"],
+                                        "PUT",
+                                        JSON.stringify({
+                                          isActive: !eltData["isActive"],
+                                        })
+                                      );
+                                    }}
+                                    handleIsActive={this.handleRequestFetch}
+                                  />
+                                ) : subTh === "isTop" ? (
+                                  <SwitchButton
+                                    onlabel="Top"
+                                    offlabel="Non"
+                                    isActive={eltData["isTop"]}
+                                    id={eltData["_id"]}
+                                    change={() => {
+                                      this.handleRequestFetch(
+                                        eltData["_id"],
+                                        "PUT",
+                                        JSON.stringify({
+                                          isTop: !eltData["isTop"],
+                                        })
+                                      );
+                                    }}
                                     handleIsActive={this.handleRequestFetch}
                                   />
                                 ) : subTh === "description" ? (

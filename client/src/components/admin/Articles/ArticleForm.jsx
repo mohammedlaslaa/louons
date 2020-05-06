@@ -7,6 +7,7 @@ import InputFileForm from "../Form/InputFileForm";
 import Form from "../Form/Form";
 
 function ArticleForm(props) {
+
   return (
     <Form
       handleSubmit={props.handleSubmit}
@@ -29,7 +30,7 @@ function ArticleForm(props) {
           }}
         />
       </div>
-      {props.pictureDisplay.length > 0 && (
+      {props.pictureDisplay && props.pictureDisplay.length > 0 && (
         <div className="col-12 m-0 p-0 row d-flex justify-content-between">
           {props.pictureDisplay.map((e) => (
             <div className="col-4 col-sm-4 p-2 col-md-3 mx-auto" key={e.title}>

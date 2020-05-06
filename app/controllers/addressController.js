@@ -170,8 +170,21 @@ exports.putAddressById = async (req, res) => {
       });
 
     // Check if the client is an admin and the id_user is specify.
+    if (
+      !isOwner &&
+      Object.keys(req.body).length === 1 &&
+      req.body.isActive !== undefined
+    ) {
+      await Address.findByIdAndUpdate(req.params.id, {
+        $set: req.body,
+        date_update: Date.now(),
+      });
 
-    if (res.locals.owner.adminLevel && !ownerId) {
+      return res.send({
+        error: false,
+        message: "Address updated with success",
+      });
+    } else if (res.locals.owner.adminLevel && !ownerId) {
       return res.status(400).send({
         error: true,
         message: "Id_user is required",
@@ -209,7 +222,7 @@ exports.putAddressById = async (req, res) => {
     });
 
     return res.send({
-      modified: true,
+      error: false,
       message: "Address modified with success",
     });
   } catch (e) {

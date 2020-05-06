@@ -49,6 +49,8 @@ function UserFormLogic(props) {
             setEmail(result.email);
             setIsSubscribe(result.isSubscribe);
             setPictureDisplay(result.path_picture)
+          }else if (result.error) {
+            return props.history.push("/admin/users");
           }
         });
     }
@@ -142,6 +144,7 @@ function UserFormLogic(props) {
     method,
     dataform,
     picture,
+    props.history
   ]);
 
   const handleSubmit = (e) => {

@@ -10,9 +10,11 @@ function PrivateCategory() {
       <Route exact path="/admin/categories">
         <ListCategory />
       </Route>
-      <Route exact path="/admin/categories/:id">
-        <CategoryFormLogic />
-      </Route>
+      <Route
+        exact
+        path="/admin/categories/:id"
+        render={(props) => <CategoryFormLogic {...props} />}
+      />
       <Route>
         <NotFound />
       </Route>

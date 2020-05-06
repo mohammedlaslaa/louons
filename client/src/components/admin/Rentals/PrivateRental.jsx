@@ -11,11 +11,13 @@ function PrivateRental() {
         <ListRental />
       </Route>
       <Route exact path="/admin/rentals/add">
-        <RentalFormLogic title="Créer une"/>
+        <RentalFormLogic title="Créer une" />
       </Route>
-      <Route exact path="/admin/rentals/:id">
-        <RentalFormLogic title="Modifier une"/>
-      </Route>
+      <Route
+        exact
+        path="/admin/rentals/:id"
+        render={(props) => <RentalFormLogic {...props} title="Modifier une" />}
+      />
       <Route>
         <NotFound />
       </Route>

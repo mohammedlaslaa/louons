@@ -33,6 +33,7 @@ function RentalFormLogic(props) {
   const [errorPayment, setErrorPayment] = useState(false);
   const [errorForm, setErrorForm] = useState(false);
   const [errorNumberListDate, setErrorNumberListDate] = useState(false);
+  const [isIdValid, setIsIdValid] = useState(false);
   const [numberErrorForm, setNumberErrorForm] = useState(0);
   const [isFetchedDeliveries, setIsFetchedDeliveries] = useState(false);
   const [isFetchedPayments, setIsFetchedPayments] = useState(false);
@@ -51,9 +52,13 @@ function RentalFormLogic(props) {
       setStatusMessageForm("modifié");
     }
 
+    if(!idParams){
+      setIsIdValid(true)
+    }
+
     // get the owner of the article when the article is settled
 
-    if (idArticle) {
+    if (idArticle && isIdValid) {
       fetch(`http://localhost:5000/louons/api/v1/article/detail/${idArticle}`, {
         credentials: "include",
       })
@@ -67,11 +72,7 @@ function RentalFormLogic(props) {
         });
     }
 
-    if (graspArticle === "") {
-      setOwner("");
-    }
-
-    if (idArticle && numberListDate > 0 && method === "POST") {
+    if (idArticle && numberListDate > 0 && method === "POST" && isIdValid) {
       fetch(
         `http://localhost:5000/louons/api/v1/rental/date/${idArticle}/${numberListDate}`,
         {
@@ -90,7 +91,7 @@ function RentalFormLogic(props) {
     // fetch the datas if isFetched is false, then set this to true
     // if there are not error set the category state with the result.data value
 
-    if (!isFetchedDeliveries) {
+    if (!isFetchedDeliveries && isIdValid) {
       fetch("http://localhost:5000/louons/api/v1/carrier/all/activecarrier", {
         credentials: "include",
       })
@@ -103,7 +104,7 @@ function RentalFormLogic(props) {
         });
     }
 
-    if (!isFetchedPayments) {
+    if (!isFetchedPayments && isIdValid) {
       fetch("http://localhost:5000/louons/api/v1/payment/all/activepayment", {
         credentials: "include",
       })
@@ -140,11 +141,18 @@ function RentalFormLogic(props) {
             setIsActive(result.data.isActive);
             setDateStart(result.data.start_date);
             setDateEnd(result.data.end_date);
+            setIsIdValid(true);
+          } else if (result.error) {
+            return props.history.push("/admin/rentals");
           }
         });
     }
 
-    // condition to display some error in the form
+    // condition to display some error in the form or initialize some values
+
+    if (graspArticle === "") {
+      setOwner("");
+    }
 
     if (idOwnerArticle === idTenant && idOwnerArticle !== "") {
       setErrorSameUser(true);
@@ -195,7 +203,6 @@ function RentalFormLogic(props) {
         numberListDate < 0) &&
       !idParams
     ) {
-      console.log(numberListDate)
       setListDate([]);
       setTotalPrice(0);
       setErrorNumberListDate(true);
@@ -214,6 +221,7 @@ function RentalFormLogic(props) {
     }
   }, [
     idArticle,
+    isIdValid,
     isFetchedDeliveries,
     isFetchedPayments,
     idDelivery,
@@ -230,6 +238,7 @@ function RentalFormLogic(props) {
     method,
     isFetchedRental,
     pricePerDay,
+    props.history,
   ]);
 
   // reset the date start, date end and the list data when this function is called
@@ -242,6 +251,8 @@ function RentalFormLogic(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // set the state isSubmit to true in order to display some error in the form
 
     setIsSubmit(true);
 

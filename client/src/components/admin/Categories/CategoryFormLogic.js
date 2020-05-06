@@ -3,10 +3,11 @@ import CategoryForm from "./CategoryForm";
 import { useParams } from "react-router-dom";
 import { PopupAddContext } from "../../../context/PopupAddContext";
 
-function CategoryFormLogic() {
+function CategoryFormLogic(props) {
   const [method, setMethod] = useState("GET");
   const [isActive, setIsActive] = useState(false);
   const [dateRegister, setDateRegister] = useState("");
+  const [statusMessageForm, setStatusMessageForm] = useState("enregistré");
   const [title, setTitle] = useState("");
   const [errorTitle, setErrorTitle] = useState(false);
   const [link, setLink] = useState("");
@@ -35,6 +36,7 @@ function CategoryFormLogic() {
     // fetch the data depending if the method state is settled to 'GET' and if there are an idParams
 
     if (method === "GET" && idParams) {
+      setStatusMessageForm("modifié")
       fetch(`http://localhost:5000/louons/api/v1/category/detail/${idParams}`, {
         method: method,
         credentials: "include",
@@ -50,6 +52,8 @@ function CategoryFormLogic() {
             setDescription(result.data.description);
             setIsActive(result.data.isActive);
             setDateRegister(result.data.date_register);
+          } else if (result.error) {
+            return props.history.push("/admin/categories");
           }
         });
     }
@@ -94,6 +98,7 @@ function CategoryFormLogic() {
     stringRegex,
     linkRegex,
     numberErrorForm,
+    props.history
   ]);
 
   // if the form is submitted call the handleFetchPut function
@@ -136,7 +141,7 @@ function CategoryFormLogic() {
             if (arg === "isActive") {
               setIsActive(!isActive);
             }
-            setIsSubmit(false)
+            setIsSubmit(false);
           } else {
             setIsFailed(true);
             setTimeout(() => {
@@ -184,8 +189,7 @@ function CategoryFormLogic() {
             setDescription("");
             PopupContext.setToggle(false);
             setRedirect(true);
-            setIsSubmit(false)
-            
+            setIsSubmit(false);
           } else {
             setIsFailed(true);
             setTimeout(() => {
@@ -217,6 +221,7 @@ function CategoryFormLogic() {
       errorDescription={errorDescription}
       redirect={redirect}
       isSubmit={isSubmit}
+      statusMessageForm={statusMessageForm}
     />
   );
 }

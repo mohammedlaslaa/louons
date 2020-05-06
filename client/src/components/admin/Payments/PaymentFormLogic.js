@@ -44,6 +44,8 @@ function PaymentFormLogic(props) {
             setTitle(result.data.title);
             setIsActive(result.data.isActive);
             setPictureDisplay(result.data.path_picture);
+          } else if (result.error) {
+            return props.history.push("/admin/payments");
           }
         });
     }
@@ -107,6 +109,7 @@ function PaymentFormLogic(props) {
     dataform,
     method,
     picture,
+    props.history
   ]);
 
   const handleSubmit = (e) => {
@@ -146,7 +149,7 @@ function PaymentFormLogic(props) {
               setDescription("");
               setIsSubmit(false);
               setIsActive(false);
-            } else {
+            } else if (result.picture) {
               setPictureDisplay(result.picture);
             }
           } else {

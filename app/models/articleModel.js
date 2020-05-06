@@ -75,6 +75,11 @@ const articleSchema = new mongoose.Schema({
   isActive: {
     type: Boolean,
     default: true
+  },
+
+  isTop: {
+    type: Boolean,
+    default: false
   }
 });
 
@@ -128,7 +133,9 @@ const schemaPutValidationArticle = Joi.object({
     .min(1)
     .max(2000),
 
-  isActive: Joi.boolean()
+  isActive: Joi.boolean(),
+
+  isTop: Joi.boolean()
 });
 
 const Article = mongoose.model("Article", articleSchema);
