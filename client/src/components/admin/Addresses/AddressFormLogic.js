@@ -3,10 +3,19 @@ import { useParams } from "react-router-dom";
 import AddressForm from "./AddressForm";
 
 function AddressFormLogic(props) {
+  // change of states in progress
+  
   const [statusMessageForm, setStatusMessageForm] = useState("enregistrée");
-  const [isSuccess, setIssuccess] = useState(false);
-  const [isFailed, setIsFailed] = useState(false);
+  const [errorForm, setErrorForm] = useState(false);
+  const [numberErrorForm, setNumberErrorForm] = useState(0);
   const [isFetched, setIsFetched] = useState(false);
+  const [Form, setForm] = useState({
+    isSuccess: false,
+    isFailed: false,
+    error: false,
+    statusMessageForm: "enregistrée",
+    numberError: 0,
+  });
   const [owner, setOwner] = useState("");
   const [title, setTitle] = useState("");
   const [errorTitle, setErrorTitle] = useState(false);
@@ -14,14 +23,14 @@ function AddressFormLogic(props) {
   const [errorAddress, setErrorAddress] = useState(false);
   const [zipCode, setZipCode] = useState("");
   const [errorZipCode, setErrorZipCode] = useState(false);
-  const [city, setCity] = useState("");
-  const [errorCity, setErrorCity] = useState(false);
+  const [city, setCity] = useState({
+    value: "",
+    error: false,
+  });
   const [country, setCountry] = useState("");
   const [errorCountry, setErrorCountry] = useState(false);
   const [isShow, setIsShow] = useState(false);
   const [errorGrasp, setErrorGrasp] = useState(true);
-  const [numberErrorForm, setNumberErrorForm] = useState(0);
-  const [errorForm, setErrorForm] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [isSubmit, setIsSubmit] = useState(false);
   const [grasp, setGrasp] = useState("");
@@ -31,6 +40,7 @@ function AddressFormLogic(props) {
   const regexpCountryCity = new RegExp(/^[a-zA-Z\s-éùàüäîçïèêôö]*$/);
 
   useEffect(() => {
+
     // initialize the number of error form
 
     setNumberErrorForm(0);
@@ -54,7 +64,7 @@ function AddressFormLogic(props) {
             setAddress(result.data.address);
             setTitle(result.data.title);
             setZipCode(result.data.zipcode);
-            setCity(result.data.city);
+            setCity({ value: result.data.city });
             setCountry(result.data.country);
             setIsActive(result.data.isActive);
             setOwner(result.data.id_user._id);
@@ -91,15 +101,19 @@ function AddressFormLogic(props) {
     }
 
     if (
-      !regexpCountryCity.test(city) ||
-      city === "" ||
-      city.length < 3 ||
-      city.length > 50
+      !regexpCountryCity.test(city.value) ||
+      city.value === "" ||
+      city.value.length < 3 ||
+      city.value.length > 50
     ) {
-      setErrorCity(true);
+      if (!city.error) {
+        setCity((prevState) => ({ ...prevState, error: true }));
+      }
       setNumberErrorForm((prevNumber) => prevNumber + 1);
     } else {
-      setErrorCity(false);
+      if (city.error) {
+        setCity((prevState) => ({ ...prevState, error: false }));
+      }
     }
 
     if (
@@ -130,8 +144,14 @@ function AddressFormLogic(props) {
     }
 
     if (numberErrorForm > 0) {
+      if (!Form.error) {
+        setForm((prevState) => ({ ...prevState, error: true }));
+      }
       setErrorForm(true);
     } else {
+      if (Form.error) {
+        setForm((prevState) => ({ ...prevState, error: false }));
+      }
       setErrorForm(false);
     }
   }, [
@@ -145,7 +165,8 @@ function AddressFormLogic(props) {
     country,
     zipCode,
     errorGrasp,
-    isFetched
+    isFetched,
+    Form,
   ]);
 
   const handleSubmit = (e) => {
@@ -157,7 +178,7 @@ function AddressFormLogic(props) {
       title,
       address,
       zipcode: zipCode,
-      city,
+      city: city.value,
       country,
     });
 
@@ -166,7 +187,7 @@ function AddressFormLogic(props) {
         ? `http://localhost:5000/louons/api/v1/address`
         : `http://localhost:5000/louons/api/v1/address/${idParams}`;
 
-    if (!errorForm) {
+    if (!Form.error || !errorForm) {
       fetch(url, {
         method,
         headers: {
@@ -178,23 +199,23 @@ function AddressFormLogic(props) {
         .then((res) => res.json())
         .then((result) => {
           if (!result.error) {
-            setIssuccess(true);
+            setForm((prevState) => ({ ...prevState, isSuccess: true }));
             setTimeout(() => {
-              setIssuccess(false);
+              setForm((prevState) => ({ ...prevState, isSuccess: false }));
             }, 1500);
             if (method === "POST") {
               setTitle("");
               setAddress("");
               setZipCode("");
-              setCity("");
+              setCity({ value: "" });
               setCountry("");
               setIsSubmit(false);
               setGrasp("");
             }
           } else {
-            setIsFailed(true);
+            setForm((prevState) => ({ ...prevState, isFailed: true }));
             setTimeout(() => {
-              setIsFailed(false);
+              setForm((prevState) => ({ ...prevState, isFailed: false }));
             }, 1500);
           }
         });
@@ -204,9 +225,8 @@ function AddressFormLogic(props) {
 
   return (
     <AddressForm
+      form={Form}
       titlepage={props.title}
-      isSuccess={isSuccess}
-      isFailed={isFailed}
       errorGrasp={errorGrasp}
       isActive={isActive}
       isShow={isShow}
@@ -231,7 +251,6 @@ function AddressFormLogic(props) {
       errorZipCode={errorZipCode}
       city={city}
       setCity={setCity}
-      errorCity={errorCity}
       country={country}
       setCountry={setCountry}
       errorCountry={errorCountry}

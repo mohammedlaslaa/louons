@@ -9,9 +9,9 @@ function AddressForm(props) {
     <Form
       handleSubmit={props.handleSubmit}
       titlepage={`${props.titlepage}  une adresse`}
-      isFailed={props.isFailed}
-      isSuccess={props.isSuccess}
-      successMessage={`Location ${props.statusMessageForm} avec succés`}
+      isFailed={props.form.isFailed}
+      isSuccess={props.form.isSuccess}
+      successMessage={`Location ${props.form.statusMessageForm} avec succés`}
       failMessage="Erreur de duplication ou champs vide, veuillez vérifier votre formulaire"
     >
       <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100">
@@ -74,11 +74,11 @@ function AddressForm(props) {
         label={"Ville :"}
         name="city"
         type="text"
-        value={props.city}
+        value={props.city.value}
         change={(e) => {
-          props.setCity(e.target.value);
+          props.setCity({value: e.target.value});
         }}
-        errorcondition={props.errorCity && props.isSubmit}
+        errorcondition={props.city.error && props.isSubmit}
         errormessage="Ce champ doit contenir entre 3 et 50 caractères, et sans caractères spéciaux ni chiffre"
       />
       <DivInputForm
