@@ -1,11 +1,26 @@
 import React, { useState, useEffect } from "react";
+import ListProduct from "../ListProduct";
+import "../../../styles/front/home.css";
 
 function Home() {
   const [article, setArticle] = useState({
     data: [],
   });
+
+  const [text] = useState([
+    {
+      message: "Publiez vos articles et recevez des offres de locations",
+    },
+    {
+      message: "Louez auprès de personnes évalués",
+    },
+    {
+      message: "Donnez une seconde vie à vos articles et pensez écolo",
+    },
+  ]);
+
   useEffect(() => {
-    fetch("http://localhost:5000/louons/api/v1/article/activetop", {
+    fetch("http://localhost:5000/louons/api/v1/article/lastactive", {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -15,25 +30,33 @@ function Home() {
         }
       });
   }, []);
-  console.log(article);
+
   return (
     <>
-      <h1 className="mx-auto color3c8ce4 p-2">Bienvenue sur louons.fr</h1>
-      <div className="row m-0 p-0">
-        <div className="row col-12 col-lg-6 m-0 p-0 order-lg-last d-flex justify-content-around">
-          {article.data.map((elt, index) => {
-            return (
-              <img
-                key={index}
-                src={`http://localhost:5000/uploads/img/${elt.pictures[0].path_picture}`}
-                alt=""
-                className="w-100 col-5 p-2 my-2 my-lg-4"
-              />
-            );
-          })}
-        </div>
-        <div className="row col-12 col-lg-6 m-0 p-0 order-lg-first"></div>
+      <h1 className="color144c84 p-2 my-3 col-12 text-center">
+        Bienvenue sur louons.fr
+      </h1>
+      <div className="row col-12 mx-0 my-2 my-md-5 p-0 d-flex mx-auto">
+        {text.map((e, index) => (
+          <div
+            key={index}
+            className="col-11 col-sm-8 col-md-3 border border-white mx-auto hometext bgcolor9cd1ff text-white p-1 my-2 text-center"
+          >
+            {index === 0 ? (
+              <i className="ri-edit-line ri-3x"></i>
+            ) : index === 1 ? (
+              <i className="ri-service-line ri-3x"></i>
+            ) : (
+              <i className="ri-time-line ri-3x"></i>
+            )}
+            <p className="text-center m-0 mx-auto">{e.message}</p>
+          </div>
+        ))}
       </div>
+      <h2 className="bgcolor144c84 p-2 my-3 col-12 text-center text-white font-italic">
+        Derniers articles publiés
+      </h2>
+      <ListProduct data={article.data} />
     </>
   );
 }

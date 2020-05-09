@@ -4,7 +4,7 @@ function InputFileForm(props) {
   return (
     <>
       {props.errorFile > 0 && props.isSubmit && (
-        <span className="text-danger errormessage text-center">
+        <span className="text-danger errormessage text-center mx-auto">
           {props.errorMessage}
         </span>
       )}

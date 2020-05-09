@@ -20,8 +20,6 @@ exports.getAllArticle = async function (req, res) {
     if (req.cookies["x-auth-token"]) {
       verify = jwt.verify(req.cookies["x-auth-token"], process.env.PRIVATE_KEY);
     }
-    
-    console.log(req.params.searcharticle);
 
     const allArticle =
       req.params.searcharticle === "searcharticle"
@@ -29,11 +27,11 @@ exports.getAllArticle = async function (req, res) {
             isActive: true,
             title: { $regex: req.params.searcharticle, $options: "i" },
           }).select("_id articleId title")
-        : req.params.searcharticle === "activetop"
+        : req.params.searcharticle === "lastactive"
         ? await Article.find({
-            isActive: true,
-            isTop: true,
-          }).select("price title pictures")
+            isActive: true
+          }).limit(4).sort({date_register : -1})
+          .select("price title pictures")
         : verify.adminLevel
         ? await Article.find().populate("id_category", "title -_id")
         : await Article.find({ isActive: true }).populate(

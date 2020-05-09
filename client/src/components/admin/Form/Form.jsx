@@ -3,7 +3,7 @@ import SubmitButton from "./SubmitButton";
 
 function Form(props) {
   return (
-    <form className={props.class} onSubmit={props.handleSubmit}>
+    <form className={props.class} onSubmit={props.handleSubmit} autoComplete="off">
       <h4 className="titlepage col-12">{props.titlepage}</h4>
       {props.isSuccess ? (
         <p className="bg-success text-white text-center p-2 w-100">

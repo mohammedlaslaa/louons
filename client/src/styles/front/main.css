@@ -4,34 +4,78 @@
   width: 100%;
 }
 
-h1{
+h1 {
   font-size: 1.2rem;
+}
+
+h2 {
+  font-size: 1rem;
+}
+
+/* List of product */
+
+.thumbnail-img {
+  max-height: 12.5rem;
+  max-width: 12.5rem;
+}
+
+.product-container,
+.listproduct-btn {
+  font-size: 0.75rem;
+}
+
+.titleannounce {
+  margin: 0.3rem 0;
 }
 
 @media screen and (min-width: 576px) {
 
+  .product-container,
+  .listproduct-btn {
+    font-size: 1rem;
+  }
+
+  .listproduct-btn {
+    width: 12rem;
+    margin: 0 auto;
+  }
 }
 
 @media screen and (min-width: 768px) {
-  h1{
+  h1 {
     font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  .titleannounce {
+    margin: 0.3rem 0;
+  }
+
+  .product-container,
+  .listproduct-btn {
+    font-size: 1rem;
   }
 }
 
-@media screen and (min-width: 992px) {
+@media screen and (max-width: 992px) {
 
 }
 
+@media screen and (min-width: 992px) {}
+
 @media screen and (min-width: 1200px) {
+
+
+  .imgnotfound {
+    width: 75%;
+  }
+}
+
+@media screen and (min-width: 1400px) {
   .widthmain {
     width: 80%;
   }
-  .imgnotfound{
-      width: 75%;
-  }
 }
-@media screen and (min-width: 1400px) {
-
-}
-
-

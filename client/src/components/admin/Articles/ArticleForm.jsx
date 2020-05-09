@@ -11,7 +11,7 @@ function ArticleForm(props) {
   return (
     <Form
       handleSubmit={props.handleSubmit}
-      titlepage={`${props.titlepage} admin`}
+      titlepage={`${props.titlepage} un article`}
       isFailed={props.isFailed}
       isSuccess={props.isSuccess}
       successMessage={`Article ${props.statusMessageForm} avec succés`}
@@ -44,7 +44,7 @@ function ArticleForm(props) {
         </div>
       )}
       {props.errorCategory && props.isSubmit && (
-        <span className="text-danger errormessage text-center">
+        <span className="text-danger errormessage text-center mx-auto">
           Veuillez sélectionner une catégorie
         </span>
       )}
@@ -95,7 +95,7 @@ function ArticleForm(props) {
         label="Description :"
       />
       {props.errorPrice && props.isSubmit && (
-        <span className="text-danger errormessage text-center">
+        <span className="text-danger errormessage text-center mx-auto">
           Veuillez saisir un prix valide compris entre 0 et 2000
         </span>
       )}

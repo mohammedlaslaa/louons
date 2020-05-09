@@ -198,9 +198,9 @@ header li:hover {
 /* searchbar */
 
 .searchbar {
-  width: 80%;
+  width: 100%;
   top: 100%;
-  left: 0;
+  left: -20%;
 }
 
 /* searchbar animation csstranstion */
@@ -262,6 +262,7 @@ header li:hover {
 }
 
 @media screen and (max-width: 340px) {
+
   .bar1-enter-done,
   .bar1-enter-active {
     transform: rotate(45deg) translateY(0.8rem);
@@ -348,6 +349,7 @@ header li:hover {
     background-color: white;
   }
 }
+
 @media screen and (min-width: 1200px) {
   .headercontainer {
     width: 80%;
