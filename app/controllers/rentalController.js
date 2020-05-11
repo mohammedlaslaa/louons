@@ -76,42 +76,46 @@ exports.getAvailableDate = async function (req, res) {
     let dateStart;
     let dateEnd;
 
-    while (result.length < 5) {
-      let obj = {};
-      j++;
-      dateStart = new Date(Date.now() + 3600 * 1000 * 24 * j);
-      dateEnd = new Date(Date.now() + 3600 * 1000 * 24 * (number + j));
+    if (req.params.number > 0) {
+      while (result.length < 5) {
+        let obj = {};
+        j++;
+        dateStart = new Date(Date.now() + 3600 * 1000 * 24 * j);
+        dateEnd = new Date(Date.now() + 3600 * 1000 * 24 * (number + j));
 
-      // Check if the same Rental exist at this start date.
+        // Check if the same Rental exist at this start date.
 
-      findRental = await Rental.find({
-        id_article: req.params.id,
-        start_date: { $lte: moment(dateStart).format("YYYY-MM-DD") },
-        end_date: { $gte: moment(dateStart).format("YYYY-MM-DD") },
-        isActive: true,
-      });
-
-      // If the same rental exist at this start date, send a 400 response status code with a message.
-
-      if (findRental.length === 0) {
         findRental = await Rental.find({
           id_article: req.params.id,
-          start_date: {
-            $gte: moment(dateStart).format("YYYY-MM-DD"),
-            $lte: moment(dateEnd).format("YYYY-MM-DD"),
-          },
+          start_date: { $lte: moment(dateStart).format("YYYY-MM-DD") },
+          end_date: { $gte: moment(dateStart).format("YYYY-MM-DD") },
           isActive: true,
         });
 
+        // If the same rental exist at this start date, send a 400 response status code with a message.
+
         if (findRental.length === 0) {
-          obj["dateStart"] = dateStart;
-          obj["dateEnd"] = dateEnd;
-          result[i] = obj;
-          i++;
+          findRental = await Rental.find({
+            id_article: req.params.id,
+            start_date: {
+              $gte: moment(dateStart).format("YYYY-MM-DD"),
+              $lte: moment(dateEnd).format("YYYY-MM-DD"),
+            },
+            isActive: true,
+          });
+
+          if (findRental.length === 0) {
+            obj["dateStart"] = dateStart;
+            obj["dateEnd"] = dateEnd;
+            result[i] = obj;
+            i++;
+          }
         }
       }
+      return res.status(200).send({ error: false, data: result });
+    }else{
+      return res.status(400).send({error: true, message : 'The number params must be a positive integer'})
     }
-    return res.status(200).send({ error: false, data: result });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }

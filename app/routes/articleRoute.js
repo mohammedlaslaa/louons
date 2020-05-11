@@ -7,9 +7,10 @@ const articleController = require("../controllers/articleController");
 
 // Get all article or article by id, this route is available for everyone.
 
-router.get("/:searcharticle?", articleController.getAllArticle);
-
 router.get("/detail/:id", objectvalid, articleController.getArticleById);
+
+router.get("/:searcharticle?/:idcategory?", articleController.getAllArticle);
+
 
 // Only an user or an admin authenticated can post a new article or put an article by id.
 

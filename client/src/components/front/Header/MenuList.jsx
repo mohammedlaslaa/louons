@@ -20,45 +20,48 @@ function MenuList(props) {
     const regex = /\s/gi;
     if (currElt.toLowerCase() === "catégories") {
       return (
-        <Link
+        <li
           key={index}
-          className="menuelement text-decoration-none"
-          to={`/${currElt.toLowerCase().replace(regex, "_").normalize("NFC")}`}
+          className="p-2 my-3"
+          onMouseEnter={() => {
+            setDisplayCategory(true);
+          }}
+          onMouseLeave={() => {
+            setDisplayCategory(false);
+          }}
         >
-          <li
-            key={index}
-            className="p-2 my-3"
-            onMouseEnter={() => {
-              setDisplayCategory(true);
-            }}
-            onMouseLeave={() => {
-              setDisplayCategory(false);
-            }}
+          {currElt}
+          <CSSTransition
+            classNames="submenuelt"
+            unmountOnExit
+            timeout={600}
+            in={displayCategory}
           >
-            {currElt}
-            <CSSTransition
-              classNames="submenuelt"
-              unmountOnExit
-              timeout={600}
-              in={displayCategory}
-            >
-              <ul className={`list-unstyled listcategory px-2`}>
-                <ListCategoryContext.Consumer>
-                  {({ listCat }) =>
-                    listCat.map((e) => (
-                      <li
-                        className="p-1 my-3 font-italic submenuelement"
-                        key={e._id}
-                      >
+            <ul className={`list-unstyled listcategory px-2`}>
+              <ListCategoryContext.Consumer>
+                {({ listCat }) => 
+                  listCat.map((e) => {
+                    return(
+                    <Link
+                      key={e._id}
+                      className="submenuelement text-decoration-none"
+                      to={{
+                        pathname: `/categories/${e.link}`,
+                        id: e._id,
+                        title: e.title,
+                        description: e.description,
+                      }}
+                    >
+                      <li className="p-1 my-3 font-italic submenuelement">
                         {e.title}
                       </li>
-                    ))
-                  }
-                </ListCategoryContext.Consumer>
-              </ul>
-            </CSSTransition>
-          </li>
-        </Link>
+                    </Link>
+                  )})
+                }
+              </ListCategoryContext.Consumer>
+            </ul>
+          </CSSTransition>
+        </li>
       );
     } else {
       return (

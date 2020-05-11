@@ -52,8 +52,8 @@ function RentalFormLogic(props) {
       setStatusMessageForm("modifié");
     }
 
-    if(!idParams){
-      setIsIdValid(true)
+    if (!idParams) {
+      setIsIdValid(true);
     }
 
     // get the owner of the article when the article is settled
@@ -65,9 +65,11 @@ function RentalFormLogic(props) {
         .then((res) => res.json())
         .then((result) => {
           if (!result.error) {
-            setPricePerDay(result.price);
-            setIdOwnerArticle(result.id_user._id);
-            setOwner(`${result.id_user.lastName} ${result.id_user.firstName}`);
+            setPricePerDay(result.data.price);
+            setIdOwnerArticle(result.data.id_user._id);
+            setOwner(
+              `${result.data.id_user.lastName} ${result.data.id_user.firstName}`
+            );
           }
         });
     }

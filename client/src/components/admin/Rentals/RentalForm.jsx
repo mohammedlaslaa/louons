@@ -10,11 +10,11 @@ function RentalForm(props) {
   const [currLi, setCurrLi] = useState("");
 
   useEffect(() => {
-    if (props.isSubmit) {
+    if (!props.idArticle) {
       setCurrLi("");
     }
-  }, [props.isSubmit]);
-  
+  }, [props.idArticle]);
+
   return (
     <Form
       handleSubmit={props.handleSubmit}
@@ -115,11 +115,17 @@ function RentalForm(props) {
                   key={index}
                   index={index}
                   className={currLi === index ? "bg-secondary text-white" : ""}
-                  setCurrLi={setCurrLi}
+                  setCurrLi={() => setCurrLi(index)}
                   dateStart={elt.dateStart}
                   dateEnd={elt.dateEnd}
-                  setDateStart={props.setDateStart}
-                  setDateEnd={props.setDateEnd}
+                  setDateStart={() =>
+                    props.setDateStart(
+                      moment(elt.dateStart).format("YYYY-MM-DD")
+                    )
+                  }
+                  setDateEnd={() =>
+                    props.setDateEnd(moment(elt.dateEnd).format("YYYY-MM-DD"))
+                  }
                 />
               );
             })}

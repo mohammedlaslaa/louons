@@ -14,21 +14,18 @@ exports.getAllCategory = async function (req, res) {
     };
 
     if (Object.keys(req.cookies).length > 0) {
-      verify = jwt.verify(
-        req.cookies["x-auth-token"],
-        process.env.PRIVATE_KEY
-      );
+      verify = jwt.verify(req.cookies["x-auth-token"], process.env.PRIVATE_KEY);
     }
 
     const allCategory =
       req.params.isactive === "activecategory"
         ? await Category.find({ isActive: true }).select(
-            "categoryId isActive title link"
+            "categoryId isActive title link description"
           )
         : verify.adminLevel == "admin" || verify.adminLevel == "superadmin"
-        ? await Category.find().select("categoryId isActive title link")
+        ? await Category.find().select("categoryId isActive title link description")
         : await Category.find({ isActive: true }).select(
-            "categoryId isActive title link"
+            "categoryId isActive title link description"
           );
 
     return res.status(200).send({
@@ -46,7 +43,9 @@ exports.getCategoryById = async function (req, res) {
 
     // Find a category by id, then return it to the client.
 
-    const category = await Category.findById(req.params.id);
+    const category = req.query.title
+      ? await Category.find({ link: req.query.title }).select("_id title description")
+      : await Category.findById(req.params.id);
 
     // If there are not category with this id return a 400 response status code with a message.
 

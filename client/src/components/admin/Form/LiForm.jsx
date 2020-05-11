@@ -6,9 +6,9 @@ function LiForm(props) {
     <li
       className={`listcomplete p-2 ${props.className}`}
       onClick={() => {
-        props.setCurrLi(props.index);
-        props.setDateStart(moment(props.dateStart).format("YYYY-MM-DD"));
-        props.setDateEnd(moment(props.dateEnd).format("YYYY-MM-DD"));
+        props.setCurrLi();
+        props.setDateStart();
+        props.setDateEnd();
       }}
     >{`Du ${moment(props.dateStart).format("DD/MM/YYYY")} au ${moment(
       props.dateEnd

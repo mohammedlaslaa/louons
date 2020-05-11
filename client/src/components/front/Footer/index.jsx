@@ -28,9 +28,9 @@ function Footer() {
   return (
     // Return all components of the footer
     <footer className="bgcolor144c84 d-flex flex-column flex-md-row w-100">
-        <PartOfFooter dataToDisplay={partAccount} title="Mon compte" />
-        <PartOfFooter dataToDisplay={listCat} title="Catégories" />
-        <PartOfFooter dataToDisplay={partSociety} title="Informations" />
+        <PartOfFooter dataToDisplay={partAccount} pathlink="" title="Mon compte" />
+        <PartOfFooter dataToDisplay={listCat} pathlink="/categories" title="Catégories" />
+        <PartOfFooter dataToDisplay={partSociety} pathlink="" title="Informations" />
     </footer>
   );
 }

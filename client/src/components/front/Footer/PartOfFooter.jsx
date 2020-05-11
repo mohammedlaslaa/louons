@@ -4,10 +4,23 @@ import { CSSTransition } from "react-transition-group";
 
 function PartOfFooter(props) {
   // map over the dataToDisplay prop in order to display them in list
-  
+
   const list = props.dataToDisplay.map((elt, index) => (
-    <Link key={`link${index}`} to={elt.link} className="text-white">
-      <li key={`title${index}`} className="footerli p-2" onClick={() => setIsDisplay(false)}>
+    <Link
+      key={elt._id || index}
+      className="text-white"
+      to={{
+        pathname: `${props.pathlink}/${elt.link}`,
+        id: elt._id || index,
+        title: elt.title,
+        description: elt.description,
+      }}
+    >
+      <li
+        key={`title${index}`}
+        className="footerli p-2"
+        onClick={() => setIsDisplay(false)}
+      >
         {elt.title}
       </li>
     </Link>

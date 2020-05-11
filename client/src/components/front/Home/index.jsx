@@ -40,7 +40,7 @@ function Home() {
         {text.map((e, index) => (
           <div
             key={index}
-            className="col-11 col-sm-8 col-md-3 border border-white mx-auto hometext bgcolor9cd1ff text-white p-1 my-2 text-center"
+            className="col-11 col-sm-8 col-md-5 col-lg-3 border border-white mx-auto hometext bgcolor9cd1ff text-white p-1 my-2 text-center"
           >
             {index === 0 ? (
               <i className="ri-edit-line ri-3x"></i>
@@ -53,7 +53,7 @@ function Home() {
           </div>
         ))}
       </div>
-      <h2 className="bgcolor144c84 p-2 my-3 col-12 text-center text-white font-italic">
+      <h2 className="bgcolor144c84 p-2 my-3 col-12 col-lg-10 mx-auto text-center text-white font-italic">
         Derniers articles publiés
       </h2>
       <ListProduct data={article.data} />

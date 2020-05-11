@@ -22,16 +22,26 @@ exports.getAllArticle = async function (req, res) {
     }
 
     const allArticle =
-      req.params.searcharticle === "searcharticle"
+      req.params.searcharticle === "lastactive"
+        ? await Article.find({
+            isActive: true,
+          })
+            .limit(4)
+            .sort({ date_register: -1 })
+            .select("price title pictures")
+        : req.params.idcategory && req.params.searcharticle === "searcharticle"
+        ? await Article.find({
+            isActive: true,
+            id_category: req.params.idcategory,
+          })
+            .limit(4)
+            .sort({ date_register: -1 })
+            .select("price title pictures")
+        : req.params.searcharticle
         ? await Article.find({
             isActive: true,
             title: { $regex: req.params.searcharticle, $options: "i" },
           }).select("_id articleId title")
-        : req.params.searcharticle === "lastactive"
-        ? await Article.find({
-            isActive: true
-          }).limit(4).sort({date_register : -1})
-          .select("price title pictures")
         : verify.adminLevel
         ? await Article.find().populate("id_category", "title -_id")
         : await Article.find({ isActive: true }).populate(
@@ -51,7 +61,6 @@ exports.getAllArticle = async function (req, res) {
 exports.getArticleById = async function (req, res) {
   try {
     // Find an article by id, then return it to the client.
-
     const article = await Article.findById(req.params.id)
       .select("id_user title description price pictures isActive")
       .populate("id_category", "title description _id")
@@ -67,7 +76,7 @@ exports.getArticleById = async function (req, res) {
 
     // If there is an existing article, send back a 200 response status code with a this article.
 
-    return res.send(article);
+    return res.send({ error: false, data: article });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }

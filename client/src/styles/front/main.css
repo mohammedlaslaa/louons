@@ -28,6 +28,28 @@ h2 {
   margin: 0.3rem 0;
 }
 
+/* product */
+
+.thumbnail-img-product {
+  cursor: pointer;
+}
+
+.main-picture-container {
+  height: 20rem;
+}
+
+.main-picture {
+  max-height: 20rem
+}
+
+.list-date{
+  font-size: 0.85rem;
+}
+
+.number-day{
+  font-size: 1.4rem;
+}
+
 @media screen and (min-width: 576px) {
 
   .product-container,
@@ -47,7 +69,7 @@ h2 {
   }
 
   h2 {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 
   .titleannounce {
@@ -60,15 +82,9 @@ h2 {
   }
 }
 
-@media screen and (max-width: 992px) {
-
-}
-
-@media screen and (min-width: 992px) {}
+@media screen and (max-width: 992px) {}
 
 @media screen and (min-width: 1200px) {
-
-
   .imgnotfound {
     width: 75%;
   }

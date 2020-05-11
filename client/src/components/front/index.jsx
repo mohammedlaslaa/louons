@@ -3,6 +3,8 @@ import { ListCategoryProvider } from "../../context/ListCategoryContext";
 import Header from "./Header";
 import Footer from "./Footer";
 import Home from "./Home";
+import Product from "./Product";
+import Category from "./Category";
 import NotFound from "../general/NotFound";
 import { Switch, Route } from "react-router-dom";
 import "../../styles/front/main.css";
@@ -17,9 +19,16 @@ function Front() {
           <Route exact path="/">
             <Home />
           </Route>
-          <Route exact path="/annonces">
-          <h1>coucou page annonce</h1>
-          </Route>
+          <Route
+            exact
+            path="/announce/:id"
+            render={() => <Product />}
+          />
+          <Route
+            exact
+            path="/categories/:title"
+            render={(props) => <Category {...props} />}
+          />
           <Route>
             <NotFound />
           </Route>
