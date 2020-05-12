@@ -49,7 +49,7 @@ function Product() {
 
   const handleFetchDate = () => {
     // Fetch the date only if numberday and the prevnumberday are not equal
-    if (article.numberDay !== article.prevNumberDay) {
+    if (article.numberDay !== article.prevNumberDay && article.numberDay > 0) {
       fetch(
         `http://localhost:5000/louons/api/v1/rental/date/${id}/${article.numberDay}`,
         {

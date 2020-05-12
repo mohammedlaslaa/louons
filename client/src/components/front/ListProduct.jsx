@@ -6,10 +6,7 @@ function ListProduct(props) {
     <div className={props.divClass}>
       {props.data.map((elt, index) => {
         return (
-          <div
-            key={index}
-            className="col-8 col-sm-6 col-lg-3 p-2 my-2 my-lg-4 product-container d-flex flex-column justify-content-end"
-          >
+          <div key={index} className={props.productClass}>
             <img
               src={`http://localhost:5000/uploads/img/${elt.pictures[0].path_picture}`}
               alt=""
@@ -41,6 +38,8 @@ function ListProduct(props) {
 ListProduct.defaultProps = {
   divClass:
     "row col-12 col-lg-10 mx-auto m-0 p-0 d-flex justify-content-center justify-content-lg-between",
+  productClass:
+    "col-8 col-sm-6 col-lg-3 p-2 my-2 my-lg-4 product-container d-flex flex-column justify-content-end",
 };
 
 export default ListProduct;

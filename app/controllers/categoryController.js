@@ -23,7 +23,9 @@ exports.getAllCategory = async function (req, res) {
             "categoryId isActive title link description"
           )
         : verify.adminLevel == "admin" || verify.adminLevel == "superadmin"
-        ? await Category.find().select("categoryId isActive title link description")
+        ? await Category.find().select(
+            "categoryId isActive title link description"
+          )
         : await Category.find({ isActive: true }).select(
             "categoryId isActive title link description"
           );
@@ -44,13 +46,15 @@ exports.getCategoryById = async function (req, res) {
     // Find a category by id, then return it to the client.
 
     const category = req.query.title
-      ? await Category.find({ link: req.query.title }).select("_id title description")
+      ? await Category.find({ link: req.query.title }).select(
+          "_id title description"
+        )
       : await Category.findById(req.params.id);
 
     // If there are not category with this id return a 400 response status code with a message.
 
-    if (!category)
-      return res.status(400).send({
+    if (!category || category.length === 0)
+      return res.status(404).send({
         error: true,
         message: "There are not category with the id provided",
       });

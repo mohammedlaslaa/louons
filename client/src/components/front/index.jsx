@@ -5,6 +5,7 @@ import Footer from "./Footer";
 import Home from "./Home";
 import Product from "./Product";
 import Category from "./Category";
+import AllProduct from "./AllProduct";
 import NotFound from "../general/NotFound";
 import { Switch, Route } from "react-router-dom";
 import "../../styles/front/main.css";
@@ -19,6 +20,11 @@ function Front() {
           <Route exact path="/">
             <Home />
           </Route>
+          <Route
+            exact
+            path="/announces"
+            render={() => <AllProduct />}
+          />
           <Route
             exact
             path="/announce/:id"

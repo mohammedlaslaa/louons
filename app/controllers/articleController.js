@@ -44,7 +44,7 @@ exports.getAllArticle = async function (req, res) {
           }).select("_id articleId title")
         : verify.adminLevel
         ? await Article.find().populate("id_category", "title -_id")
-        : await Article.find({ isActive: true }).populate(
+        : await Article.find({ isActive: true }).sort({ date_register: -1 }).populate(
             "id_category",
             "title -_id"
           );

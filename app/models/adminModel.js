@@ -55,12 +55,12 @@ const adminSchema = new mongoose.Schema({
 
   date_register: {
     type: Date,
-    default: new Date(),
+    default: Date.now(),
   },
 
   date_update: {
     type: Date,
-    default: new Date(),
+    default: Date.now(),
   },
 
   date_delete: {
@@ -113,7 +113,7 @@ const schemaValidationAdmin = Joi.object({
     .max(50)
     .required(),
 
-    date_birth: Joi.date().iso(),
+  date_birth: Joi.date().iso(),
 
   email: Joi.string()
     .email({ minDomainSegments: 2 })
@@ -152,7 +152,7 @@ const schemaPutValidationAdmin = Joi.object({
     .min(3)
     .max(50),
 
-    date_birth: Joi.date().iso(),
+  date_birth: Joi.date().iso(),
 
   email: Joi.string()
     .email({ minDomainSegments: 2 })

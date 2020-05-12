@@ -37,12 +37,12 @@ const paymentSchema = new mongoose.Schema({
 
   date_register: {
     type: Date,
-    default: new Date(),
+    default: Date.now(),
   },
 
   date_update: {
     type: Date,
-    default: new Date(),
+    default: Date.now(),
   },
 
   date_delete: {

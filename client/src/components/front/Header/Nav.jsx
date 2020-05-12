@@ -6,7 +6,11 @@ class Nav extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      listOfMenu: ["Annonces", "Catégories", "Déposer une annonce"],
+      listOfMenu: [
+        { link: "announces", title: "Annonces" },
+        { link: "categories", title: "Catégories" },
+        { link: "post_announce", title: "Déposer une annonce" },
+      ],
     };
     // Bind the method to the context of the class.
 

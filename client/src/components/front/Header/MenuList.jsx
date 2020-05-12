@@ -18,7 +18,7 @@ function MenuList(props) {
 
   const menuList = props.menuList.map((currElt, index) => {
     const regex = /\s/gi;
-    if (currElt.toLowerCase() === "catégories") {
+    if (currElt.link === "categories") {
       return (
         <li
           key={index}
@@ -30,7 +30,7 @@ function MenuList(props) {
             setDisplayCategory(false);
           }}
         >
-          {currElt}
+          {currElt.title}
           <CSSTransition
             classNames="submenuelt"
             unmountOnExit
@@ -39,24 +39,31 @@ function MenuList(props) {
           >
             <ul className={`list-unstyled listcategory px-2`}>
               <ListCategoryContext.Consumer>
-                {({ listCat }) => 
+                {({ listCat }) =>
                   listCat.map((e) => {
-                    return(
-                    <Link
-                      key={e._id}
-                      className="submenuelement text-decoration-none"
-                      to={{
-                        pathname: `/categories/${e.link}`,
-                        id: e._id,
-                        title: e.title,
-                        description: e.description,
-                      }}
-                    >
-                      <li className="p-1 my-3 font-italic submenuelement">
-                        {e.title}
-                      </li>
-                    </Link>
-                  )})
+                    return (
+                      <Link
+                        key={e._id}
+                        className="submenuelement text-decoration-none"
+                        to={{
+                          pathname: `/categories/${e.link}`,
+                          id: e._id,
+                          title: e.title,
+                          description: e.description,
+                        }}
+                      >
+                        <li
+                          className="p-1 my-3 font-italic submenuelement"
+                          onClick={() => {
+                            setToggle(false);
+                            setDisplayCategory(false);
+                          }}
+                        >
+                          {e.title}
+                        </li>
+                      </Link>
+                    );
+                  })
                 }
               </ListCategoryContext.Consumer>
             </ul>
@@ -68,10 +75,10 @@ function MenuList(props) {
         <Link
           key={index}
           className="menuelement text-decoration-none"
-          to={`/${currElt.toLowerCase().replace(regex, "_").normalize("NFC")}`}
+          to={`/${currElt.link.replace(regex, "_").normalize("NFC")}`}
         >
           <li key={index} className="p-2 my-3" onClick={() => setToggle(false)}>
-            {currElt}
+            {currElt.title}
           </li>
         </Link>
       );

@@ -54,7 +54,7 @@ function AdminFormLogic(props) {
             setEmail(result.email);
             setPictureDisplay(result.path_picture);
           } else if (result.error) {
-            return props.history.push('/admin/admins');;
+            return props.history.push('/admin/admins');
           }
         });
     }

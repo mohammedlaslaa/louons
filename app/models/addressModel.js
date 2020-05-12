@@ -5,67 +5,67 @@ const addressSchema = new mongoose.Schema({
   id_user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true
+    required: true,
   },
 
   addressId: {
-    type: Number
+    type: Number,
   },
 
   title: {
     type: String,
     required: true,
     minlength: 5,
-    maxlength: 30
+    maxlength: 30,
   },
 
   address: {
     type: String,
     required: true,
     minlength: 10,
-    maxlength: 80
+    maxlength: 80,
   },
 
   zipcode: {
     type: String,
     required: true,
     minlength: 4,
-    maxlength: 5
+    maxlength: 5,
   },
 
   city: {
     type: String,
     required: true,
     minlength: 3,
-    maxlength: 50
+    maxlength: 50,
   },
 
   country: {
     type: String,
     required: true,
     minlength: 3,
-    maxlength: 20
+    maxlength: 20,
   },
 
   date_register: {
     type: Date,
-    default: new Date()
+    default: Date.now(),
   },
 
   date_update: {
     type: Date,
-    default: new Date()
+    default: Date.now(),
   },
 
   date_delete: {
     type: Date,
-    default: null
+    default: null,
   },
 
   isActive: {
     type: Boolean,
-    default: true
-  }
+    default: true,
+  },
 });
 
 // Note that the fields send in the request that are not in this JOI Object will automatically throw a rejected request.
@@ -105,7 +105,7 @@ const schemaValidationAddress = Joi.object({
     .max(20)
     .required(),
 
-  isActive: Joi.boolean()
+  isActive: Joi.boolean(),
 });
 
 // Validator put with the required fields.
@@ -138,7 +138,7 @@ const schemaPutValidationAddress = Joi.object({
     .min(3)
     .max(20),
 
-  isActive: Joi.boolean()
+  isActive: Joi.boolean(),
 });
 
 const Address = mongoose.model("Address", addressSchema);

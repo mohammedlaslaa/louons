@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import ListProduct from "./ListProduct";
 import { useParams } from "react-router-dom";
+import ListProduct from "./ListProduct";
+import NotFound from "../general/NotFound";
 
 function Category(props) {
   // initialize the state listArticle (get the id provided by the link)
@@ -12,8 +13,9 @@ function Category(props) {
     description: props.location.description,
     data: [],
     idLocationUndefined: true,
+    isNotFound: false,
   });
-  console.log(props.location.description);
+
   // get the title of the category
 
   const linkCat = useParams().title;
@@ -31,9 +33,9 @@ function Category(props) {
       }));
     }
 
-    // if the listarticle.id is undefined and idLocationUndefined is settled to true get the id, the title and the description from the api
+    // if the listarticle.id is undefined, and if idLocationUndefined is settled to true, and the isnotfound is settled to false, get the id, the title and the description from the api
 
-    if (!listArticle.id && listArticle.idLocationUndefined) {
+    if (!listArticle.id && listArticle.idLocationUndefined && !listArticle.isNotFound) {
       fetch(
         `http://localhost:5000/louons/api/v1/category/detail?title=${linkCat}`,
         {
@@ -50,13 +52,18 @@ function Category(props) {
               description: result.data[0].description,
               idLocationUndefined: false,
             }));
+          } else {
+            setListarticle((prevState) => ({
+              ...prevState,
+              isNotFound: true,
+            }));
           }
         });
     }
 
-    // if isFetched is settled to false and there are a listarticle.id fetch the article from the api and set the isfetched value to true
+    // if isFetched is settled to false and there are a listarticle.id, and the isnotfound is settled to false, fetch the article from the api and set the isfetched value to true
 
-    if (!listArticle.isFetched && listArticle.id) {
+    if (!listArticle.isFetched && listArticle.id && !listArticle.isNotFound) {
       fetch(
         `http://localhost:5000/louons/api/v1/article/searcharticle/${listArticle.id}`,
         {
@@ -76,14 +83,19 @@ function Category(props) {
     }
   }, [listArticle, props.location, linkCat]);
 
-  return (
+  return listArticle.isNotFound ? (
+    <NotFound />
+  ) : (
     <>
-      <h2 className="col-12 mx-auto text-center">{listArticle.title}</h2>
-      <p className="m-0 mx-auto col-12 text-center font-italic">
+      <h2 className="col-12 m-auto text-center category-title">
+        {listArticle.title}
+      </h2>
+      <p className="col-12 col-lg-10 m-0 m-auto mt-md-3 p-2 text-center text-white font-italic bgcolor3c8ce4">
         {listArticle.description}
       </p>
       <ListProduct
-        divClass="row col-12 col-lg-10 mx-auto m-0 p-0 d-flex"
+        divClass="row col-12 col-lg-10 mx-auto m-0 p-0 d-flex justify-content-center justify-content-md-start"
+        productClass="col-6 col-sm-4 col-lg-3 p-2 my-2 my-lg-4 product-container d-flex flex-column justify-content-end"
         data={listArticle.data}
       />
     </>
