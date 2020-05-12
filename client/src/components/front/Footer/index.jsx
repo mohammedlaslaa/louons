@@ -11,7 +11,7 @@ function Footer() {
     { link: "mylocation", title: "Locations" },
     { link: "myarticle", title: "Mes Articles" },
     { link: "message", title: "Message" },
-    { link: "deconnection", title: "Deconnexion" }
+    { link: "login", title: "Connexion" }
   ]);
 
   const [partSociety] = useState([

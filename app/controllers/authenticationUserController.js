@@ -2,6 +2,17 @@ const Joi = require("@hapi/joi");
 const { User } = require("../models/userModel");
 const bcrypt = require("bcrypt");
 
+exports.getIsAuthUser = async (req, res) => {
+  if(res.locals.owner.adminLevel){
+    return res.status(400).send({ error: true, message: "Authentication failed" });
+  }
+  res.send({
+    error: false,
+    message: "Authentication success",
+    user: res.locals.owner,
+  });
+};
+
 exports.postAuthUser = async (req, res) => {
   try {
     // Validation post user.
@@ -34,9 +45,11 @@ exports.postAuthUser = async (req, res) => {
 
     // If all the checks is passing, send back a token to the res.header("x-auth-token").
 
-    res
+      res
+      .clearCookie("x-auth-token")
       .cookie("x-auth-token", user.generateToken(), {
-        maxAge: 10800000,
+        path: "/",
+        expires: new Date(Date.now() + 3000000),
       })
       .send({ error: false, message: "Authentication success" });
   } catch (e) {

@@ -3,35 +3,37 @@ import Cookies from "js-cookie";
 
 export const AuthContext = createContext();
 
-const AuthProvider = ({ children }) => {
+const AuthProvider = (props) => {
   const [isAuth, setIsAuth] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [cookieToken, setCookieToken] = useState(Cookies.get("x-auth-token"));
   const [dataUser, setDataUser] = useState({});
+  const [linkAuth, setLinkAuth] = useState("");
 
   // if the cookie token is existing fetch to the api to ensure that the client has a valid cookie token else set the isAuth value to false.
 
   useEffect(() => {
-    if (cookieToken) {
-      fetch("http://localhost:5000/louons/api/v1/authentificationadmin", {
+    if (cookieToken && linkAuth) {
+      fetch(linkAuth, {
         credentials: "include", // ensure that the header can include cookie.
       })
         .then((res) => res.json())
         .then((result) => {
           if (!result.error) {
             setIsAuth(true);
-            setIsLoading(false);
-            setDataUser(result.user)
+            setDataUser(result.user);
           } else if (result.error) {
+            
             setIsAuth(false);
-            setIsLoading(false);
+            setCookieToken('')
           }
+          setIsLoading(false);
         });
-    } else {
+    } else if (!cookieToken) {
       setIsAuth(false);
       setIsLoading(false);
     }
-  }, [cookieToken]);
+  }, [cookieToken, linkAuth]);
 
   // return the authcontext provider component
 
@@ -44,10 +46,12 @@ const AuthProvider = ({ children }) => {
         isLoading,
         setIsLoading,
         setCookieToken,
-        dataUser
+        dataUser,
+        setLinkAuth,
+        linkAuth
       }}
     >
-      {children}
+      {props.children}
     </AuthContext.Provider>
   );
 };

@@ -1,30 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
+import { AuthContext } from "../../../context/AuthContext";
+
 
 function PartOfFooter(props) {
+  const { isAuth } = useContext(
+    AuthContext
+  );
+
   // map over the dataToDisplay prop in order to display them in list
 
-  const list = props.dataToDisplay.map((elt, index) => (
-    <Link
-      key={elt._id || index}
-      className="text-white"
-      to={{
-        pathname: `${props.pathlink}/${elt.link}`,
-        id: elt._id || index,
-        title: elt.title,
-        description: elt.description,
-      }}
-    >
-      <li
-        key={`title${index}`}
-        className="footerli p-2"
-        onClick={() => setIsDisplay(false)}
+  const list = props.dataToDisplay.map((elt, index) => {
+    if(elt.link ==="login" && isAuth){
+      return (
+        <Link
+          key={elt._id || index}
+          className="text-white"
+          to={{
+            pathname: `${props.pathlink}/logout`,
+            id: elt._id || index
+          }}
+        >
+          <li
+            key={`title${index}`}
+            className="footerli p-2"
+            onClick={() => setIsDisplay(false)}
+          >
+            {"Deconnection"}
+          </li>
+        </Link>
+      );
+    }
+    return (
+      <Link
+        key={elt._id || index}
+        className="text-white"
+        to={{
+          pathname: `${props.pathlink}/${elt.link}`,
+          id: elt._id || index,
+          title: elt.title,
+          description: elt.description,
+        }}
       >
-        {elt.title}
-      </li>
-    </Link>
-  ));
+        <li
+          key={`title${index}`}
+          className="footerli p-2"
+          onClick={() => setIsDisplay(false)}
+        >
+          {elt.title}
+        </li>
+      </Link>
+    );
+  });
 
   const [isDisplay, setIsDisplay] = useState(false);
   const classDisplay = isDisplay ? "d-block" : "d-none d-md-block";

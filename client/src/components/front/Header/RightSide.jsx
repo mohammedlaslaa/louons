@@ -29,7 +29,7 @@ function RightSide() {
       <Link key="rightside2" className="text-decoration-none" to="/message">
         <i className="mx-1 mx-sm-2 ri-mail-fill icon-font22 color3c8ce4"></i>
       </Link>
-      <Link key="rightside1" className="text-decoration-none" to="/profil">
+      <Link key="rightside1" className="text-decoration-none" to="/my_account">
         <i className="mx-1 mx-sm-2 ri-user-3-fill icon-font22 color3c8ce4"></i>
       </Link>
 

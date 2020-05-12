@@ -1,7 +1,7 @@
 const express = require("express");
 const user = require("../routes/userRoute");
-const authUser = require("../routes/authentificationUserRoute");
-const authAdmin = require("../routes/authentificationAdminRoute");
+const authUser = require("../routes/authenticationUserRoute");
+const authAdmin = require("../routes/authenticationAdminRoute");
 const admin = require("../routes/adminRoute");
 const address = require("../routes/addressRoute");
 const category = require("../routes/categoryRoute");
@@ -26,9 +26,9 @@ module.exports = function (app) {
   // Secure Express apps by setting various HTTP headers.
   app.use(helmet());
   // Authentification User route.
-  app.use("/louons/api/v1/authentificationuser", authUser);
+  app.use("/louons/api/v1/authenticationuser", authUser);
   // Authentification Admin route.
-  app.use("/louons/api/v1/authentificationadmin", authAdmin);
+  app.use("/louons/api/v1/authenticationadmin", authAdmin);
   // User routes.
   app.use("/louons/api/v1/user", user);
   // Admin routes.

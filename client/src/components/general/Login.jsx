@@ -2,11 +2,11 @@ import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import Cookies from "js-cookie";
 
-function Login({ history }) {
+function Login({ linkapi, redirect, history, location }) {
   // Display the login page with the login form
   // initialize state and set them when the input email and password change
 
-  const { isAuth, setIsAuth, setIsLoading, setCookieToken } = useContext(
+  const { isAuth, setIsAuth, setIsLoading, cookieToken, setCookieToken } = useContext(
     AuthContext
   );
   const [errorMessage, setErrorMessage] = useState(false);
@@ -16,8 +16,8 @@ function Login({ history }) {
   // automatic redirection, when the user try to display the login page if he is logged in
 
   useEffect(() => {
-    if (isAuth) {
-      history.replace("/admin");
+    if (isAuth || cookieToken) {
+      history.replace(redirect);
     }
   });
 
@@ -27,7 +27,7 @@ function Login({ history }) {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:5000/louons/api/v1/authentificationadmin", {
+    fetch(linkapi, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -41,7 +41,7 @@ function Login({ history }) {
           setIsAuth(true);
           setIsLoading(false);
           setCookieToken(Cookies.get("x-auth-token"));
-          history.replace("/admin");
+          history.replace(redirect);
         } else if (result.error) {
           setErrorMessage(true);
         }
@@ -50,18 +50,21 @@ function Login({ history }) {
 
   return (
     <>
-      <header className="header row d-flex align-items-center">
-        <div className="col-12 col-md-6 text-center p-3 order-md-1">
-          <img
-            src="../assets/img/louons.png"
-            alt="logo_louons"
-            className="img-fluid logoimg"
-          />
-        </div>
-        <div className="col-12 col-md-6 text-center p-3">
-          <h1 className="titlelogin color3c8ce4">Connexion au Panel Admin</h1>
-        </div>
-      </header>
+      {location.pathname === "/adminlogin" && (
+        <header className="header row d-flex align-items-center">
+          <div className="col-12 col-md-6 text-center p-3 order-md-1">
+            <img
+              src="../assets/img/louons.png"
+              alt="logo_louons"
+              className="img-fluid logoimg"
+            />
+          </div>
+          <div className="col-12 col-md-6 text-center p-3">
+            <h1 className="titlelogin color3c8ce4">Connexion au Panel Admin</h1>
+          </div>
+        </header>
+      )}
+
       <main className="row flex-grow-1">
         <form
           className="mt-5 form-group mx-auto d-flex flex-column col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 align-items-center"

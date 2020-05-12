@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const isemptybody = require("../middleware/isEmptyBody")
 const jwtverify = require("../middleware/jwtVerify");
-const authAdminController = require("../controllers/authentificationAdminController");
+const authAdminController = require("../controllers/authenticationAdminController");
 
 // Admin authentification, if everything is going well, send back token.
 
