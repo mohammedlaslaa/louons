@@ -103,3 +103,9 @@ i[class^="ri"] {
   pointer-events: none;
   color: #aaa;
 }
+
+/* loading message */
+
+.message-loading{
+  max-height: 3.5rem;
+}

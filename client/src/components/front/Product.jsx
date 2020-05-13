@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import NotFound from "../general/NotFound";
-import LiForm from "../admin/Form/LiForm";
+import LiForm from "../general/Form/LiForm";
 import moment from "moment";
 
 function Product() {

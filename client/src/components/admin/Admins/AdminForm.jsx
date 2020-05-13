@@ -1,8 +1,8 @@
 import React from "react";
 import moment from "moment";
 import Form from "../Form/Form";
-import DivInputForm from "../Form/DivInputForm";
-import InputFileForm from "../Form/InputFileForm";
+import DivInputForm from "../../general/Form/DivInputForm";
+import InputFileForm from "../../general/Form/InputFileForm";
 
 function AdminForm(props) {
   return (
@@ -52,22 +52,24 @@ function AdminForm(props) {
       <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100">
         <label className="col-9 col-sm-4 mt-2">Titre :</label>
         <div className="col-12 col-sm-6 col-md-5">
-          <label className="col-6 col-sm-4 mt-2">
+          <label className="col-6 col-sm-5 mt-2">
             Mr
             <input
               type="radio"
               name="gender"
+              className="mx-1"
               checked={props.gender === "mr"}
               id="mr"
               key="mr"
               onChange={() => props.setGender("mr")}
             />
           </label>
-          <label className="col-6 col-sm-4 mt-2">
+          <label className="col-6 col-sm-5 mt-2">
             Mrs
             <input
               type="radio"
               name="gender"
+              className="mx-1"
               id="mrs"
               key="mrs"
               checked={props.gender === "mrs"}
@@ -119,7 +121,7 @@ function AdminForm(props) {
         errorcondition={props.errorFirstName && props.isSubmit}
         errormessage="Le prénom ne peut pas contenir de chiffre ou de charactère spécial"
       />
-      <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100">
+      <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100 mx-auto">
         <label className="col-9 col-sm-4 mt-2">Date de naissance :</label>
         <input
           type="date"

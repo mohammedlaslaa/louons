@@ -1,9 +1,9 @@
 import React from "react";
-import Form from "../Form/Form";
-import DivInputForm from "../Form/DivInputForm";
+import Form from "../../general/Form/Form";
+import DivInputForm from "../../general/Form/DivInputForm";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
-import TextAreaInputForm from "../Form/TextAreaInputForm";
-import InputFileForm from "../Form/InputFileForm";
+import TextAreaInputForm from "../../general/Form/TextAreaInputForm";
+import InputFileForm from "../../general/Form/InputFileForm";
 
 function DeliveryForm(props) {
   return (

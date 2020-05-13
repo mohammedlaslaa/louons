@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import Cookies from "js-cookie";
 
@@ -6,9 +7,13 @@ function Login({ linkapi, redirect, history, location }) {
   // Display the login page with the login form
   // initialize state and set them when the input email and password change
 
-  const { isAuth, setIsAuth, setIsLoading, cookieToken, setCookieToken } = useContext(
-    AuthContext
-  );
+  const {
+    isAuth,
+    setIsAuth,
+    setIsLoading,
+    cookieToken,
+    setCookieToken,
+  } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState(false);
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
@@ -97,6 +102,14 @@ function Login({ linkapi, redirect, history, location }) {
               }}
             />
           </label>
+          {location.pathname === "/login" && (
+            <Link to="/register">
+              <p className="text-danger mb-2 notregistered-login">
+                Pas encore de compte ? Inscrivez-vous{" "}
+              </p>
+            </Link>
+          )}
+
           <input
             className="bgcolor3c8ce4 text-white btn btnlogin"
             type="submit"

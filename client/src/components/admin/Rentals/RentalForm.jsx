@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Form from "../Form/Form";
-import AutoCompleteField from "../../admin/Form/AutoCompleteField";
+import Form from "../../general/Form/Form";
+import AutoCompleteField from "../../general/Form/AutoCompleteField";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
-import DivInputForm from "../Form/DivInputForm";
-import LiForm from "../Form/LiForm";
+import DivInputForm from "../../general/Form/DivInputForm";
+import LiForm from "../../general/Form/LiForm";
 import moment from "moment";
 
 function RentalForm(props) {

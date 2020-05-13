@@ -11,11 +11,28 @@ const crypto = require("crypto");
 
 exports.getSelf = async (req, res) => {
   try {
-    // The res.locals.owner comes from the jwtverify middleware (It ensure that the client is an existing user with his token). It return the user.
+    jwt.verify(
+      req.cookies["x-auth-token"],
+      process.env.PRIVATE_KEY,
+      async function (err, decode) {
+        if (err)
+          // If the verify fail, send a 401 error.
+          return res.status(401).send({ error: true, message: err.message });
 
-    // Then return this res.lacals.owner to the client.
+        // Check if this user still exist
+        let user = await User.findById(decode.id).select("-password -isActive -date_delete -date_update");
 
-    return res.send(res.locals.owner);
+        if (user) {
+          // If the client is an existing user send this to the res.locals.
+          return res.send({ error: false, data: user });
+        } else {
+          // If the client is not an existing admin send a 404 error with a message.
+          return res
+            .status(404)
+            .send({ error: true, message: "JWT ID authentication failed" });
+        }
+      }
+    );
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -315,13 +332,13 @@ exports.putUserById = async (req, res) => {
       // If the request contains a password, hash this.
 
       if (objdata.password) {
-        const passWordData = objdata.password
+        const passWordData = objdata.password;
         objdata.password = await bcrypt.hash(
           passWordData,
           parseInt(process.env.SALT)
         );
       }
-      
+
       await User.findByIdAndUpdate(req.params.id, {
         $set: objdata,
         date_update: Date.now(),
@@ -332,7 +349,7 @@ exports.putUserById = async (req, res) => {
       return res.send({
         error: false,
         message: "User modified with success",
-        picture : user.path_picture
+        picture: objdata.path_picture,
       });
     }
   } catch (e) {

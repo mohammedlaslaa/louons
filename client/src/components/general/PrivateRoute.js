@@ -27,7 +27,7 @@ function PrivateRoute({ linkAuth, component: Component, ...rest }) {
         {...rest}
         render={() => {
           return (
-            <p className="text-white text-center bg-success p-3">Loading ...</p>
+            <p className="text-white message-loading text-center bg-success p-3 w-100">Loading ...</p>
           );
         }}
       />

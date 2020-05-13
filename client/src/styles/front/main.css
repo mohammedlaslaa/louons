@@ -56,6 +56,22 @@ h2 {
   font-size: 1.5rem;
 }
 
+/* login front */
+
+.notregistered-login{
+  font-size: 0.75rem;
+}
+
+/* my account */
+
+.title-profil{
+  font-size: 1.3rem;
+}
+
+.container-myaccount{
+  min-height: 20rem;
+}
+
 @media screen and (min-width: 576px) {
 
   .product-container,
@@ -85,6 +101,10 @@ h2 {
   .product-container,
   .listproduct-btn {
     font-size: 1rem;
+  }
+
+  .container-myaccount{
+    min-height: 30rem;
   }
 }
 

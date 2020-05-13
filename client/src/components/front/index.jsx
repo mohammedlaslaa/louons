@@ -9,7 +9,7 @@ import AllProduct from "./AllProduct";
 import NotFound from "../general/NotFound";
 import Login from "../general/Login";
 import Logout from "../general/Logout";
-import Profil from "./Profil";
+import Profil from "./Profil/Profil";
 import PrivateRoute from "../general/PrivateRoute";
 import { Switch, Route } from "react-router-dom";
 import "../../styles/front/main.css";

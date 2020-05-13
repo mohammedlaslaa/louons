@@ -16,7 +16,7 @@ const helmet = require("helmet");
 
 module.exports = function (app) {
   // Morgan send many informations of the request status in a dev environment.
-  process.env.NODE_ENV == "dev" ? app.use(morgan("tiny")) : "";
+  process.env.NODE_ENV == "dev" && app.use(morgan("tiny"));
   // Only parse JSON incoming requests.
   app.use(express.json());
   // Get the cookie parser.

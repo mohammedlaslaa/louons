@@ -25,7 +25,7 @@ function DeliveryFormLogic(props) {
   const [method, setMethod] = useState("POST");
   const dataform = new FormData();
   const [idParams] = useState(useParams().id);
-  const regexp = new RegExp(/^[\w\d\séùàüäîçïèêôö]*$/);
+  const regexp = new RegExp(/^[\w\d\séùàüäîçïèêôö/-_]*$/);
 
   useEffect(() => {
     // initialize the number of error form

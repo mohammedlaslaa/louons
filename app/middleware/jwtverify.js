@@ -11,7 +11,7 @@ module.exports = function(req, res, next) {
       let admin = true;
       if (!err) {
         // If the verify not fail, check if the client is an existing admin.
-        admin = await Admin.findById(decode.id).select("adminId lastName firstName adminLevel path_picture");;
+        admin = await Admin.findById(decode.id).select("adminId lastName firstName adminLevel path_picture");
       }
       if (
         err ||

@@ -1,8 +1,8 @@
 import React from "react";
 import Form from "../Form/Form";
-import DivInputForm from "../../admin/Form/DivInputForm";
+import DivInputForm from "../../general/Form/DivInputForm";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
-import AutoCompleteField from "../../admin/Form/AutoCompleteField";
+import AutoCompleteField from "../../general/Form/AutoCompleteField";
 
 function AddressForm(props) {
   return (

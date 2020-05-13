@@ -1,10 +1,10 @@
 import React from "react";
-import DivInputForm from "../../admin/Form/DivInputForm";
+import DivInputForm from "../../general/Form/DivInputForm";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
-import AutoCompleteField from "../Form/AutoCompleteField";
-import TextAreaInputForm from "../Form/TextAreaInputForm";
-import InputFileForm from "../Form/InputFileForm";
-import Form from "../Form/Form";
+import AutoCompleteField from "../../general/Form/AutoCompleteField";
+import TextAreaInputForm from "../../general/Form/TextAreaInputForm";
+import InputFileForm from "../../general/Form/InputFileForm";
+import Form from "../../general/Form/Form";
 
 function ArticleForm(props) {
 

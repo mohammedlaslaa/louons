@@ -2,8 +2,8 @@ import React, { useContext } from "react";
 import moment from "moment";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
 import { PopupAddContext } from "../../../context/PopupAddContext";
-import DivInputForm from "../../admin/Form/DivInputForm";
-import Form from "../Form/Form";
+import DivInputForm from "../../general/Form/DivInputForm";
+import Form from "../../general/Form/Form";
 
 function CategoryForm(props) {
   const PopupContext = useContext(PopupAddContext);
