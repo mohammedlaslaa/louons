@@ -3,12 +3,12 @@ import React from "react";
 function DivInputForm(props) {
   return (
     <>
-      {props.errorcondition && (
-        <span className="text-danger errormessage text-center mx-auto">
-          {props.errormessage}
-        </span>
-      )}
       <div className={props.containerClass}>
+        {props.errorcondition && (
+          <span className="text-danger w-100 errormessage text-center mx-auto p-2">
+            {props.errormessage}
+          </span>
+        )}
         <label className={props.labelClass} htmlFor={props.name}>
           {props.label}
         </label>
@@ -37,6 +37,7 @@ DivInputForm.defaultProps = {
   htmlFor: "",
   min: "",
   max: "",
+  errorCondition: false,
 };
 
 export default DivInputForm;

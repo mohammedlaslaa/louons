@@ -3,7 +3,6 @@ const router = express.Router();
 const objectvalid = require("../middleware/objectIdValid");
 const jwtverify = require("../middleware/jwtVerify");
 const jwtSuperAdmin = require("../middleware/jwtSuperAdmin");
-const isemptybody = require("../middleware/isEmptyBody");
 const ifExistAdminUser = require("../middleware/ifExistAdminUser");
 const userController = require("../controllers/userController");
 
@@ -11,7 +10,7 @@ const userController = require("../controllers/userController");
 
 router.get("/me", ifExistAdminUser, userController.getSelf);
 
-router.put("/me", isemptybody, userController.putSelf);
+router.put("/me", userController.putSelf);
 
 // User inscription
 

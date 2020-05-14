@@ -111,7 +111,7 @@ function ArticleForm(props) {
       <InputFileForm
         errorFile={props.errorFile}
         isSubmit={props.isSubmit}
-        setPicture={props.setPicture}
+        setPicture={(e) => props.setPicture(e.target.files)}
         errorMessage="L'article doit contenir 3 images sous le format png ou jpg/jpeg"
         isMultiple={true}
       />

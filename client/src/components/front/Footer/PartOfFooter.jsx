@@ -27,7 +27,7 @@ function PartOfFooter(props) {
             className="footerli p-2"
             onClick={() => setIsDisplay(false)}
           >
-            {"Deconnection"}
+            {"Déconnexion"}
           </li>
         </Link>
       );

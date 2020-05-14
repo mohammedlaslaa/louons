@@ -1,5 +1,5 @@
 import React from "react";
-import Form from "../Form/Form";
+import Form from "../../general/Form/Form";
 import DivInputForm from "../../general/Form/DivInputForm";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
 import AutoCompleteField from "../../general/Form/AutoCompleteField";

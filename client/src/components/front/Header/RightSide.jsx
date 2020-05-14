@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Bar from "../../general/Bar";
 import SearchBar from "../../general/SearchBar";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../../context/AuthContext";
 
 function RightSide() {
   const [isShownSearchBar, setIsShownSearchBar] = useState(false);
+  const { isAuth } = useContext(AuthContext);
 
   // set the isshown searchbar to false when the window is resizing
   const setIsShown = () => {
@@ -32,7 +34,11 @@ function RightSide() {
       <Link key="rightside1" className="text-decoration-none" to="/my_account">
         <i className="mx-1 mx-sm-2 ri-user-3-fill icon-font22 color3c8ce4"></i>
       </Link>
-
+      {isAuth && (
+        <Link key="rightside3" className="text-decoration-none" to="/logout">
+          <i className="mx-1 mx-sm-2 ri-logout-circle-r-line icon-font22 text-danger"></i>
+        </Link>
+      )}
       <SearchBar
         specificclassname={"position-absolute searchbar"}
         isShown={isShownSearchBar}

@@ -1,80 +1,67 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import moment from "moment";
 import DivInputForm from "../../general/Form/DivInputForm";
 
-function Informations() {
-  const [dataCurrentUser, setDataCurrentUser] = useState({
-    method: "GET",
-    data: {
-      date_birth: "",
-    },
-    isFetched: false,
-    isDisabledForm: true,
-  });
+function Informations(props) {
+  const { data, isDisabledForm, isLoading } = props.dataCurrentUser;
 
-  useEffect(() => {
-    if (!dataCurrentUser.isFetched) {
-      fetch("http://localhost:5000/louons/api/v1/user/me", {
-        method: dataCurrentUser.method,
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          if (!result.error) {
-            setDataCurrentUser((prevState) => ({
-              ...prevState,
-              data: result.data,
-              isFetched: true,
-            }));
-          }
-        });
-    }
-  }, [dataCurrentUser]);
-
-  const handleChangeForm = (e, arg = "") => {
-    const { value, name } = e.target;
-    const val = arg === "" ? value : arg;
-    setDataCurrentUser((prevState) => ({
-      ...prevState,
-      data: { ...data, [name]: val },
-    }));
-  };
-
-  const { data, isDisabledForm } = dataCurrentUser;
   const isDisabled = isDisabledForm ? "disabled" : "";
 
-  return (
+  return isLoading ? (
+    <p className="p-2 text-white bg-success">Chargement...</p>
+  ) : (
     <>
       <h3 className="title-profil text-center mb-4">Mes informations</h3>
-      <form className="row form-group mx-auto" autoComplete="off">
-        <div className="row my-3 d-flex justify-content-center ">
-          {data.path_picture ? (
-            <div className="col-12 m-0 p-0 row d-flex justify-content-between">
-              <div className="col-4 col-sm-2 p-2 mx-auto">
-                <img
-                  src={`http://localhost:5000/uploads/img/${data.path_picture}`}
-                  className="w-100 rounded-circle"
-                  alt="avatar_image_profil"
-                />
-              </div>
-            </div>
-          ) : (
-            <div className="col-12 m-0 p-0 row d-flex justify-content-between">
-              <div className="col-4 col-sm-2 p-2 mx-auto">
-                <img
-                  src={`http://localhost:5000/uploads/img/default-avatar.png`}
-                  className="w-100 rounded-circle"
-                  alt="avatar_image_profil"
-                />
-              </div>
-            </div>
+      {props.dataCurrentUser.isSuccess ? (
+        <p className="bg-success text-white text-center p-2 w-100">
+          Information mis à jour avec succés
+        </p>
+      ) : props.dataCurrentUser.isFailed ? (
+        <p className="bg-danger text-white text-center p-2 w-100">
+          Erreur serveur ou formulaire
+        </p>
+      ) : (
+        true
+      )}
+      <form
+        className="row form-group mx-auto"
+        autoComplete="off"
+        onSubmit={(e) => props.handleSubmit(e)}
+      >
+        {props.dataCurrentUser.errorPicture &&
+          props.dataCurrentUser.isSubmit && (
+            <span className="text-danger errormessage text-center mx-auto">
+              Seule une image sous le format png ou jpg/jpeg est accepté
+            </span>
           )}
-          <label className="col-12 col-sm-3 col-md-4 col-lg-3 mt-2 text-center">
-            Titre :
-          </label>
+        <div className="col-12 m-0 p-0 row d-flex justify-content-between">
+          <div className="col-4 col-sm-2 p-2 mx-auto d-flex align-items-center">
+            <img
+              src={
+                data.path_picture
+                  ? `http://localhost:5000/uploads/img/${data.path_picture}`
+                  : `http://localhost:5000/uploads/img/default-avatar.png`
+              }
+              className="w-100 rounded-circle"
+              alt="avatar_image_profil"
+            />
+            {!isDisabled && (
+              <div className="file-picture-profil">
+                <i className="ri-edit-line ri-2x text-white"></i>
+                <span className="input-profil">
+                  <input
+                    type="file"
+                    name="picture"
+                    multiple={true}
+                    onChange={(e) => props.handleChangeForm(e)}
+                  />
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="row my-3 col-12">
+          <label className="col-12 col-sm-4 mt-2 text-center">Titre :</label>
           <label className="col-6 col-sm-4 col-lg-2 mt-2 text-center">
             Mr
             <input
@@ -85,7 +72,7 @@ function Informations() {
               checked={data.gender === "mr"}
               id="mr"
               key="mr"
-              onChange={(e) => handleChangeForm(e, "mr")}
+              onChange={(e) => props.handleChangeForm(e, "mr")}
             />
           </label>
           <label className="col-6 col-sm-4 col-lg-2 mt-2 text-center">
@@ -98,70 +85,123 @@ function Informations() {
               id="mrs"
               key="mrs"
               checked={data.gender === "mrs"}
-              onChange={(e) => handleChangeForm(e, "mrs")}
+              onChange={(e) => props.handleChangeForm(e, "mrs")}
             />
           </label>
         </div>
         <DivInputForm
-          label={"Nom :"}
+          label="Nom :"
           containerClass="row mr-2 col-12 col-xl-6 my-2 d-flex flex-row justify-content-center justify-content-sm-between align-items-center"
-          labelClass="text-center m-0"
+          labelClass="text-center my-2 m-md-0"
           inputClass="form-control col-12 col-sm-6 col-md-7 text-center"
           name="lastName"
           type="text"
+          errorcondition={props.dataCurrentUser.errorLastName}
           disabled={isDisabled}
           value={"lastName" in data && data.lastName}
           change={(e) => {
-            handleChangeForm(e);
+            props.handleChangeForm(e);
           }}
-          errormessage="Le nom ne peut pas contenir de chiffre ou de charactère spécial"
+          errormessage="Le nom ne peut pas contenir de chiffre ou de caractères spéciaux et ne doit pas être vide"
         />
         <DivInputForm
           label={"Prénom :"}
           containerClass="row col-12 col-xl-6 my-2 d-flex flex-row justify-content-center justify-content-sm-between align-items-center"
-          labelClass="text-center m-0"
+          labelClass="text-center my-2 m-md-0"
           inputClass="form-control col-12 col-sm-6 col-md-7 text-center"
           name="firstName"
           type="text"
+          errorcondition={props.dataCurrentUser.errorFirstName}
           disabled={isDisabled}
           value={"firstName" in data && data.firstName}
           change={(e) => {
-            handleChangeForm(e);
+            props.handleChangeForm(e);
           }}
-          errormessage="Le nom ne peut pas contenir de chiffre ou de charactère spécial"
+          errormessage="Le prénom ne peut pas contenir de chiffre ou de caractères spéciaux et ne doit pas être vide"
         />
         <DivInputForm
           label={"Email :"}
           containerClass="row mr-2 col-12 col-xl-6 my-2 d-flex flex-row justify-content-center justify-content-sm-between align-items-center"
-          labelClass="text-center m-0"
+          labelClass="text-center my-2 m-md-0"
           inputClass="form-control col-12 col-sm-6 col-md-9 text-center"
           name="email"
           type="text"
           disabled={isDisabled}
+          errorcondition={props.dataCurrentUser.errorMail}
           value={"email" in data && data.email}
           change={(e) => {
-            handleChangeForm(e);
+            props.handleChangeForm(e);
           }}
-          errormessage="Le nom ne peut pas contenir de chiffre ou de charactère spécial"
+          errormessage="L'email doit être au format johndoe@louons.fr"
         />
         <DivInputForm
           label={"Date de naissance :"}
           containerClass="row col-12 col-xl-6 my-2 d-flex flex-row justify-content-center justify-content-sm-between align-items-center"
-          labelClass="text-center m-0"
+          labelClass="text-center my-2 m-md-0"
           inputClass="form-control col-12 col-sm-6 p-0 col-md-5 text-center"
           name="date_birth"
           type="date"
           min="1940-01-01"
           max="2010-01-01"
+          errormessage="Date incorrect"
+          errorcondition={props.dataCurrentUser.errorDate}
           disabled={isDisabled}
           value={
             data.date_birth && moment(data.date_birth).format("YYYY-MM-DD")
           }
           change={(e) => {
-            handleChangeForm(e);
+            props.handleChangeForm(e);
           }}
-          errormessage="Le nom ne peut pas contenir de chiffre ou de charactère spécial"
         />
+        <div className="row mr-2 col-12 col-xl-6 my-2 d-flex flex-row justify-content-center justify-content-sm-between align-items-center">
+          <label className="text-center my-2 m-md-0">Newsletter :</label>
+          <select
+            name="isSubscribe"
+            id="category"
+            disabled={isDisabled}
+            className="form-control col-12 col-sm-6 p-0 col-md-5 text-center"
+            value={data.isSubscribe}
+            onChange={(e) => props.handleChangeForm(e)}
+          >
+            <option value={"true"}>Oui</option>
+            <option value={"false"}>Non</option>
+          </select>
+        </div>
+        <DivInputForm
+          label={"Date d'inscription :"}
+          containerClass="row col-12 col-xl-6 my-2 d-flex flex-row justify-content-center justify-content-sm-between align-items-center"
+          labelClass="text-center my-2 m-md-0"
+          inputClass="form-control col-12 col-sm-6 p-0 col-md-5 text-center"
+          name="date_register"
+          type="date"
+          min="1940-01-01"
+          max="2010-01-01"
+          disabled="disabled"
+          value={
+            data.date_register &&
+            moment(data.date_register).format("YYYY-MM-DD")
+          }
+        />
+        {isDisabled ? (
+          <button
+            className="mx-auto my-3 btn btn-info"
+            onClick={() =>
+              props.setDataCurrentUser((prevState) => ({
+                ...prevState,
+                isDisabledForm: false,
+                method: "PUT",
+              }))
+            }
+          >
+            Modifier
+          </button>
+        ) : (
+          <input
+            type="submit"
+            className="mx-auto my-3 btn btn-info"
+            value="Envoyer"
+          />
+        )}
       </form>
     </>
   );

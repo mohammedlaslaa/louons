@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
 import { ListCategoryProvider } from "../../context/ListCategoryContext";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -13,8 +13,15 @@ import Profil from "./Profil/Profil";
 import PrivateRoute from "../general/PrivateRoute";
 import { Switch, Route } from "react-router-dom";
 import "../../styles/front/main.css";
+import { AuthContext } from "../../context/AuthContext";
 
 function Front() {
+  const { setLinkAuth } = useContext(AuthContext);
+  
+  useEffect(() => {
+    setLinkAuth("http://localhost:5000/louons/api/v1/authenticationuser");
+  }, [setLinkAuth]);
+
   return (
     // Provide the category list to the app or to the component that need it
     <ListCategoryProvider>

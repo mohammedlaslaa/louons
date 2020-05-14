@@ -1,6 +1,6 @@
 import React from "react";
 import { Switch, Route, Link } from "react-router-dom";
-import Informations from "./Informations";
+import InformationsLogic from "./InformationsLogic";
 import MyAnnounces from "./MyAnnounces";
 import MyAddresses from "./MyAddresses";
 import MyRentals from "./MyRentals";
@@ -24,12 +24,15 @@ function Profil() {
             <Link to="/my_account/rental" className="text-dark">
               <li className="p-2 text-center">Mes locations</li>
             </Link>
+            <Link to="/logout" className="text-dark">
+              <li className="p-2 text-center text-danger">Déconnexion</li>
+            </Link>
           </ul>
         </div>
         <div className="col-12 col-md-8 col-lg-9 container-myaccount">
             <Switch>
               <Route exact path="/my_account">
-                <Informations />
+                <InformationsLogic />
               </Route>
               <Route exact path="/my_account/announces">
                 <MyAnnounces />

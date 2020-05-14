@@ -45,7 +45,7 @@ function UserForm(props) {
         errorPicture={props.errorPicture}
         isSubmit={props.isSubmit}
         reset={props.picture}
-        setPicture={props.setPicture}
+        setPicture={(e) => props.setPicture(e.target.files)}
         label={"Photo de profil"}
         errorMessage="Seule une image sous le format png ou jpg/jpeg est accepté"
         isMultiple={true}
@@ -86,7 +86,7 @@ function UserForm(props) {
           props.handleName(e);
         }}
         errorcondition={props.errorLastName && props.isSubmit}
-        errormessage="Le nom ne peut pas contenir de chiffre ou de charactère spécial"
+        errormessage="Le nom ne peut pas contenir de chiffre ou de caractères spéciaux"
       />
       <DivInputForm
         label={"Prénom :"}
@@ -97,7 +97,7 @@ function UserForm(props) {
           props.handleName(e);
         }}
         errorcondition={props.errorFirstName && props.isSubmit}
-        errormessage="Le prénom ne peut pas contenir de chiffre ou de charactère spécial"
+        errormessage="Le prénom ne peut pas contenir de chiffre ou de caractères spéciaux"
       />
       <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100 mx-auto">
         <label className="col-9 col-sm-4 mt-2">Date de naissance :</label>

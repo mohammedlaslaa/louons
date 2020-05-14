@@ -12,13 +12,11 @@ function InputFileForm(props) {
         <label className="col-9 col-sm-4 mt-2">{props.label} :</label>
         <input
           type="file"
-          name="file"
+          name={props.name}
           reset={props.reset}
           multiple={props.isMultiple}
           className="form-control-file col-9 col-sm-6 col-md-5"
-          onChange={(e) => {
-            props.setPicture(e.target.files);
-          }}
+          onChange={props.setPicture}
         />
       </div>
     </>
@@ -27,6 +25,7 @@ function InputFileForm(props) {
 
 InputFileForm.defaultProps = {
   label: "Images",
+  anme : "file"
 };
 
 export default InputFileForm;

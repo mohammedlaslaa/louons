@@ -86,7 +86,7 @@ function DeliveryForm(props) {
       <InputFileForm
         errorFile={props.errorPicture}
         isSubmit={props.isSubmit}
-        setPicture={props.setPicture}
+        setPicture={(e) => props.setPicture(e.target.files)}
         errorMessage="Une livraison doit contenir au moins une image sous le format png ou jpg/jpeg"
         isMultiple={false}
       />

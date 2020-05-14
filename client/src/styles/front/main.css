@@ -42,34 +42,61 @@ h2 {
   max-height: 20rem
 }
 
-.list-date{
+.list-date {
   font-size: 0.85rem;
 }
 
-.number-day{
+.number-day {
   font-size: 1.4rem;
 }
 
 /* category */
 
-.category-title{
+.category-title {
   font-size: 1.5rem;
 }
 
 /* login front */
 
-.notregistered-login{
+.notregistered-login {
   font-size: 0.75rem;
 }
 
 /* my account */
 
-.title-profil{
+.title-profil {
   font-size: 1.3rem;
 }
 
-.container-myaccount{
+.container-myaccount {
   min-height: 20rem;
+}
+
+.file-picture-profil {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  text-align: center;
+}
+
+.input-profil {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  z-index: 0;
+  opacity: 0;
+}
+
+input[type=file]:hover {
+  cursor: pointer;
+}
+
+select {
+  text-align: center;
+  text-align-last: center;
+  -moz-text-align-last: center;
 }
 
 @media screen and (min-width: 576px) {
@@ -103,7 +130,7 @@ h2 {
     font-size: 1rem;
   }
 
-  .container-myaccount{
+  .container-myaccount {
     min-height: 30rem;
   }
 }
