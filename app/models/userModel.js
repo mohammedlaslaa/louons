@@ -159,6 +159,12 @@ const schemaPutValidationUser = Joi.object({
     )
   ),
 
+  testPassword: Joi.string().pattern(
+    new RegExp(
+      /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[#$%^&*()+=!?\-';,.\/{}|:<>?~]).{8,20})/
+    )
+  ),
+
   path_picture: Joi.string(),
 
   isSubscribe: Joi.boolean(),

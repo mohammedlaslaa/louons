@@ -7,9 +7,10 @@ function InformationsLogic() {
     data: {
       date_birth: "",
       picture: [],
+      testPassword: "",
+      confirmationTestPassword: "",
     },
-    password: "",
-    confirmationPassword: "",
+
     isFetched: false,
     isLoading: true,
     isSubmit: false,
@@ -21,8 +22,8 @@ function InformationsLogic() {
     errorLastName: false,
     errorFirstName: false,
     errorMail: false,
-    errorPassword: false,
-    errorConfirmationPassword: false,
+    errorTestPassword: false,
+    errorConfirmationTestPassword: false,
     isSuccess: false,
     isFailed: false,
   });
@@ -35,11 +36,27 @@ function InformationsLogic() {
     gender,
     email,
     isSubscribe,
+    picture,
+    testPassword,
+    confirmationTestPassword,
   } = dataCurrentUser.data;
+
+  const {
+    method,
+    isFetched,
+    errorForm,
+    errorPicture,
+    errorDate,
+    errorLastName,
+    errorFirstName,
+    errorMail,
+    errorTestPassword,
+    errorConfirmationTestPassword,
+  } = dataCurrentUser;
 
   // initialize the regex
 
-  const regexName = new RegExp(/[a-zA-Z\séùàüäîçïèêôö-]+$/);
+  const regexName = new RegExp(/^[a-zA-Z\séùàüäîçïèêôö-]+$/);
   const regexMail = new RegExp(
     /^\w*([.|-]){0,1}\w*([.|-]){0,1}\w*[@][a-z]*[.]\w{2,5}/
   );
@@ -48,9 +65,9 @@ function InformationsLogic() {
   );
 
   useEffect(() => {
-    if (!dataCurrentUser.isFetched) {
+    if (!isFetched) {
       fetch("http://localhost:5000/louons/api/v1/user/me", {
-        method: dataCurrentUser.method,
+        method: method,
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
@@ -69,135 +86,154 @@ function InformationsLogic() {
         });
     }
 
-    if (dataCurrentUser.isFetched && dataCurrentUser.method === "PUT") {
-      if (Object.keys(dataCurrentUser.data.picture).length === 1) {
-        for (let i = 0; i < dataCurrentUser.data.picture.length; i++) {
+    if (isFetched && method === "PUT") {
+      if (Object.keys(picture).length === 1) {
+        for (let i = 0; i < picture.length; i++) {
           if (
-            dataCurrentUser.data.picture[i].type !== "image/png" &&
-            dataCurrentUser.data.picture[i].type !== "image/jpeg" &&
-            !dataCurrentUser.errorPicture
+            picture[i].type !== "image/png" &&
+            picture[i].type !== "image/jpeg" &&
+            !errorPicture
           ) {
             setDataCurrentUser((prevState) => ({
               ...prevState,
               errorPicture: true,
-              numberErrorForm: prevState.numberErrorForm + 1,
             }));
           } else if (
-            dataCurrentUser.data.picture[i].type === "image/png" ||
-            dataCurrentUser.data.picture[i].type === "image/jpeg"
+            picture[i].type === "image/png" ||
+            picture[i].type === "image/jpeg"
           ) {
-            if (dataCurrentUser.errorPicture) {
+            if (errorPicture) {
               setDataCurrentUser((prevState) => ({
                 ...prevState,
                 errorPicture: false,
-                numberErrorForm: prevState.numberErrorForm - 1,
               }));
             }
-            console.log(dataCurrentUser.data.picture[i]);
-            dataform.append(`file${i}`, dataCurrentUser.data.picture[i]);
+            dataform.append(`file${i}`, picture[i]);
           }
         }
-      } else if (
-        Object.keys(dataCurrentUser.data.picture).length > 1 &&
-        !dataCurrentUser.errorPicture
-      ) {
+      } else if (Object.keys(picture).length > 1 && !errorPicture) {
         setDataCurrentUser((prevState) => ({
           ...prevState,
           errorPicture: true,
-          numberErrorForm: prevState.numberErrorForm + 1,
         }));
       }
 
       if (
-        (new Date(dataCurrentUser.data.date_birth).getFullYear() < 1940 ||
-          new Date(dataCurrentUser.data.date_birth).getFullYear() > 2010) &&
-        !dataCurrentUser.errorDate
+        (new Date(date_birth).getFullYear() < 1940 ||
+          new Date(date_birth).getFullYear() > 2010) &&
+        !errorDate
       ) {
         setDataCurrentUser((prevState) => ({
           ...prevState,
           errorDate: true,
-          numberErrorForm: prevState.numberErrorForm + 1,
         }));
       } else if (
-        new Date(dataCurrentUser.data.date_birth).getFullYear() > 1940 &&
-        new Date(dataCurrentUser.data.date_birth).getFullYear() < 2010 &&
-        dataCurrentUser.errorDate
+        new Date(date_birth).getFullYear() > 1940 &&
+        new Date(date_birth).getFullYear() < 2010 &&
+        errorDate
       ) {
         setDataCurrentUser((prevState) => ({
           ...prevState,
           errorDate: false,
-          numberErrorForm: prevState.numberErrorForm - 1,
         }));
       }
 
-      if (!regexName.test(lastName) && !dataCurrentUser.errorLastName) {
-        setDataCurrentUser((prevState) => ({
-          ...prevState,
-          errorLastName: true,
-          numberErrorForm: prevState.numberErrorForm + 1,
-        }));
-      } else if (
-        regexName.test(lastName) &&
-        lastName !== "" &&
-        dataCurrentUser.errorLastName
-      ) {
+      if (regexName.test(lastName) && lastName !== "" && errorLastName) {
         setDataCurrentUser((prevState) => ({
           ...prevState,
           errorLastName: false,
-          numberErrorForm: prevState.numberErrorForm - 1,
+        }));
+      } else if (
+        (!regexName.test(lastName) || lastName === "") &&
+        !errorLastName
+      ) {
+        setDataCurrentUser((prevState) => ({
+          ...prevState,
+          errorLastName: true,
         }));
       }
 
-      if (
-        regexName.test(dataCurrentUser.data.firstName) &&
-        dataCurrentUser.data.firstName !== "" &&
-        dataCurrentUser.errorFirstName
-      ) {
+      if (regexName.test(firstName) && firstName !== "" && errorFirstName) {
         setDataCurrentUser((prevState) => ({
           ...prevState,
           errorFirstName: false,
-          numberErrorForm: prevState.numberErrorForm - 1,
         }));
-      } else if (
-        !regexName.test(dataCurrentUser.data.firstName) &&
-        !dataCurrentUser.errorFirstName
-      ) {
+      } else if (!regexName.test(firstName) && !errorFirstName) {
         setDataCurrentUser((prevState) => ({
           ...prevState,
           errorFirstName: true,
-          numberErrorForm: prevState.numberErrorForm + 1,
+        }));
+      }
+
+      if (regexMail.test(email) && email !== "" && errorMail) {
+        setDataCurrentUser((prevState) => ({
+          ...prevState,
+          errorMail: false,
+        }));
+      } else if (!regexMail.test(email) && !errorMail) {
+        setDataCurrentUser((prevState) => ({
+          ...prevState,
+          errorMail: true,
+        }));
+      }
+
+      if (regexPassword.test(testPassword) && testPassword !== "" && errorTestPassword) {
+        setDataCurrentUser((prevState) => ({
+          ...prevState,
+          errorTestPassword: false,
+        }));
+      } else if (
+        (!regexPassword.test(testPassword) || testPassword === "") &&
+        !errorTestPassword
+      ) {
+        setDataCurrentUser((prevState) => ({
+          ...prevState,
+          errorTestPassword: true,
         }));
       }
 
       if (
-        regexMail.test(dataCurrentUser.data.email) &&
-        dataCurrentUser.data.email !== "" &&
-        dataCurrentUser.errorMail
+        testPassword === confirmationTestPassword &&
+        errorConfirmationTestPassword
       ) {
         setDataCurrentUser((prevState) => ({
           ...prevState,
-          errorMail: false,
-          numberErrorForm: prevState.numberErrorForm - 1,
+          errorConfirmationTestPassword: false,
         }));
       } else if (
-        !regexMail.test(dataCurrentUser.data.email) &&
-        !dataCurrentUser.errorMail
+        testPassword !== confirmationTestPassword &&
+        !errorConfirmationTestPassword
       ) {
         setDataCurrentUser((prevState) => ({
           ...prevState,
-          errorMail: true,
-          numberErrorForm: prevState.numberErrorForm + 1,
+          errorConfirmationTestPassword: true,
         }));
       }
+      console.log(testPassword, confirmationTestPassword)
 
-      if (dataCurrentUser.numberErrorForm > 0 && !dataCurrentUser.errorForm) {
+      if (
+        (errorPicture ||
+          errorDate ||
+          errorLastName ||
+          errorFirstName ||
+          errorMail ||
+          errorTestPassword ||
+          errorConfirmationTestPassword) &&
+        !errorForm
+      ) {
         setDataCurrentUser((prevState) => ({
           ...prevState,
           errorForm: true,
         }));
       } else if (
-        dataCurrentUser.numberErrorForm === 0 &&
-        dataCurrentUser.errorForm
+        errorForm &&
+        !errorPicture &&
+        !errorDate &&
+        !errorLastName &&
+        !errorFirstName &&
+        !errorMail &&
+        !errorTestPassword &&
+        !errorConfirmationTestPassword
       ) {
         setDataCurrentUser((prevState) => ({
           ...prevState,
@@ -206,7 +242,8 @@ function InformationsLogic() {
       }
     }
   }, [
-    dataCurrentUser,
+    method,
+    isFetched,
     regexMail,
     regexName,
     regexPassword,
@@ -215,6 +252,17 @@ function InformationsLogic() {
     firstName,
     date_birth,
     email,
+    picture,
+    testPassword,
+    confirmationTestPassword,
+    errorForm,
+    errorPicture,
+    errorDate,
+    errorLastName,
+    errorFirstName,
+    errorMail,
+    errorTestPassword,
+    errorConfirmationTestPassword,
   ]);
 
   const handleChangeForm = (e, arg = "") => {
@@ -250,10 +298,11 @@ function InformationsLogic() {
     dataform.append("gender", gender);
     dataform.append("email", email);
     dataform.append("isSubscribe", isSubscribe);
+    dataform.append("testPassword", testPassword);
 
-    if (!dataCurrentUser.errorForm) {
+    if (!errorForm) {
       fetch(`http://localhost:5000/louons/api/v1/user/me`, {
-        method: dataCurrentUser.method,
+        method: method,
         credentials: "include",
         body: dataform,
       })

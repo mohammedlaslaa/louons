@@ -59,7 +59,7 @@ function UserFormLogic(props) {
 
     // initialize the regex
 
-    const regexName = new RegExp(/[a-zA-Z\séùàüäîçïèêôö-]+$/);
+    const regexName = new RegExp(/^[a-zA-Z\séùàüäîçïèêôö-]+$/);
     const regexMail = new RegExp(
       /^\w*([.|-]){0,1}\w*([.|-]){0,1}\w*[@][a-z]*[.]\w{2,5}/
     );

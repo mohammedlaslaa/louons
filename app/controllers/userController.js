@@ -20,7 +20,9 @@ exports.getSelf = async (req, res) => {
           return res.status(401).send({ error: true, message: err.message });
 
         // Check if this user still exist
-        let user = await User.findById(decode.id).select("-password -isActive -date_delete -date_update");
+        let user = await User.findById(decode.id).select(
+          "-password -isActive -date_delete -date_update"
+        );
 
         if (user) {
           // If the client is an existing user send this to the res.locals.
@@ -40,105 +42,116 @@ exports.getSelf = async (req, res) => {
 
 exports.putSelf = async (req, res) => {
   try {
-      // Varify the token and check if an user exist.
-  
-      const verify = jwt.verify(
-        req.cookies["x-auth-token"],
-        process.env.PRIVATE_KEY
-      );
+    // Varify the token and check if an user exist.
 
-      let user = await User.findById(verify.id);
-  
-      // If there are not user find, send a 400 response status code with a message.
-  
-      if (!user)
-        return res.status(401).send({ error: true, message: "Not Authorized" });
-  
-      // parse the formdata incoming with formidable
-  
-      const form = new formidable.IncomingForm();
-  
-      let objdata = {};
-  
-      const formdata = await new Promise((resolve, reject) => {
-        form.parse(req, (err, fields, files) => {
-          if (err) {
-            reject(err);
-            return;
-          }
-  
-          // store the fields sended by the client in the objdata
-  
-          objdata = fields;
+    const verify = jwt.verify(
+      req.cookies["x-auth-token"],
+      process.env.PRIVATE_KEY
+    );
 
-          // initialize the name of the picture and the path
-  
-          if (Object.keys(files).length === 1) {
-            const path = `${process.env.UPLOAD_IMG_PATH}/${user.path_picture}`;
-            if (fs.existsSync(path)) {
-              fs.unlinkSync(path);
-            }
-            for (const file of Object.entries(files)) {
-              const title = file[1].name;
-              const ext = title.split(".");
-              const random = Math.random().toString();
-              const path = `${crypto
-                .createHash("sha1")
-                .update(ext[0] + random)
-                .digest("hex")}.${ext[1]}`;
-              objdata["path_picture"] = path;
-  
-              fs.rename(
-                file[1].path,
-                `${process.env.UPLOAD_IMG_PATH}/${path}`,
-                (err) => {
-                  if (err) throw err;
-                }
-              );
-            }
-          } else if (Object.keys(files).length > 1) {
-            return res.status(400).send({
-              error: true,
-              message: "The number of files sending is wrong",
-            });
-          }
-          resolve("done");
-        });
-      });
-  
-      if (formdata === "done") {
-        // Validation put user.
-  
-        const { error } = schemaPutValidationUser.validate(objdata);
-        if (error)
-          return res.status(400).send({ error: true, message: error.message });
-  
-        // If the request contains a password, hash this.
-  
-        if (objdata.password) {
-          const passWordData = objdata.password;
-          objdata.password = await bcrypt.hash(
-            passWordData,
-            parseInt(process.env.SALT)
-          );
+    let user = await User.findById(verify.id);
+
+    // If there are not user find, send a 400 response status code with a message.
+
+    if (!user)
+      return res.status(401).send({ error: true, message: "Not Authorized" });
+
+    // parse the formdata incoming with formidable
+
+    const form = new formidable.IncomingForm();
+
+    let objdata = {};
+
+    const formdata = await new Promise((resolve, reject) => {
+      form.parse(req, (err, fields, files) => {
+        if (err) {
+          reject(err);
+          return;
         }
-  
-        await User.findByIdAndUpdate(verify.id, {
-          $set: objdata,
-          date_update: Date.now(),
-        });
-  
-        // If all the checks is passing, return a 200 response status code with a succesfull message.
-  console.log(objdata.path_picture)
-        return res.send({
-          error: false,
-          message: "User modified with success",
-          picture: objdata.path_picture,
-        });
+        
+        // Compare the user password with the password provided in a req.body.password.
+
+        let decrypt = bcrypt.compareSync(fields.testPassword, user.password);
+
+        // If the comparison fail send back a 400 response status code with a message.
+
+        if (!decrypt)
+          return res
+            .status(400)
+            .send({ error: true, message: "Error" });
+
+        // store the fields sended by the client in the objdata
+
+        objdata = fields;
+
+        // initialize the name of the picture and the path
+
+        if (Object.keys(files).length === 1) {
+          const path = `${process.env.UPLOAD_IMG_PATH}/${user.path_picture}`;
+          if (fs.existsSync(path)) {
+            fs.unlinkSync(path);
+          }
+          for (const file of Object.entries(files)) {
+            const title = file[1].name;
+            const ext = title.split(".");
+            const random = Math.random().toString();
+            const path = `${crypto
+              .createHash("sha1")
+              .update(ext[0] + random)
+              .digest("hex")}.${ext[1]}`;
+            objdata["path_picture"] = path;
+
+            fs.rename(
+              file[1].path,
+              `${process.env.UPLOAD_IMG_PATH}/${path}`,
+              (err) => {
+                if (err) throw err;
+              }
+            );
+          }
+        } else if (Object.keys(files).length > 1) {
+          return res.status(400).send({
+            error: true,
+            message: "The number of files sending is wrong",
+          });
+        }
+        resolve("done");
+      });
+    });
+
+    if (formdata === "done") {
+      // Validation put user.
+
+      const { error } = schemaPutValidationUser.validate(objdata);
+      if (error)
+        return res.status(400).send({ error: true, message: error.message });
+
+      // If the request contains a password, hash this.
+
+      if (objdata.password) {
+        const passWordData = objdata.password;
+        objdata.password = await bcrypt.hash(
+          passWordData,
+          parseInt(process.env.SALT)
+        );
       }
-    } catch (e) {
-      return res.status(404).send({ error: true, message: e.message });
+
+      await User.findByIdAndUpdate(verify.id, {
+        $set: objdata,
+        date_update: Date.now(),
+      });
+
+      // If all the checks is passing, return a 200 response status code with a succesfull message.
+
+      return res.send({
+        error: false,
+        message: "User modified with success",
+        picture: objdata.path_picture,
+      });
     }
+  } catch (e) {
+    return res.status(404).send({ error: true, message: e.message });
+  }
 };
 
 exports.postInscription = async (req, res) => {
@@ -192,7 +205,6 @@ exports.postInscription = async (req, res) => {
     });
 
     if (formdata === "done") {
-
       // Validation post inscription user.
 
       const { error } = schemaValidationUser.validate(objdata);

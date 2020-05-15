@@ -22,6 +22,7 @@ function DivInputForm(props) {
           disabled={props.disabled}
           min={props.min}
           max={props.max}
+          autoComplete={props.autoComplete}
         />
       </div>
     </>
@@ -38,6 +39,7 @@ DivInputForm.defaultProps = {
   min: "",
   max: "",
   errorCondition: false,
+  autoComplete: "on",
 };
 
 export default DivInputForm;

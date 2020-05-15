@@ -18,13 +18,13 @@ function Informations(props) {
         </p>
       ) : props.dataCurrentUser.isFailed ? (
         <p className="bg-danger text-white text-center p-2 w-100">
-          Erreur serveur ou formulaire
+          Mot de passe incorrect ou erreur formulaire
         </p>
       ) : (
         true
       )}
       <form
-        className="row form-group mx-auto"
+        className="row form-group mx-auto d-flex justify-content-center"
         autoComplete="off"
         onSubmit={(e) => props.handleSubmit(e)}
       >
@@ -60,9 +60,9 @@ function Informations(props) {
             )}
           </div>
         </div>
-        <div className="row my-3 col-12">
+        <div className="row my-3 col-12 col-sm-8 col-lg-7 d-flex justify-content-center">
           <label className="col-12 col-sm-4 mt-2 text-center">Titre :</label>
-          <label className="col-6 col-sm-4 col-lg-2 mt-2 text-center">
+          <label className="col-4 mt-2 text-center">
             Mr
             <input
               type="radio"
@@ -75,7 +75,7 @@ function Informations(props) {
               onChange={(e) => props.handleChangeForm(e, "mr")}
             />
           </label>
-          <label className="col-6 col-sm-4 col-lg-2 mt-2 text-center">
+          <label className="col-4 mt-2 text-center">
             Mrs
             <input
               type="radio"
@@ -91,7 +91,7 @@ function Informations(props) {
         </div>
         <DivInputForm
           label="Nom :"
-          containerClass="row mr-2 col-12 col-xl-6 my-2 d-flex flex-row justify-content-center justify-content-sm-between align-items-center"
+          containerClass="row mr-xl-2 col-12 col-xl-6 my-2 d-flex flex-row justify-content-center justify-content-sm-between align-items-center"
           labelClass="text-center my-2 m-md-0"
           inputClass="form-control col-12 col-sm-6 col-md-7 text-center"
           name="lastName"
@@ -121,7 +121,7 @@ function Informations(props) {
         />
         <DivInputForm
           label={"Email :"}
-          containerClass="row mr-2 col-12 col-xl-6 my-2 d-flex flex-row justify-content-center justify-content-sm-between align-items-center"
+          containerClass="row mr-xl-2 col-12 col-xl-6 my-2 d-flex flex-row justify-content-center justify-content-sm-between align-items-center"
           labelClass="text-center my-2 m-md-0"
           inputClass="form-control col-12 col-sm-6 col-md-9 text-center"
           name="email"
@@ -153,7 +153,7 @@ function Informations(props) {
             props.handleChangeForm(e);
           }}
         />
-        <div className="row mr-2 col-12 col-xl-6 my-2 d-flex flex-row justify-content-center justify-content-sm-between align-items-center">
+        <div className="row mr-xl-2 col-12 col-xl-6 my-2 d-flex flex-row justify-content-center justify-content-sm-between align-items-center">
           <label className="text-center my-2 m-md-0">Newsletter :</label>
           <select
             name="isSubscribe"
@@ -196,11 +196,51 @@ function Informations(props) {
             Modifier
           </button>
         ) : (
-          <input
-            type="submit"
-            className="mx-auto my-3 btn btn-info"
-            value="Envoyer"
-          />
+          <>
+            <p className="text-secondary text-center p-2 w-100 mb-0">
+              Pour toute modification, veuillez confirmer votre mot de passe.
+            </p>
+            <DivInputForm
+              containerClass="row mr-xl-2 col-12 col-xl-6 my-2 d-flex flex-row justify-content-center justify-content-sm-between align-items-center"
+              labelClass="text-center my-2 m-md-0"
+              inputClass="form-control col-12 col-sm-6 p-0 col-md-5 text-center"
+              label={"Mot de passe :"}
+              name="testPassword"
+              type="password"
+              autoComplete="new-password"
+              value={data.testPassword}
+              change={(e) => {
+                props.handleChangeForm(e);
+              }}
+              errorcondition={
+                props.dataCurrentUser.errorTestPassword &&
+                props.dataCurrentUser.isSubmit
+              }
+              errormessage=" Le mot de passe doit contenir au moins 8 charactères, une majuscule
+          un chiffre et un caractère spécial"
+            />
+            <DivInputForm
+              containerClass="row col-12 col-xl-6 my-2 d-flex flex-row justify-content-center justify-content-sm-between align-items-center"
+              labelClass="text-center my-2 m-md-0"
+              inputClass="form-control col-12 col-sm-6 p-0 col-md-5 text-center"
+              label={"Confirmation :"}
+              name="confirmationTestPassword"
+              type="password"
+              value={data.confirmationTestPassword}
+              change={(e) => {
+                props.handleChangeForm(e);
+              }}
+              errorcondition={
+                props.dataCurrentUser.errorConfirmationTestPassword
+              }
+              errormessage="Le mot de passe de confirmation doit être identique"
+            />
+            <input
+              type="submit"
+              className="mx-auto my-3 btn btn-info"
+              value="Envoyer"
+            />
+          </>
         )}
       </form>
     </>
