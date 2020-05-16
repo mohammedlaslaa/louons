@@ -99,6 +99,10 @@ select {
   -moz-text-align-last: center;
 }
 
+.date-size{
+  font-size: 0.8rem !important;
+}
+
 @media screen and (min-width: 576px) {
 
   .product-container,

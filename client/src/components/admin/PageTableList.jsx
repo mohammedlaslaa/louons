@@ -20,6 +20,7 @@ class PageTableList extends Component {
       listOfData: [],
       adminLevel: "",
     };
+    this._isMounted = false;
   }
 
   // get the context of popupaddcontext
@@ -50,14 +51,14 @@ class PageTableList extends Component {
     })
       .then((res) => res.json())
       .then((result) => {
-        if (!result.error) {
-          this.setState({
-            listOfData: result.data,
-            adminLevel: result.adminLevel,
-            isLoading: false,
-          });
-        } else {
-          if (this._isMounted) {
+        if (this._isMounted) {
+          if (!result.error) {
+            this.setState({
+              listOfData: result.data,
+              adminLevel: result.adminLevel,
+              isLoading: false,
+            });
+          } else {
             this.setState({
               isLoading: false,
             });

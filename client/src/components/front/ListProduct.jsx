@@ -12,7 +12,6 @@ function ListProduct(props) {
               alt=""
               className="w-100 img-fluid thumbnail-img mx-auto"
             />
-
             <div className="d-flex flex-column flex-xl-row p-1 justify-content-center align-items-center text-center">
               <p className="p-1 text-center titleannounce mx-md-3">
                 {elt.title.length > 12

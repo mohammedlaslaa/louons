@@ -11,7 +11,9 @@ function Informations(props) {
     <p className="p-2 text-white bg-success">Chargement...</p>
   ) : (
     <>
-      <h3 className="title-profil text-center mb-4">Mes informations</h3>
+      {!props.isMediumWindow && (
+        <h3 className="title-profil text-center mb-4">Mes informations</h3>
+      )}
       {props.dataCurrentUser.isSuccess ? (
         <p className="bg-success text-white text-center p-2 w-100">
           Information mis à jour avec succés
@@ -62,7 +64,7 @@ function Informations(props) {
         </div>
         <div className="row my-3 col-12 col-sm-8 col-lg-7 d-flex justify-content-center">
           <label className="col-12 col-sm-4 mt-2 text-center">Titre :</label>
-          <label className="col-4 mt-2 text-center">
+          <label className="col-5 col-sm-4 mt-2 text-center">
             Mr
             <input
               type="radio"
@@ -75,7 +77,7 @@ function Informations(props) {
               onChange={(e) => props.handleChangeForm(e, "mr")}
             />
           </label>
-          <label className="col-4 mt-2 text-center">
+          <label className="col-5 col-sm-4 mt-2 text-center">
             Mrs
             <input
               type="radio"
@@ -138,7 +140,7 @@ function Informations(props) {
           label={"Date de naissance :"}
           containerClass="row col-12 col-xl-6 my-2 d-flex flex-row justify-content-center justify-content-sm-between align-items-center"
           labelClass="text-center my-2 m-md-0"
-          inputClass="form-control col-12 col-sm-6 p-0 col-md-5 text-center"
+          inputClass="form-control date-size col-12 col-sm-6 p-0 col-md-5 text-center"
           name="date_birth"
           type="date"
           min="1940-01-01"
@@ -171,11 +173,9 @@ function Informations(props) {
           label={"Date d'inscription :"}
           containerClass="row col-12 col-xl-6 my-2 d-flex flex-row justify-content-center justify-content-sm-between align-items-center"
           labelClass="text-center my-2 m-md-0"
-          inputClass="form-control col-12 col-sm-6 p-0 col-md-5 text-center"
+          inputClass="form-control date-size col-12 col-sm-6 p-0 col-md-5 text-center"
           name="date_register"
           type="date"
-          min="1940-01-01"
-          max="2010-01-01"
           disabled="disabled"
           value={
             data.date_register &&
@@ -204,7 +204,7 @@ function Informations(props) {
               containerClass="row mr-xl-2 col-12 col-xl-6 my-2 d-flex flex-row justify-content-center justify-content-sm-between align-items-center"
               labelClass="text-center my-2 m-md-0"
               inputClass="form-control col-12 col-sm-6 p-0 col-md-5 text-center"
-              label={"Mot de passe :"}
+              label={"Mot de passe Actuel :"}
               name="testPassword"
               type="password"
               autoComplete="new-password"
@@ -232,6 +232,41 @@ function Informations(props) {
               }}
               errorcondition={
                 props.dataCurrentUser.errorConfirmationTestPassword
+              }
+              errormessage="Le mot de passe de confirmation doit être identique"
+            />
+            <DivInputForm
+              containerClass="row mr-xl-2 col-12 col-xl-6 my-2 d-flex flex-row justify-content-center justify-content-sm-between align-items-center"
+              labelClass="text-center my-2 m-md-0"
+              inputClass="form-control col-12 col-sm-6 p-0 col-md-5 text-center"
+              label={"Nouveau mdp :"}
+              name="newPassword"
+              type="password"
+              autoComplete="new-password"
+              value={data.newPassword}
+              change={(e) => {
+                props.handleChangeForm(e);
+              }}
+              errorcondition={
+                props.dataCurrentUser.errorNewPassword &&
+                props.dataCurrentUser.isSubmit
+              }
+              errormessage=" Le mot de passe doit contenir au moins 8 charactères, une majuscule
+          un chiffre et un caractère spécial"
+            />
+            <DivInputForm
+              containerClass="row col-12 col-xl-6 my-2 d-flex flex-row justify-content-center justify-content-sm-between align-items-center"
+              labelClass="text-center my-2 m-md-0"
+              inputClass="form-control col-12 col-sm-6 p-0 col-md-5 text-center"
+              label={"Confirmation :"}
+              name="confirmationNewPassword"
+              type="password"
+              value={data.confirmationNewPassword}
+              change={(e) => {
+                props.handleChangeForm(e);
+              }}
+              errorcondition={
+                props.dataCurrentUser.errorConfirmationNewPassword
               }
               errormessage="Le mot de passe de confirmation doit être identique"
             />

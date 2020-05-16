@@ -19,7 +19,7 @@ function RightHeaderPart() {
       </Link>
       <i className="ri-mail-fill mx-1 mx-sm-2 icon-font22 color3c8ce4"></i>
       <Link className="text-decoration-none" to="/adminlogout">
-        <i className="ri-logout-circle-r-line mx-1 mx-sm-2 icon-font22 color3c8ce4"></i>
+        <i className="ri-logout-circle-r-line mx-1 mx-sm-2 icon-font22 text-danger"></i>
       </Link>
       <Bar />
     </div>

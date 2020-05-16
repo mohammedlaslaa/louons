@@ -27,7 +27,7 @@ function Admin() {
     <TogglerProvider>
       <PopupAddProvider>
         <Header />
-        <main className="row">
+        <main className="row fill">
           <Menu />
           <div className="col-12 col-lg-9">
             <Switch>

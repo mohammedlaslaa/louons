@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Informations from "./Informations";
 
-function InformationsLogic() {
+function InformationsLogic(props) {
   const [dataCurrentUser, setDataCurrentUser] = useState({
     method: "GET",
     data: {
@@ -9,6 +9,8 @@ function InformationsLogic() {
       picture: [],
       testPassword: "",
       confirmationTestPassword: "",
+      newPassword: "",
+      confirmationNewPassword: "",
     },
 
     isFetched: false,
@@ -24,6 +26,8 @@ function InformationsLogic() {
     errorMail: false,
     errorTestPassword: false,
     errorConfirmationTestPassword: false,
+    errorNewPassword: false,
+    errorConfirmationNewPassword: false,
     isSuccess: false,
     isFailed: false,
   });
@@ -39,6 +43,8 @@ function InformationsLogic() {
     picture,
     testPassword,
     confirmationTestPassword,
+    newPassword,
+    confirmationNewPassword,
   } = dataCurrentUser.data;
 
   const {
@@ -52,6 +58,8 @@ function InformationsLogic() {
     errorMail,
     errorTestPassword,
     errorConfirmationTestPassword,
+    errorNewPassword,
+    errorConfirmationNewPassword,
   } = dataCurrentUser;
 
   // initialize the regex
@@ -65,6 +73,8 @@ function InformationsLogic() {
   );
 
   useEffect(() => {
+    // fetch the users information from the api
+
     if (!isFetched) {
       fetch("http://localhost:5000/louons/api/v1/user/me", {
         method: method,
@@ -87,6 +97,7 @@ function InformationsLogic() {
     }
 
     if (isFetched && method === "PUT") {
+      // Add picture and test the type mime
       if (Object.keys(picture).length === 1) {
         for (let i = 0; i < picture.length; i++) {
           if (
@@ -118,6 +129,7 @@ function InformationsLogic() {
         }));
       }
 
+      // set the error depending the value of the fields
       if (
         (new Date(date_birth).getFullYear() < 1940 ||
           new Date(date_birth).getFullYear() > 2010) &&
@@ -177,7 +189,11 @@ function InformationsLogic() {
         }));
       }
 
-      if (regexPassword.test(testPassword) && testPassword !== "" && errorTestPassword) {
+      if (
+        regexPassword.test(testPassword) &&
+        testPassword !== "" &&
+        errorTestPassword
+      ) {
         setDataCurrentUser((prevState) => ({
           ...prevState,
           errorTestPassword: false,
@@ -209,7 +225,43 @@ function InformationsLogic() {
           errorConfirmationTestPassword: true,
         }));
       }
-      console.log(testPassword, confirmationTestPassword)
+
+      if (
+        (newPassword === "" || regexPassword.test(newPassword)) &&
+        errorNewPassword
+      ) {
+        setDataCurrentUser((prevState) => ({
+          ...prevState,
+          errorNewPassword: false,
+        }));
+      } else if (
+        newPassword !== "" &&
+        !regexPassword.test(newPassword) &&
+        !errorNewPassword
+      ) {
+        setDataCurrentUser((prevState) => ({
+          ...prevState,
+          errorNewPassword: true,
+        }));
+      }
+
+      if (
+        newPassword === confirmationNewPassword &&
+        errorConfirmationNewPassword
+      ) {
+        setDataCurrentUser((prevState) => ({
+          ...prevState,
+          errorConfirmationNewPassword: false,
+        }));
+      } else if (
+        newPassword !== confirmationNewPassword &&
+        !errorConfirmationNewPassword
+      ) {
+        setDataCurrentUser((prevState) => ({
+          ...prevState,
+          errorConfirmationNewPassword: true,
+        }));
+      }
 
       if (
         (errorPicture ||
@@ -218,7 +270,9 @@ function InformationsLogic() {
           errorFirstName ||
           errorMail ||
           errorTestPassword ||
-          errorConfirmationTestPassword) &&
+          errorConfirmationTestPassword ||
+          errorNewPassword ||
+          errorConfirmationNewPassword) &&
         !errorForm
       ) {
         setDataCurrentUser((prevState) => ({
@@ -233,7 +287,9 @@ function InformationsLogic() {
         !errorFirstName &&
         !errorMail &&
         !errorTestPassword &&
-        !errorConfirmationTestPassword
+        !errorConfirmationTestPassword &&
+        !errorNewPassword &&
+        !errorConfirmationNewPassword
       ) {
         setDataCurrentUser((prevState) => ({
           ...prevState,
@@ -263,9 +319,15 @@ function InformationsLogic() {
     errorMail,
     errorTestPassword,
     errorConfirmationTestPassword,
+    newPassword,
+    confirmationNewPassword,
+    errorNewPassword,
+    errorConfirmationNewPassword,
   ]);
 
   const handleChangeForm = (e, arg = "") => {
+    // manage the controlled input depending the value and the name
+
     const { value, name, files } = e.target;
     let val = arg === "" ? value : arg;
     val = val === "true" || val === "false" ? JSON.parse(val) : val;
@@ -287,11 +349,14 @@ function InformationsLogic() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // set issubmit to true when this function is called (onSubmit form)
     setDataCurrentUser((prevState) => ({
       ...prevState,
       isSubmit: true,
     }));
 
+    // append the value to the data form
     dataform.append("lastName", lastName);
     dataform.append("firstName", firstName);
     dataform.append("date_birth", date_birth);
@@ -299,7 +364,9 @@ function InformationsLogic() {
     dataform.append("email", email);
     dataform.append("isSubscribe", isSubscribe);
     dataform.append("testPassword", testPassword);
+    newPassword !== "" && dataform.append("password", newPassword);
 
+    // if there are not error put the data to the api
     if (!errorForm) {
       fetch(`http://localhost:5000/louons/api/v1/user/me`, {
         method: method,
@@ -309,7 +376,7 @@ function InformationsLogic() {
         .then((response) => response.json())
         .then((result) => {
           if (!result.error) {
-            // set issuccess to true if there are not error
+            // set issuccess to true and change the path_picture if there are not error
             setDataCurrentUser((prevState) => {
               if (result.picture) {
                 return {
@@ -331,12 +398,20 @@ function InformationsLogic() {
                 };
               }
             });
+            // reset the field when there not error
             setTimeout(() => {
               setDataCurrentUser((prevState) => ({
                 ...prevState,
                 isSuccess: false,
+                data: {
+                  ...prevState.data,
+                  testPassword: "",
+                  confirmationTestPassword: "",
+                  newPassword: "",
+                  confirmationNewPassword: "",
+                },
               }));
-            }, 1500);
+            }, 1000);
           } else if (result.error) {
             // set isfailed to false if there are an error
             setDataCurrentUser((prevState) => ({
@@ -348,7 +423,7 @@ function InformationsLogic() {
                 ...prevState,
                 isFailed: false,
               }));
-            }, 1500);
+            }, 1000);
           }
         });
     }
@@ -359,6 +434,7 @@ function InformationsLogic() {
       setDataCurrentUser={setDataCurrentUser}
       handleChangeForm={handleChangeForm}
       handleSubmit={handleSubmit}
+      isMediumWindow={props.isMediumWindow}
     />
   );
 }

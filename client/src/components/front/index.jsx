@@ -66,6 +66,7 @@ function Front() {
           </Route>
         </Switch>
       </main>
+      <div className="fill"></div>
       <Footer />
     </ListCategoryProvider>
   );

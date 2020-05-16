@@ -13,6 +13,7 @@ const AuthProvider = (props) => {
   // if the cookie token is existing fetch to the api to ensure that the client has a valid cookie token else set the isAuth value to false.
 
   useEffect(() => {
+
     if (cookieToken && linkAuth) {
       fetch(linkAuth, {
         credentials: "include", // ensure that the header can include cookie.
@@ -23,9 +24,8 @@ const AuthProvider = (props) => {
             setIsAuth(true);
             setDataUser(result.user);
           } else if (result.error) {
-            
             setIsAuth(false);
-            setCookieToken('')
+            setCookieToken("");
           }
           setIsLoading(false);
         });
@@ -33,6 +33,7 @@ const AuthProvider = (props) => {
       setIsAuth(false);
       setIsLoading(false);
     }
+
   }, [cookieToken, linkAuth]);
 
   // return the authcontext provider component
@@ -48,7 +49,7 @@ const AuthProvider = (props) => {
         setCookieToken,
         dataUser,
         setLinkAuth,
-        linkAuth
+        linkAuth,
       }}
     >
       {props.children}
