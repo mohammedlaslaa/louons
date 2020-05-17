@@ -72,6 +72,8 @@ h2 {
   min-height: 20rem;
 }
 
+/* my informations */
+
 .file-picture-profil {
   position: absolute;
   left: 0;
@@ -99,8 +101,20 @@ select {
   -moz-text-align-last: center;
 }
 
-.date-size{
+.date-size {
   font-size: 0.8rem !important;
+}
+
+.menu-link-account {
+  cursor: pointer;
+}
+
+/* my announces */
+
+.table-announce {
+  font-size: 0.8rem;
+  text-align: center;
+  margin-top: 1rem;
 }
 
 @media screen and (min-width: 576px) {

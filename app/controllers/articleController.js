@@ -22,7 +22,12 @@ exports.getAllArticle = async function (req, res) {
     }
 
     const allArticle =
-      req.params.searcharticle === "lastactive"
+    req.params.searcharticle === "owner"
+    ? await Article.find({
+        isActive: true,
+        id_user : verify.id
+      }).select("-date_update -date_delete -isTop -id_user -articleId")
+    : req.params.searcharticle === "lastactive"
         ? await Article.find({
             isActive: true,
           })
@@ -48,6 +53,7 @@ exports.getAllArticle = async function (req, res) {
             "id_category",
             "title -_id"
           );
+
 
     return res.status(200).send({
       adminLevel: verify.adminLevel,

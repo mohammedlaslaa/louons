@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Switch, Route, Link, useHistory } from "react-router-dom";
+import { Switch, Route, useHistory } from "react-router-dom";
 import PrivateRoute from "../../general/PrivateRoute";
 import InformationsLogic from "./InformationsLogic";
 import MyAnnounces from "./MyAnnounces";
@@ -9,6 +9,7 @@ import MyRentals from "./MyRentals";
 
 function Profil() {
   const [isMediumWindow, setIsMediumWindow] = useState();
+  const [valueSelect, setValueSelect] = useState();
   let history = useHistory();
   let isCancelled = useRef(null);
 
@@ -24,7 +25,7 @@ function Profil() {
 
   useEffect(() => {
     isCancelled.current = false;
-    
+
     if (!isCancelled.current) {
       handleIsMedium();
     }
@@ -37,7 +38,12 @@ function Profil() {
   window.addEventListener("resize", handleIsMedium);
 
   function handleChangeSelect(value) {
-    history.push(`/my_account/${value}`);
+    setValueSelect(value);
+    if (value === "logout") {
+      history.push(`/${value}`);
+    } else {
+      history.push(`/my_account/${value}`);
+    }
   }
 
   return (
@@ -47,34 +53,50 @@ function Profil() {
           {isMediumWindow ? (
             <select
               className="custom-select w-75 mx-auto"
+              value={valueSelect}
               onChange={(e) => handleChangeSelect(e.target.value)}
             >
               <option value="">Informations</option>
               <option value="announces">Mes Annonces</option>
               <option value="addresses">Mes Adresses</option>
-              <option value="rental">Mes locations</option>
+              <option value="rentals">Mes locations</option>
             </select>
           ) : (
             <ul className="list-unstyled mt-5">
-              <Link to="/my_account" className="text-dark">
-                <li className="p-2 text-center">Informations</li>
-              </Link>
-              <Link to="/my_account/announces" className="text-dark">
-                <li className="p-2 text-center">Mes Annonces</li>
-              </Link>
-              <Link to="/my_account/addresses" className="text-dark">
-                <li className="p-2 text-center">Mes Adresses</li>
-              </Link>
-              <Link to="/my_account/rental" className="text-dark">
-                <li className="p-2 text-center">Mes locations</li>
-              </Link>
-              <Link to="/logout" className="text-dark">
-                <li className="p-2 text-center text-danger">Déconnexion</li>
-              </Link>
+              <li
+                className="p-2 text-center menu-link-account"
+                onClick={() => handleChangeSelect("")}
+              >
+                Informations
+              </li>
+              <li
+                className="p-2 text-center menu-link-account"
+                onClick={() => handleChangeSelect("announces")}
+              >
+                Mes Annonces
+              </li>
+              <li
+                className="p-2 text-center menu-link-account"
+                onClick={() => handleChangeSelect("addresses")}
+              >
+                Mes Adresses
+              </li>
+              <li
+                className="p-2 text-center menu-link-account"
+                onClick={() => handleChangeSelect("rentals")}
+              >
+                Mes locations
+              </li>
+              <li
+                className="p-2 text-center text-danger menu-link-account"
+                onClick={() => handleChangeSelect("logout")}
+              >
+                Déconnexion
+              </li>
             </ul>
           )}
         </div>
-        <div className="col-12 col-md-8 col-lg-9 container-myaccount">
+        <div className="col-12 col-md-8 col-lg-9 container-myaccount p-0">
           <Switch>
             <Route exact path="/my_account">
               <PrivateRoute
@@ -92,7 +114,7 @@ function Profil() {
                 linkAuth="http://localhost:5000/louons/api/v1/authenticationuser"
               />
             </Route>
-            <Route exact path="/my_account/addresses">
+            <Route exact path="/my_account/addresses/:id?">
               <PrivateRoute
                 isMediumWindow={isMediumWindow}
                 component={MyAddresses}
@@ -100,7 +122,7 @@ function Profil() {
                 linkAuth="http://localhost:5000/louons/api/v1/authenticationuser"
               />
             </Route>
-            <Route exact path="/my_account/rental">
+            <Route exact path="/my_account/rentals/:id?">
               <PrivateRoute
                 isMediumWindow={isMediumWindow}
                 component={MyRentals}

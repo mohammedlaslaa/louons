@@ -1,10 +1,53 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import TitleSection from "./TitleSection";
+import TableProfil from "./TableProfil";
 
+function MyAnnounces(props) {
+  const [announces, setAnnounces] = useState({
+    data: [],
+    isFetched: false,
+  });
 
-function MyAnnounces() {
+  useEffect(() => {
+    if (!announces.isFetched) {
+      fetch("http://localhost:5000/louons/api/v1/article/owner", {
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          if (!result.error) {
+            setAnnounces((prevState) => ({
+              ...prevState,
+              data: result.data,
+              isFetched: true,
+            }));
+          } else if (result.error) {
+          }
+        });
+    }
+  }, [announces]);
+
   return (
-    <h3 className="title-profil text-center mb-4">Mes annonces</h3>
-
+    <>
+      <TitleSection
+        isMediumWindow={props.isMediumWindow}
+        title="Mes Annonces"
+      />
+      {announces.data.length > 0 ? (
+        <TableProfil
+          data={announces.data}
+          linkdetail="/announce"
+          datatodisplay={{
+            title: "Titre",
+            date_register: "Date d'enregistrement",
+            price: "Tarif",
+            seemore: "Voir",
+          }}
+        />
+      ) : (
+        <p>Vous n'avez pas encore d'annonces publiés</p>
+      )}
+    </>
   );
 }
 

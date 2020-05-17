@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import AddressForm from "./AddressForm";
 
@@ -9,7 +9,7 @@ function AddressFormLogic(props) {
   const [errorForm, setErrorForm] = useState(false);
   const [numberErrorForm, setNumberErrorForm] = useState(0);
   const [isFetched, setIsFetched] = useState(false);
-  const [Form, setForm] = useState({
+  const [form, setForm] = useState({
     isSuccess: false,
     isFailed: false,
     error: false,
@@ -31,22 +31,81 @@ function AddressFormLogic(props) {
   const [errorCountry, setErrorCountry] = useState(false);
   const [isShow, setIsShow] = useState(false);
   const [errorGrasp, setErrorGrasp] = useState(true);
-  const [isActive, setIsActive] = useState(false);
+  const [isActive, setIsActive] = useState(true);
   const [isSubmit, setIsSubmit] = useState(false);
   const [grasp, setGrasp] = useState("");
   const [method, setMethod] = useState("POST");
   const [idParams] = useState(useParams().id);
   const regexp = new RegExp(/^[\w\d\séùàüäîçïèêôö]*$/);
   const regexpCountryCity = new RegExp(/^[a-zA-Z\s-éùàüäîçïèêôö]*$/);
+  let isCancelled = useRef(null);
 
   useEffect(() => {
+    isCancelled.current = false;
     // initialize the number of error form
-
     setNumberErrorForm(0);
 
+    if ((!form.error || !errorForm) && isSubmit) {
+      const body = JSON.stringify({
+        isActive,
+        id_user: owner,
+        title,
+        address,
+        zipcode: zipCode,
+        city: city.value,
+        country,
+      });
+
+      const url =
+        method === "POST"
+          ? `http://localhost:5000/louons/api/v1/address`
+          : `http://localhost:5000/louons/api/v1/address/${idParams}`;
+      fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body,
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          setIsSubmit(false);
+          if (!result.error) {
+            setForm((prevState) => ({ ...prevState, isSuccess: true }));
+
+            setTimeout(() => {
+              !isCancelled.current &&
+                setForm((prevState) => ({ ...prevState, isSuccess: false }));
+            }, 800);
+
+            if (method === "POST") {
+              setTitle("");
+              setAddress("");
+              setZipCode("");
+              setCity({ value: "" });
+              setCountry("");
+              setGrasp("");
+            }
+            if (props.setAddresses) {
+              props.setAddresses((prevState) => ({
+                ...prevState,
+                isFetched: false,
+              }));
+            }
+          } else {
+            setForm((prevState) => ({ ...prevState, isFailed: true }));
+            setTimeout(() => {
+              !isCancelled.current &&
+                setForm((prevState) => ({ ...prevState, isFailed: false }));
+            }, 800);
+          }
+          
+        });
+    }
     // get the data depending if the isFetched state is settled to false and if there are an idParams
 
-    if (idParams && !isFetched) {
+    if (idParams && !isFetched && idParams !== "add") {
       setMethod("PUT");
       setStatusMessageForm("modifiée");
       fetch(`http://localhost:5000/louons/api/v1/address/detail/${idParams}`, {
@@ -67,8 +126,8 @@ function AddressFormLogic(props) {
             setCountry(result.data.country);
             setIsActive(result.data.isActive);
             setOwner(result.data.id_user._id);
-          } else if (result.error) {
-            return props.history.push('/admin/addresses');
+          } else if (result.error && props.history) {
+            return props.history.push("/admin/addresses");
           }
         });
     }
@@ -145,16 +204,20 @@ function AddressFormLogic(props) {
     }
 
     if (numberErrorForm > 0) {
-      if (!Form.error) {
+      if (!form.error) {
         setForm((prevState) => ({ ...prevState, error: true }));
       }
       setErrorForm(true);
     } else {
-      if (Form.error) {
+      if (form.error) {
         setForm((prevState) => ({ ...prevState, error: false }));
       }
       setErrorForm(false);
     }
+
+    return () => {
+      isCancelled.current = true;
+    };
   }, [
     idParams,
     numberErrorForm,
@@ -167,67 +230,24 @@ function AddressFormLogic(props) {
     zipCode,
     errorGrasp,
     isFetched,
-    Form,
-    props.history
+    form,
+    props.history,
+    owner,
+    errorForm,
+    isActive,
+    isSubmit,
+    method,
+    props,
   ]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const body = JSON.stringify({
-      isActive,
-      id_user: owner,
-      title,
-      address,
-      zipcode: zipCode,
-      city: city.value,
-      country,
-    });
-
-    const url =
-      method === "POST"
-        ? `http://localhost:5000/louons/api/v1/address`
-        : `http://localhost:5000/louons/api/v1/address/${idParams}`;
-
-    if (!Form.error || !errorForm) {
-      fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body,
-      })
-        .then((res) => res.json())
-        .then((result) => {
-          if (!result.error) {
-            setForm((prevState) => ({ ...prevState, isSuccess: true }));
-            setTimeout(() => {
-              setForm((prevState) => ({ ...prevState, isSuccess: false }));
-            }, 1500);
-            if (method === "POST") {
-              setTitle("");
-              setAddress("");
-              setZipCode("");
-              setCity({ value: "" });
-              setCountry("");
-              setIsSubmit(false);
-              setGrasp("");
-            }
-          } else {
-            setForm((prevState) => ({ ...prevState, isFailed: true }));
-            setTimeout(() => {
-              setForm((prevState) => ({ ...prevState, isFailed: false }));
-            }, 1500);
-          }
-        });
-    }
     setIsSubmit(true);
   };
 
   return (
     <AddressForm
-      form={Form}
+      form={form}
       titlepage={props.title}
       errorGrasp={errorGrasp}
       isActive={isActive}

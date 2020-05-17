@@ -32,20 +32,21 @@ exports.getAllSelfAddresses = async (req, res) => {
       return res.send(allAddress);
     }
 
-    const selfaddress = await Address.find({
+    const selfaddresses = await Address.find({
       id_user: res.locals.owner.id,
-    }).populate("id_user");
+      isActive: true,
+    });
 
     // If the client does not have addresses return a 200 response status code with a message.
 
-    if (!selfaddress)
+    if (!selfaddresses)
       return res
         .status(200)
         .send({ error: true, message: "Empty list, not address found" });
 
     // If there are existing addresses, send back a 200 response status code with all of this addresses.
 
-    return res.send(selfaddress);
+    return res.send({ error: false, data: selfaddresses });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }
@@ -96,10 +97,11 @@ exports.postAddress = async (req, res) => {
     const isTitleExist = await Address.findOne({
       title: { $regex: `^${req.body.title}$`, $options: "i" },
       id_user: ownerId,
+      isActive: true,
     });
 
     // If the address title is already existing send a 400 response status code with a message
-
+    console.log(req.body)
     if (isTitleExist)
       return res
         .status(400)

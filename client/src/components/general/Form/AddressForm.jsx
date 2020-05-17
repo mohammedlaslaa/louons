@@ -1,42 +1,56 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import Form from "../../general/Form/Form";
 import DivInputForm from "../../general/Form/DivInputForm";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
 import AutoCompleteField from "../../general/Form/AutoCompleteField";
+import { AuthContext } from "../../../context/AuthContext";
 
 function AddressForm(props) {
+  const { dataUser } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (!dataUser.adminLevel) {
+      props.setErrorGrasp(false);
+      props.setOwner(dataUser.id);
+    }
+  }, [dataUser, props]);
+
   return (
     <Form
       handleSubmit={props.handleSubmit}
-      titlepage={`${props.titlepage}  une adresse`}
+      titlepage={props.titlepage && `${props.titlepage} une adresse`}
       isFailed={props.form.isFailed}
       isSuccess={props.form.isSuccess}
       successMessage={`Adresse ${props.form.statusMessageForm} avec succés`}
       failMessage="Erreur de duplication ou champs vide, veuillez vérifier votre formulaire"
     >
-      <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100">
-        <label className="col-12 col-sm-4 mt-2">Etat :</label>
-        <BootstrapSwitchButton
-          checked={props.isActive}
-          onlabel="Actif"
-          offlabel="Inactif"
-          size="xs"
-          width="70"
-          onChange={() => {
-            props.setIsActive(!props.isActive);
-          }}
-        />
-      </div>
-      <AutoCompleteField
-        errorGrasp={props.errorGrasp}
-        idParams={props.idParams}
-        grasp={props.grasp}
-        titleLabel="Propriétaire"
-        setGrasp={props.setGrasp}
-        setId={props.setOwner}
-        setErrorGrasp={props.setErrorGrasp}
-        link="http://localhost:5000/louons/api/v1/user/all"
-      />
+      {dataUser.adminLevel && (
+        <>
+          <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100 mx-auto">
+            <label className="col-4 mt-2">Etat :</label>
+            <BootstrapSwitchButton
+              checked={props.isActive}
+              onlabel="Actif"
+              offlabel="Inactif"
+              size="xs"
+              width="70"
+              onChange={() => {
+                props.setIsActive(!props.isActive);
+              }}
+            />
+          </div>
+          <AutoCompleteField
+            errorGrasp={props.errorGrasp}
+            idParams={props.idParams}
+            grasp={props.grasp}
+            titleLabel="Propriétaire"
+            setGrasp={props.setGrasp}
+            setId={props.setOwner}
+            setErrorGrasp={props.setErrorGrasp}
+            link="http://localhost:5000/louons/api/v1/user/all"
+          />
+        </>
+      )}
       <DivInputForm
         label={"Titre de l'adresse :"}
         name="title"
@@ -76,7 +90,7 @@ function AddressForm(props) {
         type="text"
         value={props.city.value}
         change={(e) => {
-          props.setCity({value: e.target.value});
+          props.setCity({ value: e.target.value });
         }}
         errorcondition={props.city.error && props.isSubmit}
         errormessage="Ce champ doit contenir entre 3 et 50 caractères, et sans caractères spéciaux ni chiffre"

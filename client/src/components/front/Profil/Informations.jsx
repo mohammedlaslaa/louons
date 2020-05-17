@@ -1,6 +1,7 @@
 import React from "react";
 import moment from "moment";
 import DivInputForm from "../../general/Form/DivInputForm";
+import TitleSection from "./TitleSection";
 
 function Informations(props) {
   const { data, isDisabledForm, isLoading } = props.dataCurrentUser;
@@ -11,9 +12,10 @@ function Informations(props) {
     <p className="p-2 text-white bg-success">Chargement...</p>
   ) : (
     <>
-      {!props.isMediumWindow && (
-        <h3 className="title-profil text-center mb-4">Mes informations</h3>
-      )}
+      <TitleSection
+        isMediumWindow={props.isMediumWindow}
+        title="Mes Informations"
+      />
       {props.dataCurrentUser.isSuccess ? (
         <p className="bg-success text-white text-center p-2 w-100">
           Information mis à jour avec succés

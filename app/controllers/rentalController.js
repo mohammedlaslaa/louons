@@ -42,25 +42,28 @@ exports.getAllMyRental = async function (req, res) {
     // Check if the request comes by an admin. If that is the case, return all rental.
 
     if (res.locals.owner.adminLevel) {
-      const allRental = await Rental.find();
-      return res.send(allRental);
+      
+      return res.status(200).send({
+        error: false,
+        message: "You are an admin, please check the right route",
+      });
     }
 
     // Check that there are rentals with the res.locals.owner.id provided by the token.
 
-    const myRental = await Rental.find({ id_user: res.locals.owner.id });
+    const myRental = await Rental.find({ id_user: res.locals.owner.id }).populate("id_payment", "title").populate("id_carrier", "title").populate("id_article", "title");
 
     // If there are not rentals found, send a 400 response status code with a message.
 
     if (!myRental || myRental.length == 0)
-      return res.status(400).send({
+      return res.status(200).send({
         error: true,
-        message: "There is not rentals with this ID",
+        message: "There is not rentals found",
       });
 
     // If all the checks is passing, return the rentals to the client, with a 200 response status code.
 
-    return res.send({ aminLevel: res.locals.admin, data: myRental });
+    return res.send({ data: myRental });
   } catch (e) {
     return res.status(404).send({ error: true, message: e.message });
   }

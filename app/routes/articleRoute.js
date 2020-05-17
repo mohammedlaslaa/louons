@@ -11,7 +11,6 @@ router.get("/detail/:id", objectvalid, articleController.getArticleById);
 
 router.get("/:searcharticle?/:idcategory?", articleController.getAllArticle);
 
-
 // Only an user or an admin authenticated can post a new article or put an article by id.
 
 router.post(

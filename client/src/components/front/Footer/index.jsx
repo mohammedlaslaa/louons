@@ -7,9 +7,9 @@ function Footer() {
   // define the list to display for each part of the footer
 
   const [partAccount] = useState([
-    { link: "personalinfo", title: "Infos personnelles" },
-    { link: "mylocation", title: "Locations" },
-    { link: "myarticle", title: "Mes Articles" },
+    { link: "my_account", title: "Infos personnelles" },
+    { link: "my_account/rentals", title: "Locations" },
+    { link: "my_account/announces", title: "Mes annonces" },
     { link: "message", title: "Message" },
     { link: "login", title: "Connexion" }
   ]);

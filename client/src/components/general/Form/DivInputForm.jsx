@@ -31,9 +31,9 @@ function DivInputForm(props) {
 
 DivInputForm.defaultProps = {
   containerClass:
-    "row form-group my-md-3 d-flex justify-content-center align-items-center w-100 mx-auto",
+    "row form-group my-md-3 d-flex justify-content-center align-items-center col-12 mx-auto",
   inputClass: "form-control col-9 col-sm-6 col-md-5",
-  labelClass: "col-9 col-sm-4 mt-2",
+  labelClass: "col-9 col-sm-6 mt-2",
   disabled: false,
   htmlFor: "",
   min: "",

@@ -13,7 +13,6 @@ const AuthProvider = (props) => {
   // if the cookie token is existing fetch to the api to ensure that the client has a valid cookie token else set the isAuth value to false.
 
   useEffect(() => {
-
     if (cookieToken && linkAuth) {
       fetch(linkAuth, {
         credentials: "include", // ensure that the header can include cookie.

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import SwitchButton from "../general/SwitchButton";
 import { PopupAddContext } from "../../context/PopupAddContext";
+import moment from "moment";
 
 class PageTableList extends Component {
   // Component that render a list table with the props he receives
@@ -37,8 +38,12 @@ class PageTableList extends Component {
       isLoading: true,
     });
     this.getList();
+
     // initialize the popup context to false at each page change
-    this.context.setToggle(false);
+    if(this.context){
+      this.context.setToggle(false);
+    }
+    
   }
 
   componentWillUnmount() {
@@ -106,13 +111,6 @@ class PageTableList extends Component {
           this.getList();
         }
       });
-  };
-
-  // Convert the iso date provided by the api to the date format dd/mm/yyyy
-
-  getDateRegister = (arg) => {
-    let date = new Date(arg);
-    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
   };
 
   // Render the display of the table depending the states. Mapping over the listOfTh and the listOfData object keys in array and compare them in order to display the table correctly
@@ -288,7 +286,7 @@ class PageTableList extends Component {
                                 ) : subTh === "date_register" ||
                                   subTh === "start_date" ||
                                   subTh === "end_date" ? (
-                                  this.getDateRegister(eltData[subData])
+                                  moment(eltData[subData]).format("DD/MM/YYYY")
                                 ) : (
                                   eltData[subData]
                                 )}
