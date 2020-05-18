@@ -24,6 +24,10 @@ function AddressForm(props) {
       successMessage={`Adresse ${props.form.statusMessageForm} avec succés`}
       failMessage="Erreur de duplication ou champs vide, veuillez vérifier votre formulaire"
     >
+      {props.history && <i
+        className="ri-arrow-go-back-line go-back-my-account ri-lg position-absolute"
+        onClick={() => props.history.goBack()}
+      ></i>}
       {dataUser.adminLevel && (
         <>
           <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100 mx-auto">
@@ -55,6 +59,7 @@ function AddressForm(props) {
         label={"Titre de l'adresse :"}
         name="title"
         type="text"
+        containerClass="row form-group my-md-3 d-flex justify-content-center align-items-center col-12 mx-auto mt-5"
         value={props.title}
         change={(e) => {
           props.setTitle(e.target.value);

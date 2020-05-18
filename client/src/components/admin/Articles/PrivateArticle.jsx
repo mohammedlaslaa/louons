@@ -2,7 +2,7 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 import ListArticle from "./ListArticle";
 import NotFound from "../../general/NotFound";
-import ArticleFormLogic from "./ArticleFormLogic.js";
+import ArticleFormLogic from "../../general/Form/ArticleFormLogic.js";
 
 function PrivateArticle() {
   return (

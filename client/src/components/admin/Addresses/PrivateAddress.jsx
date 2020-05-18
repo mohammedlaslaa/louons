@@ -10,9 +10,7 @@ function PrivateAddress() {
       <Route exact path="/admin/addresses">
         <ListAddress />
       </Route>
-      <Route exact path="/admin/addresses/add">
-        <AddressFormLogic title="Ajouter" />
-      </Route>
+      <Route exact path="/admin/addresses/add"  render={(props) => <AddressFormLogic {...props} title="Ajouter" />}/>
       <Route
         exact
         path="/admin/addresses/:id"

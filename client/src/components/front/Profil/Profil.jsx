@@ -96,7 +96,7 @@ function Profil() {
             </ul>
           )}
         </div>
-        <div className="col-12 col-md-8 col-lg-9 container-myaccount p-0">
+        <div className="col-12 col-md-8 col-lg-9 container-myaccount p-0 position-relative">
           <Switch>
             <Route exact path="/my_account">
               <PrivateRoute

@@ -11,6 +11,7 @@ import Login from "../general/Login";
 import Logout from "../general/Logout";
 import Profil from "./Profil/Profil";
 import PrivateRoute from "../general/PrivateRoute";
+import ArticleFormLogic from '../general/Form/ArticleFormLogic'
 import { Switch, Route } from "react-router-dom";
 import "../../styles/front/main.css";
 import { AuthContext } from "../../context/AuthContext";
@@ -45,6 +46,11 @@ function Front() {
               linkAuth="http://localhost:5000/louons/api/v1/authenticationuser"
             />
           </Route>
+          <Route
+            exact
+            path="/post_announce"
+            render={(props) => <ArticleFormLogic title="Proposer" {...props} />}
+          />
           <Route
             exact
             path="/logout"

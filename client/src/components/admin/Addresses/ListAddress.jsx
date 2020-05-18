@@ -6,7 +6,7 @@ function ListAddress() {
 
   return (
     <PageTableList
-      titlepage="Liste des utilisateurs"
+      titlepage="Liste des adresses"
       linkapi="http://localhost:5000/louons/api/v1/address"
       th={[
         { addressId: "ID" },

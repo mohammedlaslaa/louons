@@ -49,7 +49,7 @@ exports.postAuthUser = async (req, res) => {
       .clearCookie("x-auth-token")
       .cookie("x-auth-token", user.generateToken(), {
         path: "/",
-        expires: new Date(Date.now() + 3000),
+        expires: new Date(Date.now() + 3000000),
       })
       .send({ error: false, message: "Authentication success" });
   } catch (e) {

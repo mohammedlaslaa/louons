@@ -32,9 +32,9 @@ function Product() {
           if (!result.error) {
             setArticle((prevState) => ({
               ...prevState,
-              data: result.data,
+              data: result.data[0],
               isFetched: true,
-              mainpicture: result.data.pictures[0].path_picture,
+              mainpicture: result.data[0].pictures[0].path_picture,
             }));
           } else if (result.error) {
             setArticle((prevState) => ({

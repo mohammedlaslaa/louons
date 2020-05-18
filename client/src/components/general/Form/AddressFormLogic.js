@@ -100,7 +100,6 @@ function AddressFormLogic(props) {
                 setForm((prevState) => ({ ...prevState, isFailed: false }));
             }, 800);
           }
-          
         });
     }
     // get the data depending if the isFetched state is settled to false and if there are an idParams
@@ -247,6 +246,7 @@ function AddressFormLogic(props) {
 
   return (
     <AddressForm
+      history={props.history}
       form={form}
       titlepage={props.title}
       errorGrasp={errorGrasp}

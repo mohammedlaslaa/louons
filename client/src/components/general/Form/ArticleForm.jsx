@@ -1,12 +1,21 @@
-import React from "react";
-import DivInputForm from "../../general/Form/DivInputForm";
+import React, { useEffect, useContext } from "react";
+import DivInputForm from "./DivInputForm";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
-import AutoCompleteField from "../../general/Form/AutoCompleteField";
-import TextAreaInputForm from "../../general/Form/TextAreaInputForm";
-import InputFileForm from "../../general/Form/InputFileForm";
-import Form from "../../general/Form/Form";
+import AutoCompleteField from "./AutoCompleteField";
+import TextAreaInputForm from "./TextAreaInputForm";
+import InputFileForm from "./InputFileForm";
+import Form from "./Form";
+import { AuthContext } from "../../../context/AuthContext";
 
 function ArticleForm(props) {
+  const { dataUser } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (!dataUser.adminLevel) {
+      props.setErrorGrasp(false);
+      props.setOwner(dataUser.id);
+    }
+  }, [dataUser, props]);
 
   return (
     <Form
@@ -17,19 +26,21 @@ function ArticleForm(props) {
       successMessage={`Article ${props.statusMessageForm} avec succés`}
       failMessage="Erreur de duplication ou champs vide, veuillez vérifier votre formulaire"
     >
-      <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100">
-        <label className="col-12 col-sm-4 mt-2">Etat :</label>
-        <BootstrapSwitchButton
-          checked={props.isActive}
-          onlabel="Actif"
-          offlabel="Inactif"
-          size="xs"
-          width="70"
-          onChange={() => {
-            props.setIsActive(!props.isActive);
-          }}
-        />
-      </div>
+      {dataUser.adminLevel && (
+        <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100">
+          <label className="col-12 col-sm-4 mt-2">Etat :</label>
+          <BootstrapSwitchButton
+            checked={props.isActive}
+            onlabel="Actif"
+            offlabel="Inactif"
+            size="xs"
+            width="70"
+            onChange={() => {
+              props.setIsActive(!props.isActive);
+            }}
+          />
+        </div>
+      )}
       {props.pictureDisplay && props.pictureDisplay.length > 0 && (
         <div className="col-12 m-0 p-0 row d-flex justify-content-between">
           {props.pictureDisplay.map((e) => (
@@ -65,19 +76,22 @@ function ArticleForm(props) {
           ))}
         </select>
       </div>
-      <AutoCompleteField
-        errorGrasp={props.errorGrasp}
-        idParams={props.idParams}
-        grasp={props.grasp}
-        titleLabel="Propriétaire"
-        setGrasp={props.setGrasp}
-        setId={props.setOwner}
-        setErrorGrasp={props.setErrorGrasp}
-        link="http://localhost:5000/louons/api/v1/user/all"
-      />
+      {dataUser.adminLevel && (
+        <AutoCompleteField
+          errorGrasp={props.errorGrasp}
+          idParams={props.idParams}
+          grasp={props.grasp}
+          titleLabel="Propriétaire"
+          setGrasp={props.setGrasp}
+          setId={props.setOwner}
+          setErrorGrasp={props.setErrorGrasp}
+          link="http://localhost:5000/louons/api/v1/user/all"
+        />
+      )}
       <DivInputForm
         label={"Titre :"}
         name="title"
+        labelClass="col-9 col-sm-4 mt-2"
         type="text"
         value={props.title}
         change={(e) => {
@@ -102,6 +116,7 @@ function ArticleForm(props) {
       <DivInputForm
         label={"Tarif €/jr :"}
         name="price"
+        labelClass="col-9 col-sm-4 mt-2"
         type="number"
         value={props.price}
         change={(e) => {

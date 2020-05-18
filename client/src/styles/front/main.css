@@ -68,8 +68,16 @@ h2 {
   font-size: 1.3rem;
 }
 
+.subtitle-profil {
+  font-size: 1.1rem;
+}
+
 .container-myaccount {
   min-height: 20rem;
+}
+
+.go-back-my-account{
+  top: 0.8rem;
 }
 
 /* my informations */

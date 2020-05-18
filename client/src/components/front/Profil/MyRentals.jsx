@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import TitleSection from "./TitleSection";
 import { useParams } from "react-router-dom";
 import TableProfil from "./TableProfil";
+import Rental from "./Rental";
 
 function MyRentals(props) {
   const idParams = useParams().id;
@@ -10,6 +11,7 @@ function MyRentals(props) {
     data: [],
     isFetched: false,
     id: idParams,
+    dataRental: {},
   });
 
   useEffect(() => {
@@ -28,6 +30,22 @@ function MyRentals(props) {
           }
         });
     }
+
+    if (rentals.id && Object.keys(rentals.dataRental).length === 0) {
+      fetch(`http://localhost:5000/louons/api/v1/rental/detail/${rentals.id}`, {
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          if (!result.error) {
+            setRentals((prevState) => ({
+              ...prevState,
+              dataRental: result.data,
+            }));
+          }
+        });
+    }
+
     if (idParams !== rentals.id) {
       setRentals((prevState) => ({ ...prevState, id: idParams }));
     }
@@ -59,7 +77,7 @@ function MyRentals(props) {
           }}
         />
       ) : rentals.id ? (
-        ""
+        <Rental datarental={rentals.dataRental} history={props.history} />
       ) : (
         <p>Vous n'avez pas encore de location</p>
       )}

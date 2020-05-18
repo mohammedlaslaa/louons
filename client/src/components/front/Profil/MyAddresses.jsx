@@ -73,7 +73,7 @@ function MyAddresses(props) {
           </Link>
         </>
       ) : (
-        <AdressFormLogic setAddresses={setAddresses} />
+        <AdressFormLogic setAddresses={setAddresses} history={props.history} />
       )}
     </>
   );
