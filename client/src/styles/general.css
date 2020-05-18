@@ -109,3 +109,11 @@ i[class^="ri"] {
 .message-loading{
   max-height: 3.5rem;
 }
+
+/*title of page */
+
+.titlepage {
+  font-size: 1.5rem;
+  margin-top: 3rem;
+  text-align: center;
+}

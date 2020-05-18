@@ -20,7 +20,7 @@ function ArticleForm(props) {
   return (
     <Form
       handleSubmit={props.handleSubmit}
-      titlepage={`${props.titlepage} un article`}
+      titlepage={`${props.titlepage} une annonce`}
       isFailed={props.isFailed}
       isSuccess={props.isSuccess}
       successMessage={`Article ${props.statusMessageForm} avec succés`}
@@ -59,12 +59,12 @@ function ArticleForm(props) {
           Veuillez sélectionner une catégorie
         </span>
       )}
-      <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100">
+      <div className="row form-group my-3 d-flex justify-content-center align-items-center col-12 mx-auto">
         <label className="col-9 col-sm-4 mt-2">Catégorie :</label>
         <select
           name="id_category"
           id="category"
-          className="p-1 col-9 col-sm-6 col-md-5"
+          className="form-control col-9 col-sm-6 col-md-5"
           value={props.idCategory}
           onChange={(e) => props.setIdCategory(e.target.value)}
         >

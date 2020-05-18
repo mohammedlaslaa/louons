@@ -29,14 +29,14 @@ function Product() {
       fetch(`http://localhost:5000/louons/api/v1/article/detail/${id}`)
         .then((res) => res.json())
         .then((result) => {
-          if (!result.error) {
-            setArticle((prevState) => ({
-              ...prevState,
-              data: result.data[0],
-              isFetched: true,
-              mainpicture: result.data[0].pictures[0].path_picture,
-            }));
-          } else if (result.error) {
+          if (!result.error && result.data.isActive) {
+              setArticle((prevState) => ({
+                ...prevState,
+                data: result.data,
+                isFetched: true,
+                mainpicture: result.data.pictures[0].path_picture,
+              }));
+          } else {
             setArticle((prevState) => ({
               ...prevState,
               error: true,

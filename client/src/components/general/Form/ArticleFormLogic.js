@@ -229,7 +229,7 @@ function ArticleFormLogic(props) {
 
   return (
     <ArticleForm
-      titlepage={props.title}
+      titlepage={props.title || "Proposer"}
       isSuccess={isSuccess}
       isFailed={isFailed}
       isActive={isActive}

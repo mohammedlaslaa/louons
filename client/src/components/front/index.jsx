@@ -49,8 +49,13 @@ function Front() {
           <Route
             exact
             path="/post_announce"
-            render={(props) => <ArticleFormLogic title="Proposer" {...props} />}
-          />
+          >
+            <PrivateRoute
+              component={ArticleFormLogic}
+              pageifnotauth="/login"
+              linkAuth="http://localhost:5000/louons/api/v1/authenticationuser"
+            />
+          </Route>
           <Route
             exact
             path="/logout"

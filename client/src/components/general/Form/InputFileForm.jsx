@@ -8,7 +8,7 @@ function InputFileForm(props) {
           {props.errorMessage}
         </span>
       )}
-      <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100">
+      <div className="row form-group my-3 d-flex justify-content-center align-items-center col-12 mx-auto">
         <label className="col-9 col-sm-4 mt-2">{props.label} :</label>
         <input
           type="file"

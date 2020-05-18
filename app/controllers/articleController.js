@@ -22,11 +22,11 @@ exports.getAllArticle = async function (req, res) {
     }
 
     const allArticle =
-    req.params.searcharticle === "owner"
-    ? await Article.find({
-        id_user : verify.id
-      }).select("-date_update -date_delete -isTop -id_user -articleId")
-    : req.params.searcharticle === "lastactive"
+      req.params.searcharticle === "owner"
+        ? await Article.find({
+            id_user: verify.id,
+          }).select("-date_update -date_delete -isTop -id_user -articleId")
+        : req.params.searcharticle === "lastactive"
         ? await Article.find({
             isActive: true,
           })
@@ -48,11 +48,9 @@ exports.getAllArticle = async function (req, res) {
           }).select("_id articleId title")
         : verify.adminLevel
         ? await Article.find().populate("id_category", "title -_id")
-        : await Article.find({ isActive: true }).sort({ date_register: -1 }).populate(
-            "id_category",
-            "title -_id"
-          );
-
+        : await Article.find({ isActive: true })
+            .sort({ date_register: -1 })
+            .populate("id_category", "title -_id");
 
     return res.status(200).send({
       adminLevel: verify.adminLevel,
@@ -66,14 +64,14 @@ exports.getAllArticle = async function (req, res) {
 exports.getArticleById = async function (req, res) {
   try {
     // Find an article by id, then return it to the client.
-    const article = await Article.find({_id : req.params.id, isActive : true})
+    const article = await Article.findById(req.params.id)
       .select("id_user title description price pictures isActive")
       .populate("id_category", "title description _id")
       .populate("id_user", "lastName firstName email");
 
     // If there are not article with this id return a 400 response status code with a message.
 
-    if (!article || article.length === 0)
+    if (!article)
       return res.status(400).send({
         error: true,
         message: "There are not article with the id provided",
