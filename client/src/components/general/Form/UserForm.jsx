@@ -1,57 +1,62 @@
 import React from "react";
 import moment from "moment";
-import Form from "../../general/Form/Form";
-import DivInputForm from "../../general/Form/DivInputForm";
-import InputFileForm from "../../general/Form/InputFileForm";
+import Form from "./Form";
+import DivInputForm from "./DivInputForm";
+import InputFileForm from "./InputFileForm";
 
 function UserForm(props) {
   return (
     <Form
       handleSubmit={props.handleSubmit}
-      titlepage={`${props.titlepage} utilisateur`}
+      titlepage={
+        props.titlepage ? `${props.titlepage} utilisateur` : "Inscription"
+      }
       isFailed={props.isFailed}
       isSuccess={props.isSuccess}
       successMessage={`Utilisateur enregistré avec succés`}
       failMessage="Erreur de duplication ou champs vide, veuillez vérifier votre formulaire"
     >
-      {props.pictureDisplay !== "" && props.pictureDisplay !== undefined ? (
-        <div className="col-12 m-0 p-0 row d-flex justify-content-between">
-          <div
-            className="col-4 col-sm-2 p-2 mx-auto"
-            key={props.pictureDisplay}
-          >
-            <img
-              src={`http://localhost:5000/uploads/img/${props.pictureDisplay}`}
-              className="w-100 rounded-circle"
-              alt="avatar_image_profil"
-            />
+      {props.pathname !== "/inscription" &&
+        (props.pictureDisplay !== "" && props.pictureDisplay !== undefined ? (
+          <div className="col-12 m-0 p-0 row d-flex justify-content-between">
+            <div
+              className="col-4 col-sm-2 p-2 mx-auto"
+              key={props.pictureDisplay}
+            >
+              <img
+                src={`http://localhost:5000/uploads/img/${props.pictureDisplay}`}
+                className="w-100 rounded-circle"
+                alt="avatar_image_profil"
+              />
+            </div>
           </div>
-        </div>
-      ) : (
-        <div className="col-12 m-0 p-0 row d-flex justify-content-between">
-          <div
-            className="col-4 col-sm-2 p-2 mx-auto"
-            key={props.pictureDisplay}
-          >
-            <img
-              src={`http://localhost:5000/uploads/img/default-avatar.png`}
-              className="w-100 rounded-circle"
-              alt="avatar_image_profil"
-            />
+        ) : (
+          <div className="col-12 m-0 p-0 row d-flex justify-content-between">
+            <div
+              className="col-4 col-sm-2 p-2 mx-auto"
+              key={props.pictureDisplay}
+            >
+              <img
+                src={`http://localhost:5000/uploads/img/default-avatar.png`}
+                className="w-100 rounded-circle"
+                alt="avatar_image_profil"
+              />
+            </div>
           </div>
-        </div>
-      )}
+        ))}
       <InputFileForm
         errorPicture={props.errorPicture}
         isSubmit={props.isSubmit}
         reset={props.picture}
-        setPicture={(e) => props.setPicture(e.target.files)}
+        setPicture={(e) => {
+          props.setPicture(e.target.files);
+        }}
         label={"Photo de profil"}
         errorMessage="Seule une image sous le format png ou jpg/jpeg est accepté"
         isMultiple={true}
       />
-      <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100">
-        <label className="col-9 col-sm-4 mt-2">Titre :</label>
+      <div className="row form-group my-md-3 d-flex justify-content-center align-items-center col-12 mx-auto text-center">
+        <label className="col-9 col-sm-6 mt-2">Titre :</label>
         <div className="col-12 col-sm-6 col-md-5">
           <label className="col-6 col-sm-5 mt-2">
             Mr
@@ -99,8 +104,13 @@ function UserForm(props) {
         errorcondition={props.errorFirstName && props.isSubmit}
         errormessage="Le prénom ne peut pas contenir de chiffre ou de caractères spéciaux"
       />
-      <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100 mx-auto">
-        <label className="col-9 col-sm-4 mt-2">Date de naissance :</label>
+      {props.errorDateBirth && props.isSubmit && (
+        <span className="text-danger errormessage text-center w-100 p-2">
+          Veuillez sélectionner une date
+        </span>
+      )}
+      <div className="row form-group my-3 d-flex justify-content-center align-items-center col-12 mx-auto">
+        <label className="col-9 col-sm-6 mt-2">Date de naissance :</label>
         <input
           type="date"
           name="datebirth"
@@ -162,10 +172,10 @@ function UserForm(props) {
         errormessage="Le mot de passe de confirmation doit être identique"
       />
       <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100">
-        <label className="col-9 col-sm-4 mt-2">
+        <label className="col-9 col-sm-6 mt-2">
           Inscription à la newsletter :
         </label>
-        <div>
+        <div className="col-6 col-md-5">
           <label className="col-9 col-sm-4 mt-2">Oui</label>
           <input
             type="radio"

@@ -10,15 +10,18 @@ import NotFound from "../general/NotFound";
 import Login from "../general/Login";
 import Logout from "../general/Logout";
 import Profil from "./Profil/Profil";
+import UserFormLogic from "../general/Form/UserFormLogic";
 import PrivateRoute from "../general/PrivateRoute";
-import ArticleFormLogic from '../general/Form/ArticleFormLogic'
+import ArticleFormLogic from "../general/Form/ArticleFormLogic";
 import { Switch, Route } from "react-router-dom";
 import "../../styles/front/main.css";
 import { AuthContext } from "../../context/AuthContext";
 
 function Front() {
   const { setLinkAuth } = useContext(AuthContext);
-  
+
+  // set the path authentication
+
   useEffect(() => {
     setLinkAuth("http://localhost:5000/louons/api/v1/authenticationuser");
   }, [setLinkAuth]);
@@ -46,16 +49,18 @@ function Front() {
               linkAuth="http://localhost:5000/louons/api/v1/authenticationuser"
             />
           </Route>
-          <Route
-            exact
-            path="/post_announce"
-          >
+          <Route exact path="/post_announce">
             <PrivateRoute
               component={ArticleFormLogic}
               pageifnotauth="/login"
               linkAuth="http://localhost:5000/louons/api/v1/authenticationuser"
             />
           </Route>
+          <Route
+            exact
+            path="/inscription"
+            render={(props) => <UserFormLogic  {...props} />}
+          />
           <Route
             exact
             path="/logout"

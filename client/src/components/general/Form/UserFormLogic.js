@@ -9,6 +9,7 @@ function UserFormLogic(props) {
   const [lastName, setLastName] = useState("");
   const [firstName, setFirstName] = useState("");
   const [dateBirth, setDateBirth] = useState();
+  const [errorDateBirth, setErrorDateBirth] = useState(false);
   const [email, setEmail] = useState("");
   const [picture, setPicture] = useState("");
   const [pictureDisplay, setPictureDisplay] = useState("");
@@ -48,8 +49,8 @@ function UserFormLogic(props) {
             setDateBirth(result.date_birth);
             setEmail(result.email);
             setIsSubscribe(result.isSubscribe);
-            setPictureDisplay(result.path_picture)
-          }else if (result.error) {
+            setPictureDisplay(result.path_picture);
+          } else if (result.error) {
             return props.history.push("/admin/users");
           }
         });
@@ -100,6 +101,13 @@ function UserFormLogic(props) {
     } else {
       setErrorFirstName(false);
     }
+    
+    if (!dateBirth  && method === "POST") {
+      setErrorDateBirth(true);
+      setNumberErrorForm((prev) => prev + 1);
+    } else {
+      setErrorDateBirth(false);
+    }
 
     if (!regexMail.test(email) || email === "") {
       setErrorMail(true);
@@ -143,8 +151,9 @@ function UserFormLogic(props) {
     idParams,
     method,
     dataform,
+    dateBirth,
     picture,
-    props.history
+    props.history,
   ]);
 
   const handleSubmit = (e) => {
@@ -184,6 +193,11 @@ function UserFormLogic(props) {
             setTimeout(() => {
               setIsSuccess(false);
             }, 1500);
+            if (props.location.pathname === "/inscription") {
+              setTimeout(() => {
+                return props.history.push("/login");
+              }, 2000);
+            }
             if (method === "POST") {
               // reset all value of the form if the value method is equal to POST
               setGender("");
@@ -193,8 +207,9 @@ function UserFormLogic(props) {
               setEmail("");
               setPassword("");
               setConfirmationPassword("");
-              setPicture("")
+              setPicture("");
               setIsSubscribe(false);
+              //redirect to login when the user subscribe
             } else {
               setPictureDisplay(result.picture);
               setPassword("");
@@ -253,6 +268,8 @@ function UserFormLogic(props) {
       errorPicture={errorPicture}
       pictureDisplay={pictureDisplay}
       setPictureDisplay={setPictureDisplay}
+      pathname={props.location.pathname}
+      errorDateBirth={errorDateBirth}
     />
   );
 }

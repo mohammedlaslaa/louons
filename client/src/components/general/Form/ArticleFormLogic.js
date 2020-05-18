@@ -47,13 +47,13 @@ function ArticleFormLogic(props) {
         .then((result) => {
           if (!result.error) {
             setIsFetchedArticle(true);
-            setIdCategory(result.id_category._id);
-            setPrice(result.price);
-            setTitle(result.title);
-            setDescription(result.description);
-            setGrasp(`${result.id_user.lastName} ${result.id_user.firstName}`);
-            setPictureDisplay(result.pictures);
-            setIsActive(result.isActive);
+            setIdCategory(result.data.id_category._id);
+            setPrice(result.data.price);
+            setTitle(result.data.title);
+            setDescription(result.data.description);
+            setGrasp(`${result.data.id_user.lastName} ${result.data.id_user.firstName}`);
+            setPictureDisplay(result.data.pictures);
+            setIsActive(result.data.isActive);
             setErrorGrasp(false);
           } else if (result.error) {
             return props.history.push("/admin/articles");

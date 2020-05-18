@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import ListUser from "./ListUser";
-import UserFormLogic from "./UserFormLogic.js";
+import UserFormLogic from "../../general/Form/UserFormLogic.js";
 import NotFound from "../../general/NotFound";
 
 function PrivateUser() {

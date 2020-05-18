@@ -22,7 +22,7 @@ function MenuList(props) {
       return (
         <li
           key={index}
-          className="p-2 my-3"
+          className="p-2 my-3 menuelement"
           onMouseEnter={() => {
             setDisplayCategory(true);
           }}

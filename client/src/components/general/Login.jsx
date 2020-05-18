@@ -103,7 +103,7 @@ function Login({ linkapi, redirect, history, location }) {
             />
           </label>
           {location.pathname === "/login" && (
-            <Link to="/register">
+            <Link to="/inscription">
               <p className="text-danger mb-2 notregistered-login">
                 Pas encore de compte ? Inscrivez-vous{" "}
               </p>
