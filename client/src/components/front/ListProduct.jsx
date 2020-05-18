@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function ListProduct(props) {
+// Component that simply return a list of product depending the props that it receives
   return (
     <div className={props.divClass}>
       {props.data.map((elt, index) => {

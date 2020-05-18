@@ -3,15 +3,21 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 
 function TableProfil(props) {
+  // Function that send a request to the api in order to delete a document
   const handleDelete = (id) => {
     fetch(`${props.linkapi}/${id}`, {
       method: "DELETE",
       credentials: "include",
     })
       .then((res) => res.json())
-      .then((result) =>
-        props.setAddresses((prevState) => ({ ...prevState, isFetched: false }))
-      );
+      .then((result) => {
+        if (!result.error) {
+          props.setAddresses((prevState) => ({
+            ...prevState,
+            isFetched: false,
+          }));
+        }
+      });
   };
 
   return (

@@ -5,8 +5,8 @@ import TableProfil from "./TableProfil";
 import Rental from "./Rental";
 
 function MyRentals(props) {
+  // Initialize the announces state and the idParams
   const idParams = useParams().id;
-
   const [rentals, setRentals] = useState({
     data: [],
     isFetched: false,
@@ -15,6 +15,7 @@ function MyRentals(props) {
   });
 
   useEffect(() => {
+    // fetch all the rentals of the user, then store them in the rentals state
     if (!rentals.isFetched) {
       fetch("http://localhost:5000/louons/api/v1/rental/self", {
         credentials: "include",
@@ -31,6 +32,7 @@ function MyRentals(props) {
         });
     }
 
+    // If there an rentals.id and the length of rentals.dataRental is equal to 0, fetch the data of the current rental
     if (rentals.id && Object.keys(rentals.dataRental).length === 0) {
       fetch(`http://localhost:5000/louons/api/v1/rental/detail/${rentals.id}`, {
         credentials: "include",
@@ -46,11 +48,13 @@ function MyRentals(props) {
         });
     }
 
+    // if there are an idParams and it is not equal to the rentals.id, refresh the rentals.id state
     if (idParams !== rentals.id) {
       setRentals((prevState) => ({ ...prevState, id: idParams }));
     }
   }, [rentals, idParams]);
 
+  // Simple function to change the rentals.id
   const handleIdParams = (id) => {
     setRentals((prevState) => ({ ...prevState, id }));
   };

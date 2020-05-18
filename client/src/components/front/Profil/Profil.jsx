@@ -5,7 +5,6 @@ import InformationsLogic from "./InformationsLogic";
 import MyAnnounces from "./MyAnnounces";
 import MyAddresses from "./MyAddresses";
 import MyRentals from "./MyRentals";
-// import { AuthContext } from "../../../context/AuthContext";
 
 function Profil() {
   const [isMediumWindow, setIsMediumWindow] = useState();
@@ -13,6 +12,7 @@ function Profil() {
   let history = useHistory();
   let isCancelled = useRef(null);
 
+  // set the isMediumWindow depending the width of the window
   const handleIsMedium = () => {
     if (!isCancelled.current) {
       if (window.innerWidth < 768) {
@@ -26,17 +26,21 @@ function Profil() {
   useEffect(() => {
     isCancelled.current = false;
 
+    //handleIsMedium only when the isCancelled.current is settled to false
     if (!isCancelled.current) {
       handleIsMedium();
     }
 
+    // cleanup the effect when the component is unmounted
     return () => {
       isCancelled.current = true;
     };
   }, [isMediumWindow]);
 
+  // add an event listener on resize
   window.addEventListener("resize", handleIsMedium);
 
+  // when this function is call change the value of the select state
   function handleChangeSelect(value) {
     setValueSelect(value);
     if (value === "logout") {

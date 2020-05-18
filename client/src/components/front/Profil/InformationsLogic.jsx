@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Informations from "./Informations";
 
 function InformationsLogic(props) {
+  // Initialize the state with the data of the current user
+
   const [dataCurrentUser, setDataCurrentUser] = useState({
     method: "GET",
     data: {
@@ -12,7 +14,6 @@ function InformationsLogic(props) {
       newPassword: "",
       confirmationNewPassword: "",
     },
-
     isFetched: false,
     isLoading: true,
     isSubmit: false,

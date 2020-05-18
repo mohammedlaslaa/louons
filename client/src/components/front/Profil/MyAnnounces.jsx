@@ -3,12 +3,14 @@ import TitleSection from "./TitleSection";
 import TableProfil from "./TableProfil";
 
 function MyAnnounces(props) {
+  // Initialize the announces state
   const [announces, setAnnounces] = useState({
     data: [],
     isFetched: false,
   });
 
   useEffect(() => {
+    // fetch all the announces of the user, then store them in the announces state
     if (!announces.isFetched) {
       fetch("http://localhost:5000/louons/api/v1/article/owner", {
         credentials: "include",

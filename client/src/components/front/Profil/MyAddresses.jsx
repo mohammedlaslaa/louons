@@ -5,6 +5,7 @@ import TableProfil from "./TableProfil";
 import AdressFormLogic from "../../general/Form/AddressFormLogic";
 
 function MyAddresses(props) {
+  // Initialize the id passed in parameter and the addresses of the user
   const idParams = useParams().id;
   const [addresses, setAddresses] = useState({
     data: [],
@@ -13,6 +14,7 @@ function MyAddresses(props) {
   });
 
   useEffect(() => {
+    // fetch all the addresses of the user, then store them in the adresses state
     if (!addresses.isFetched) {
       fetch("http://localhost:5000/louons/api/v1/address/allself", {
         credentials: "include",
@@ -25,15 +27,16 @@ function MyAddresses(props) {
               data: result.data,
               isFetched: true,
             }));
-          } else if (result.error) {
           }
         });
     }
+    // if there are an idParams and it is not equal to the addresses.id, refresh the addresses.id state
     if (idParams !== addresses.id) {
       setAddresses((prevState) => ({ ...prevState, id: idParams }));
     }
   }, [addresses, idParams]);
 
+  // Simple function to change the addresses.id
   const handleIdParams = (id) => {
     setAddresses((prevState) => ({ ...prevState, id }));
   };
