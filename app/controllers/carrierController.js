@@ -27,7 +27,7 @@ exports.getAllCarrier = async function (req, res) {
         : verify.adminLevel == "admin" || verify.adminLevel == "superadmin"
         ? await Carrier.find().select("carrierId description delay_delivery isActive title price link")
         : await Carrier.find({ isActive: true }).select(
-            "carrierId isActive delay_delivery title price link"
+            "carrierId isActive delay_delivery description title price link path_picture"
           );
 
     return res.status(200).send({

@@ -7,6 +7,7 @@ import Product from "./Product";
 import Category from "./Category";
 import AllProduct from "./AllProduct";
 import NotFound from "../general/NotFound";
+import Rental  from "./Rental";
 import Login from "../general/Login";
 import Logout from "../general/Logout";
 import Profil from "./Profil/Profil";
@@ -29,61 +30,71 @@ function Front() {
   return (
     // Provide the category list to the app or to the component that need it
     <ListCategoryProvider>
-      <Header />
-      <main className="row widthmain mx-auto">
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route exact path="/announces" render={() => <AllProduct />} />
-          <Route exact path="/announce/:id" render={() => <Product />} />
-          <Route
-            exact
-            path="/categories/:title"
-            render={(props) => <Category {...props} />}
-          />
-          <Route path="/my_account">
-            <PrivateRoute
-              component={Profil}
-              pageifnotauth="/login"
-              linkAuth="http://localhost:5000/louons/api/v1/authenticationuser"
+        <Header />
+        <main className="row widthmain mx-auto">
+          <Switch>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route exact path="/announces" render={() => <AllProduct />} />
+            <Route exact path="/announce/:id" render={() => <Product />} />
+            <Route
+              exact
+              path="/categories/:title"
+              render={(props) => <Category {...props} />}
             />
-          </Route>
-          <Route exact path="/post_announce">
-            <PrivateRoute
-              component={ArticleFormLogic}
-              pageifnotauth="/login"
-              linkAuth="http://localhost:5000/louons/api/v1/authenticationuser"
-            />
-          </Route>
-          <Route
-            exact
-            path="/inscription"
-            render={(props) => <UserFormLogic  {...props} />}
-          />
-          <Route
-            exact
-            path="/logout"
-            render={(props) => <Logout {...props} redirect="/" />}
-          />
-          <Route
-            exact
-            path="/login"
-            render={(props) => (
-              <Login
-                linkapi="http://localhost:5000/louons/api/v1/authenticationuser"
-                redirect="/my_account"
-                {...props}
+            <Route path="/my_account">
+              <PrivateRoute
+                component={Profil}
+                pageifnotauth="/login"
+                linkAuth="http://localhost:5000/louons/api/v1/authenticationuser"
               />
-            )}
-          />
-          <Route>
-            <NotFound />
-          </Route>
-        </Switch>
-      </main>
-      <div className="fill"></div>
-      <Footer />
+            </Route>
+            <Route exact path="/post_announce">
+              <PrivateRoute
+                component={ArticleFormLogic}
+                pageifnotauth="/login"
+                linkAuth="http://localhost:5000/louons/api/v1/authenticationuser"
+              />
+            </Route>
+            <Route
+              exact
+              path="/inscription"
+              render={(props) => <UserFormLogic {...props} />}
+            />
+            <Route
+              exact
+              path="/order"
+            >
+              <PrivateRoute
+                component={Rental}
+                pageifnotauth="/login"
+                linkAuth="http://localhost:5000/louons/api/v1/authenticationuser"
+              />
+            </Route>
+            <Route
+              exact
+              path="/logout"
+              render={(props) => <Logout {...props} redirect="/" />}
+            />
+            <Route
+              exact
+              path="/login"
+              render={(props) => (
+                <Login
+                  linkapi="http://localhost:5000/louons/api/v1/authenticationuser"
+                  redirect="/my_account"
+                  {...props}
+                />
+              )}
+            />
+            <Route>
+              <NotFound />
+            </Route>
+          </Switch>
+        </main>
+        <div className="fill"></div>
+        <Footer />
     </ListCategoryProvider>
   );
 }

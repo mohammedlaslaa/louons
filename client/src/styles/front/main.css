@@ -76,7 +76,7 @@ h2 {
   min-height: 20rem;
 }
 
-.go-back-my-account{
+.go-back-my-account {
   top: 0.8rem;
 }
 
@@ -138,6 +138,36 @@ select {
   }
 }
 
+/* rental */
+
+.step-title {
+  font-size: 0.7rem;
+  font-style: italic;
+}
+
+.title-part-rental-step {
+  font-size: 1rem;
+}
+
+.thumbnail-article-rental {
+  margin: 1rem auto;
+  max-width: 10rem
+}
+
+.content-rental p {
+  font-size: 0.9rem;
+}
+
+.table-rental th,
+td {
+  font-size: 0.85rem;
+}
+
+.thumbnail-delivery-payment {
+  max-width: 8rem;
+  margin: 0.8rem;
+}
+
 @media screen and (min-width: 768px) {
   h1 {
     font-size: 1.5rem;
@@ -159,9 +189,16 @@ select {
   .container-myaccount {
     min-height: 30rem;
   }
+
+  .step-title {
+    font-size: 0.8rem;
+    font-style: italic;
+  }
 }
 
-@media screen and (max-width: 992px) {}
+@media screen and (max-width: 992px) {
+
+}
 
 @media screen and (min-width: 1200px) {
   .imgnotfound {

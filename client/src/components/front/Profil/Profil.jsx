@@ -31,11 +31,23 @@ function Profil() {
       handleIsMedium();
     }
 
+    //change the value select depending the pathname of the location
+  
+    if(history.location.pathname === "/my_account/rentals"){
+      setValueSelect("rentals")
+    }else if(history.location.pathname === "/my_account/announces"){
+      setValueSelect("announces")
+    }else if(history.location.pathname === "/my_account/addresses"){
+      setValueSelect("addresses")
+    }else if(history.location.pathname === "/my_account"){
+      setValueSelect("")
+    }
+
     // cleanup the effect when the component is unmounted
     return () => {
       isCancelled.current = true;
     };
-  }, [isMediumWindow]);
+  }, [isMediumWindow, history]);
 
   // add an event listener on resize
   window.addEventListener("resize", handleIsMedium);
@@ -60,7 +72,7 @@ function Profil() {
               value={valueSelect}
               onChange={(e) => handleChangeSelect(e.target.value)}
             >
-              <option value="">Informations</option>
+              <option  value="">Informations</option>
               <option value="announces">Mes Annonces</option>
               <option value="addresses">Mes Adresses</option>
               <option value="rentals">Mes locations</option>

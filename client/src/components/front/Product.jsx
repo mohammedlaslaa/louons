@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { useParams, Link } from "react-router-dom";
 import NotFound from "../general/NotFound";
 import LiForm from "../general/Form/LiForm";
 import moment from "moment";
+import { AuthContext } from "../../context/AuthContext";
+import Cookies from "js-cookie";
 
 function Product() {
   // get the id params of the link
   const id = useParams().id;
+
+  // get the context from the authcontext
+  const { isAuth } = useContext(AuthContext);
 
   // initialize the state of the article
   const [article, setArticle] = useState({
@@ -30,12 +35,12 @@ function Product() {
         .then((res) => res.json())
         .then((result) => {
           if (!result.error && result.data.isActive) {
-              setArticle((prevState) => ({
-                ...prevState,
-                data: result.data,
-                isFetched: true,
-                mainpicture: result.data.pictures[0].path_picture,
-              }));
+            setArticle((prevState) => ({
+              ...prevState,
+              data: result.data,
+              isFetched: true,
+              mainpicture: result.data.pictures[0].path_picture,
+            }));
           } else {
             setArticle((prevState) => ({
               ...prevState,
@@ -119,7 +124,9 @@ function Product() {
             <p className="my-3">{article.data.description}</p>
             <p className="my-3 font-weight-bold">Prix de location :</p>
             <p className="my-3">{article.data.price} €/jr</p>
-            {article.isShownButton ? (
+            {!isAuth ? (
+              <p>Veuillez vous connecter pour voir les disponibilités</p>
+            ) : article.isShownButton ? (
               <button
                 className="btn btn-outline-dark my-3"
                 onClick={() =>
@@ -227,9 +234,21 @@ function Product() {
                   </ul>
                 )}
                 {article.dateStart && (
-                  <button className="btn btn-outline-primary m-3">
-                    Réserver à cette date
-                  </button>
+                  <Link to="/order">
+                    <button
+                      className="btn btn-outline-primary m-3"
+                      onClick={() => 
+                        Cookies.set("article", {
+                          article: article.data,
+                          dateStart: article.dateStart,
+                          dateEnd: article.dateEnd,
+                          numberDay: article.numberDay,
+                        })
+                      }
+                    >
+                      Réserver à cette date
+                    </button>
+                  </Link>
                 )}
               </>
             )}

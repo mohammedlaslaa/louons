@@ -27,7 +27,7 @@ exports.getAllPayment = async function (req, res) {
         : verify.adminLevel == "admin" || verify.adminLevel == "superadmin"
         ? await Payment.find().select("paymentId description isActive title link")
         : await Payment.find({ isActive: true }).select(
-            "paymentId isActive title link"
+            "paymentId isActive title link path_picture description"
           );
 
     return res.status(200).send({

@@ -30,7 +30,7 @@ function PartOfFooter(props) {
             {"Déconnexion"}
           </li>
         </Link>
-      );
+      )
     }
     return (
       <Link

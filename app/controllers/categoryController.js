@@ -13,7 +13,7 @@ exports.getAllCategory = async function (req, res) {
       adminLevel: "",
     };
 
-    if (Object.keys(req.cookies).length > 0) {
+    if (req.cookies["x-auth-token"]) {
       verify = jwt.verify(req.cookies["x-auth-token"], process.env.PRIVATE_KEY);
     }
 
