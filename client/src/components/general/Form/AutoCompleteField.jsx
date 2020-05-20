@@ -38,7 +38,8 @@ function AutoCompleteField(props) {
             label={`${props.titleLabel} :`}
             name="owner"
             type="text"
-            inputClass="form-control col-9 col-sm-6"
+            labelClass={props.labelClass}
+            inputClass="form-control col-9 col-sm-6 col-md-5"
             value={props.grasp}
             change={(e) => {
               props.setGrasp(e.target.value);

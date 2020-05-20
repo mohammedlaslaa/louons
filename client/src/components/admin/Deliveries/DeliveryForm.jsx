@@ -56,6 +56,7 @@ function DeliveryForm(props) {
       <TextAreaInputForm
         errorDescription={props.errorDescription}
         isSubmit={props.isSubmit}
+        labelClass="col-9 col-sm-6 mt-2"
         description={props.description}
         setDescription={props.setDescription}
         errorMessage="Ce champ doit contenir entre 10 et 200 caractères"

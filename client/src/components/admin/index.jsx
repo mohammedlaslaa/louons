@@ -14,7 +14,7 @@ import Menu from "./Menu";
 import Footer from "./Footer.jsx";
 import NotFound from "../general/NotFound";
 import PrivateRoute from "../general/PrivateRoute";
-import MyProfil from "./MyProfil";
+import MyProfile from "./MyProfile";
 import "../../styles/admin/global.css";
 import "../../styles/admin/main.css";
 import { TogglerProvider } from "../../context/TogglerContext";
@@ -82,9 +82,9 @@ function Admin() {
                   pageifnotauth="/adminlogin"
                 />
               </Route>
-              <Route path="/admin/my_profil">
+              <Route path="/admin/my_profile">
                 <PrivateRoute
-                  component={MyProfil}
+                  component={MyProfile}
                   pageifnotauth="/adminlogin"
                 />
               </Route>

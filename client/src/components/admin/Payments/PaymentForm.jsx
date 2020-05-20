@@ -46,6 +46,7 @@ function PaymentForm(props) {
         label={"Titre :"}
         name="title"
         type="text"
+        labelClass="col-9 col-sm-4 mt-2"
         value={props.title}
         change={(e) => {
           props.setTitle(e.target.value);

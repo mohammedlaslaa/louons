@@ -78,27 +78,31 @@ function AdminForm(props) {
           </label>
         </div>
       </div>
-      {props.errorAdminLevel && props.isSubmit && (
-        <span className="text-danger errormessage text-center">
-          Veuillez sélectionner un rôle
-        </span>
+      {props.location !== "/admin/my_profil" && (
+        <>
+          {props.errorAdminLevel && props.isSubmit && (
+          <span className="text-danger errormessage text-center">
+            Veuillez sélectionner un rôle
+          </span>
+          )}
+          <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100">
+            <label className="col-9 col-sm-4 mt-2">Rôle :</label>
+            <select
+              name="adminlevel"
+              id="adminlevel"
+              className="p-1 col-9 col-sm-6 col-md-5"
+              value={props.adminLevel}
+              onChange={(e) => {
+                props.setAdminLevel(e.target.value);
+              }}
+            >
+              <option value="">--Rôle admin--</option>
+              <option value="superadmin">superadmin</option>
+              <option value="admin">admin</option>
+            </select>
+          </div>
+        </>
       )}
-      <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100">
-        <label className="col-9 col-sm-4 mt-2">Rôle :</label>
-        <select
-          name="adminlevel"
-          id="adminlevel"
-          className="p-1 col-9 col-sm-6 col-md-5"
-          value={props.adminLevel}
-          onChange={(e) => {
-            props.setAdminLevel(e.target.value);
-          }}
-        >
-          <option value="">--Rôle admin--</option>
-          <option value="superadmin">superadmin</option>
-          <option value="admin">admin</option>
-        </select>
-      </div>
       <DivInputForm
         label={"Nom :"}
         name="lastname"
@@ -121,8 +125,8 @@ function AdminForm(props) {
         errorcondition={props.errorFirstName && props.isSubmit}
         errormessage="Le prénom ne peut pas contenir de chiffre ou de caractères spéciaux"
       />
-      <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100 mx-auto">
-        <label className="col-9 col-sm-4 mt-2">Date de naissance :</label>
+      <div className="row form-group my-3 d-flex justify-content-center align-items-center col-12 mx-auto">
+        <label className="col-9 col-sm-6 mt-2">Date de naissance :</label>
         <input
           type="date"
           name="datebirth"

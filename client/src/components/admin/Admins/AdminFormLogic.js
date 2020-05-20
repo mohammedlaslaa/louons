@@ -36,8 +36,12 @@ function AdminFormLogic(props) {
     // if the method is not equal to true and there are an idparams, fetch the data to the api and set the state
 
     if (idParams && method !== "PUT") {
+      const url =
+        props.location.pathname === "/admin/my_profil"
+          ? `http://localhost:5000/louons/api/v1/admin/me`
+          : `http://localhost:5000/louons/api/v1/admin/${idParams}`;
       setMethod("PUT");
-      fetch(`http://localhost:5000/louons/api/v1/admin/${idParams}`, {
+      fetch(url, {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
@@ -50,11 +54,11 @@ function AdminFormLogic(props) {
             setAdminLevel(result.adminLevel);
             setLastName(result.lastName);
             setFirstName(result.firstName);
-            setDateBirth(result.date_birth);
             setEmail(result.email);
+            setDateBirth(result.dateBirth);
             setPictureDisplay(result.path_picture);
           } else if (result.error) {
-            return props.history.push('/admin/admins');
+            return props.history.push("/admin/admins");
           }
         });
     }
@@ -158,7 +162,7 @@ function AdminFormLogic(props) {
     dataform,
     picture,
     pictureDisplay,
-    props.history
+    props,
   ]);
 
   const handleSubmit = (e) => {
@@ -266,6 +270,7 @@ function AdminFormLogic(props) {
       errorPicture={errorPicture}
       pictureDisplay={pictureDisplay}
       setPictureDisplay={setPictureDisplay}
+      location={props.location.pathname}
     />
   );
 }

@@ -63,6 +63,7 @@ function UserForm(props) {
             <input
               type="radio"
               name="gender"
+              className="mx-2"
               checked={props.gender === "mr"}
               id="mr"
               key="mr"
@@ -74,6 +75,7 @@ function UserForm(props) {
             <input
               type="radio"
               name="gender"
+              className="mx-2"
               id="mrs"
               key="mrs"
               checked={props.gender === "mrs"}

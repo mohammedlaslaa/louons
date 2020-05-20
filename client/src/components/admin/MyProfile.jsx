@@ -2,10 +2,10 @@ import React, { useContext } from "react";
 import AdminFormLogic from "./Admins/AdminFormLogic";
 import { AuthContext } from "../../context/AuthContext";
 
-function MyProfil() {
+function MyProfile(props) {
   const { dataUser } = useContext(AuthContext);
 
-  return <AdminFormLogic id={dataUser._id} title="Mon profil"/>;
+  return <AdminFormLogic {...props} id={dataUser._id} title="Mon profil"/>;
 }
 
-export default MyProfil;
+export default MyProfile;

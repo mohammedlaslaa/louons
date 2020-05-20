@@ -9,7 +9,7 @@ function TextAreaInputForm(props) {
         </span>
       )}
       <div className="row form-group my-3 d-flex justify-content-center align-items-center col-12 mx-auto">
-        <label className="col-9 col-sm-4 mt-2">{props.label}</label>
+        <label className={props.labelClass}>{props.label}</label>
         <textarea
           type="text"
           name="description"
@@ -23,6 +23,10 @@ function TextAreaInputForm(props) {
       </div>
     </>
   );
+}
+
+TextAreaInputForm.defaultProps = {
+  labelClass : "col-9 col-sm-4 mt-2"
 }
 
 export default TextAreaInputForm;

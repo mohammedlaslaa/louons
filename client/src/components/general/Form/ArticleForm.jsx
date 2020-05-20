@@ -80,6 +80,7 @@ function ArticleForm(props) {
         <AutoCompleteField
           errorGrasp={props.errorGrasp}
           idParams={props.idParams}
+          labelClass="col-9 col-sm-4 mt-2"
           grasp={props.grasp}
           titleLabel="Propriétaire"
           setGrasp={props.setGrasp}

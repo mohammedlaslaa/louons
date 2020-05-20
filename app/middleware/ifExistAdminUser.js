@@ -20,7 +20,7 @@ module.exports = function(req, res, next) {
         next();
       } else {
         // If the client is not an existing user check if it is an admin.
-        let admin = await Admin.findById(decode.id).select("adminId lastName firstName adminLevel path_picture");
+        let admin = await Admin.findById(decode.id).select("adminId lastName firstName adminLevel path_picture gender");
         if (admin) {
           // If the client is an existing admin send this to the res.locals.
           res.locals.owner = admin;

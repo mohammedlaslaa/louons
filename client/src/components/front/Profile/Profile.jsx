@@ -6,7 +6,7 @@ import MyAnnounces from "./MyAnnounces";
 import MyAddresses from "./MyAddresses";
 import MyRentals from "./MyRentals";
 
-function Profil() {
+function Profile() {
   const [isMediumWindow, setIsMediumWindow] = useState();
   const [valueSelect, setValueSelect] = useState();
   let history = useHistory();
@@ -153,4 +153,4 @@ function Profil() {
   );
 }
 
-export default Profil;
+export default Profile;

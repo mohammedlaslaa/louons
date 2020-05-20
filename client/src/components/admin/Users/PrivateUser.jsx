@@ -10,9 +10,11 @@ function PrivateUser() {
       <Route exact path="/admin/users">
         <ListUser />
       </Route>
-      <Route exact path="/admin/users/add">
-        <UserFormLogic title="Ajouter un" />
-      </Route>
+      <Route
+        exact
+        path="/admin/users/add"
+        render={(props) => <UserFormLogic {...props} title="Ajouter un" />}
+      />
       <Route
         exact
         path="/admin/users/:id"

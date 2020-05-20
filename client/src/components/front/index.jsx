@@ -10,7 +10,7 @@ import NotFound from "../general/NotFound";
 import Rental  from "./Rental";
 import Login from "../general/Login";
 import Logout from "../general/Logout";
-import Profil from "./Profil/Profil";
+import Profile from "./Profile/Profile";
 import UserFormLogic from "../general/Form/UserFormLogic";
 import PrivateRoute from "../general/PrivateRoute";
 import ArticleFormLogic from "../general/Form/ArticleFormLogic";
@@ -45,7 +45,7 @@ function Front() {
             />
             <Route path="/my_account">
               <PrivateRoute
-                component={Profil}
+                component={Profile}
                 pageifnotauth="/login"
                 linkAuth="http://localhost:5000/louons/api/v1/authenticationuser"
               />

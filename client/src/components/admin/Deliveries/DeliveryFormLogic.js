@@ -81,7 +81,6 @@ function DeliveryFormLogic(props) {
     }
 
     if (
-      price === 0 ||
       price === "" ||
       typeof price === String ||
       price > 500 ||

@@ -67,7 +67,7 @@ function MyAddresses(props) {
               }}
             />
           ) : (
-            <p>Vous n'avez pas encore d'annonces publiés</p>
+            <p>Vous n'avez pas encore d'adresses publiés</p>
           )}
           <Link to={`addresses/add`}>
             <button className="btn text-white bgcolor3c8ce4">

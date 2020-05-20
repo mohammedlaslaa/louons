@@ -10,7 +10,7 @@ function RightHeaderPart() {
 
   return (
     <div className="col-6 col-md-3 d-flex align-items-center justify-content-center">
-      <Link className="text-decoration-none" to="/admin/my_profil">
+      <Link className="text-decoration-none" to="/admin/my_profile">
         {dataUser.adminLevel === "superadmin" ? (
           <i className="ri-shield-user-line mx-1 mx-sm-2 icon-font22 color3c8ce4"></i>
         ) : (

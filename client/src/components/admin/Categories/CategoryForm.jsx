@@ -77,12 +77,12 @@ function CategoryForm(props) {
         </span>
       )}
       <div className="row form-group my-3 d-flex justify-content-center align-items-center w-100">
-        <label className="col-9 col-sm-4 mt-2">Description :</label>
+        <label className="col-9 col-sm-6 mt-2">Description :</label>
         <textarea
           type="text"
           name="description"
           value={props.description}
-          className="form-control col-9 col-sm-6 col-md-5"
+          className="form-control col-9 col-sm-6"
           onChange={(e) => {
             props.setDescription(e.target.value);
           }}
