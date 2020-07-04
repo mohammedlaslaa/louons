@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const objectvalid = require("../middleware/objectidvalid");
+const objectvalid = require("../middleware/objectIdValid");
 const jwtverify = require("../middleware/jwtVerify");
 const jwtsuperadmin = require("../middleware/jwtSuperAdmin");
 const isemptybody = require("../middleware/isEmptyBody");

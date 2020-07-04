@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const objectvalid = require("../middleware/objectidvalid");
+const objectvalid = require("../middleware/objectIdValid");
 const ifexistadminuser = require("../middleware/ifExistAdminUser");
 const jwtsuperadmin = require("../middleware/jwtSuperAdmin");
 const articleController = require("../controllers/articleController");
