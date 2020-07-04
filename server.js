@@ -5,18 +5,18 @@ const app = express();
 // Get the port registered or set this to 5000 by default.
 const port = process.env.PORT || 8080;
 
-if(process.env.NODE_ENV === 'production') {
-  app.use(express.static('client/build'));
-  const path = require('path');
-  app.get(/^\/(?!louons\/api|uploads|img|public\/uploads).*/, (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-  });
-}
-
 // Charging all routes of the app.
 require("./startup/route")(app);
 
 app.use(express.static('public'));
+
+if(process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+  const path = require('path');
+  app.get(/^\/(?!louons\/api|uploads).*/, (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
 
 // Connection to the Database.
 require("./startup/database.js");
