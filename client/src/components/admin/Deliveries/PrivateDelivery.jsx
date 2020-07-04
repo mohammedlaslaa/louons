@@ -1,6 +1,6 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import ListDelivery from "./ListDelivery";
+import ListDelivery from "./ListDelivery.jsx";
 import NotFound from "../../general/NotFound";
 import DeliveryFormLogic from "./DeliveryFormLogic";
 
