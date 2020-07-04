@@ -68,7 +68,7 @@ function ArticleFormLogic(props) {
       (method === "POST" && !isFetchedCategory && !idParams) ||
       (method === "PUT" && isFetchedArticle && !isFetchedCategory)
     ) {
-      fetch("http://localhost:5000/louons/api/v1/category/all/activecategory", {
+      fetch("http://localhost:8080/louons/api/v1/category/all/activecategory", {
         credentials: "include",
       })
         .then((res) => res.json())
