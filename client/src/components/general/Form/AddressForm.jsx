@@ -4,9 +4,11 @@ import DivInputForm from "../../general/Form/DivInputForm";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
 import AutoCompleteField from "../../general/Form/AutoCompleteField";
 import { AuthContext } from "../../../context/AuthContext";
+import Api from "../../../Classes/Api/Api";
 
 function AddressForm(props) {
   const { dataUser } = useContext(AuthContext);
+  const ApiLink = Api.endPoint;
 
   useEffect(() => {
     if (!dataUser.adminLevel) {
@@ -51,7 +53,7 @@ function AddressForm(props) {
             setGrasp={props.setGrasp}
             setId={props.setOwner}
             setErrorGrasp={props.setErrorGrasp}
-            link="http://localhost:5000/louons/api/v1/user/all"
+            link={`${ApiLink}/user/all`}
           />
         </>
       )}

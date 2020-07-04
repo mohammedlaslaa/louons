@@ -3,10 +3,12 @@ import TitleSection from "./TitleSection";
 import { useParams } from "react-router-dom";
 import TableProfil from "./TableProfil";
 import Rental from "./Rental";
+import Api from "../../../Classes/Api/Api";
 
 function MyRentals(props) {
   // Initialize the announces state and the idParams
   const idParams = useParams().id;
+  const ApiLink = Api.endPoint;
   const [rentals, setRentals] = useState({
     data: [],
     isFetched: false,
@@ -17,7 +19,7 @@ function MyRentals(props) {
   useEffect(() => {
     // fetch all the rentals of the user, then store them in the rentals state
     if (!rentals.isFetched) {
-      fetch("http://localhost:5000/louons/api/v1/rental/self", {
+      fetch(`${ApiLink}/rental/self`, {
         credentials: "include",
       })
         .then((res) => res.json())
@@ -34,7 +36,7 @@ function MyRentals(props) {
 
     // If there an rentals.id and the length of rentals.dataRental is equal to 0, fetch the data of the current rental
     if (rentals.id && Object.keys(rentals.dataRental).length === 0) {
-      fetch(`http://localhost:5000/louons/api/v1/rental/detail/${rentals.id}`, {
+      fetch(`${ApiLink}/rental/detail/${rentals.id}`, {
         credentials: "include",
       })
         .then((res) => res.json())
@@ -52,7 +54,7 @@ function MyRentals(props) {
     if (idParams !== rentals.id) {
       setRentals((prevState) => ({ ...prevState, id: idParams }));
     }
-  }, [rentals, idParams]);
+  }, [rentals, idParams, ApiLink]);
 
   // Simple function to change the rentals.id
   const handleIdParams = (id) => {

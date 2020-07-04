@@ -1,13 +1,15 @@
 import React from "react";
 import PageTableList from "../PageTableList";
+import Api from "../../../Classes/Api/Api";
+
 
 function ListRental() {
   // give the all informations (api etc...) to the PageTableList component in order to display a table of the content
-
+  const ApiLink = Api.endPoint;
   return (
     <PageTableList
       titlepage="Liste des utilisateurs"
-      linkapi="http://localhost:5000/louons/api/v1/rental"
+      linkapi={`${ApiLink}/rental`}
       th={[
         { rentalId: "ID" },
         { article: "Article" },

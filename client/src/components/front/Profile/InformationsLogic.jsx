@@ -371,7 +371,7 @@ function InformationsLogic(props) {
 
     // if there are not error put the data to the api
     if (!errorForm) {
-      fetch(`http://localhost:5000/louons/api/v1/user/me`, {
+      fetch(`${ApiLink}/user/me`, {
         method: method,
         credentials: "include",
         body: dataform,

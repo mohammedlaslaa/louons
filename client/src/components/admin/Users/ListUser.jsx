@@ -1,14 +1,15 @@
 import React from "react";
 import PageTableList from "../PageTableList";
+import Api from "../../../Classes/Api/Api";
 
 function ListUser() {
   // give the all informations (api etc...) to the PageTableList component in order to display a table of the content
-
+  const ApiLink = Api.endPoint;
   return (
     <PageTableList
       titlepage="Liste des utilisateurs"
-      linkapi="http://localhost:5000/louons/api/v1/user/all"
-      linkputapi="http://localhost:5000/louons/api/v1/user"
+      linkapi={`${ApiLink}/user/all`}
+      linkputapi={`${ApiLink}/user`}
       th={[
         { clientId: "ID" },
         { gender: "Titre" },

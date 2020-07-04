@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import moment from "moment";
 import Cookies from "js-cookie";
 import TableRental from "./TableRental";
+import Api from "../../Classes/Api/Api";
 
 function Rental(props) {
   const data = Cookies.getJSON("article");
+  const ApiLink = Api.endPoint;
+  const ApiLinkImage = Api.endPointImage;
 
   const [rental, setRental] = useState({
     currentStep: 1,
@@ -17,7 +20,7 @@ function Rental(props) {
 
   useEffect(() => {
     if (rental.currentStep === 2 && rental.delivery.length === 0) {
-      fetch("http://localhost:5000/louons/api/v1/carrier/all")
+      fetch(`${ApiLink}/carrier/all`)
         .then((res) => res.json())
         .then((result) => {
           if (!result.error) {
@@ -27,7 +30,7 @@ function Rental(props) {
     }
 
     if (rental.currentStep === 3 && rental.payment.length === 0) {
-      fetch("http://localhost:5000/louons/api/v1/payment/all")
+      fetch(`${ApiLink}/payment/all`)
         .then((res) => res.json())
         .then((result) => {
           if (!result.error) {
@@ -35,7 +38,7 @@ function Rental(props) {
           }
         });
     }
-  }, [rental]);
+  }, [rental, ApiLink]);
 
   const handleCreateRental = () => {
     const body = JSON.stringify({
@@ -48,7 +51,7 @@ function Rental(props) {
       end_date: data.dateEnd,
     });
 
-    fetch("http://localhost:5000/louons/api/v1/rental", {
+    fetch(`${ApiLink}/rental`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -84,21 +87,21 @@ function Rental(props) {
           <div
             className={`col-12 col-md-4 ${
               rental.currentStep === 1 && "bgcolor144c84 text-white"
-            }`}
+              }`}
           >
             <p className="step-title text-center m-0 p-2">1/ Récapitulatif</p>
           </div>
           <div
             className={`col-12 col-md-4 ${
               rental.currentStep === 2 && "bgcolor144c84 text-white"
-            }`}
+              }`}
           >
             <p className="step-title text-center m-0 p-2">2/ Livraison</p>
           </div>
           <div
             className={`col-12 col-md-4 ${
               rental.currentStep === 3 && "bgcolor144c84 text-white"
-            }`}
+              }`}
           >
             <p className="step-title text-center m-0 p-2">3/ Paiement</p>
           </div>
@@ -129,7 +132,7 @@ function Rental(props) {
                     <div className="col-12 d-flex justify-content-center align-items-center">
                       <img
                         className="img-fluid thumbnail-article-rental"
-                        src={`http://localhost:5000/uploads/img/${data.article.pictures[0].path_picture}`}
+                        src={`${ApiLinkImage}/${data.article.pictures[0].path_picture}`}
                         alt="main_picture_article"
                       />
                     </div>
@@ -150,7 +153,7 @@ function Rental(props) {
                       </p>
                       <p className="col-12 col-sm-6 col-md-5 col-lg-3 text-center text-lg-left">{`${
                         data.numberDay * data.article.price
-                      } €`}</p>
+                        } €`}</p>
                       <p className="col-12 col-sm-6 col-md-5 col-lg-3 text-center text-lg-right">
                         Date de début :
                       </p>
@@ -167,8 +170,8 @@ function Rental(props) {
                   </div>
                 </>
               ) : (
-                <p className="text-center my-4">Aucun article choisi</p>
-              )
+                  <p className="text-center my-4">Aucun article choisi</p>
+                )
             ) : rental.currentStep === 2 ? (
               <TableRental
                 setRental={setRental}
@@ -184,8 +187,8 @@ function Rental(props) {
                 isChecked={rental.selectedPayment}
               />
             ) : (
-              <p>Page introuvable</p>
-            )}
+                      <p>Page introuvable</p>
+                    )}
           </div>
           {data && data.article && (
             <div className="col-12 d-flex justify-content-center justify-content-md-end my-3">

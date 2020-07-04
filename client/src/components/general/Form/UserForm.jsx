@@ -3,8 +3,11 @@ import moment from "moment";
 import Form from "./Form";
 import DivInputForm from "./DivInputForm";
 import InputFileForm from "./InputFileForm";
+import Api from "../../../Classes/Api/Api";
 
 function UserForm(props) {
+  const ApiLinkImage = Api.endPointImage;
+
   return (
     <Form
       handleSubmit={props.handleSubmit}
@@ -24,26 +27,26 @@ function UserForm(props) {
               key={props.pictureDisplay}
             >
               <img
-                src={`http://localhost:5000/uploads/img/${props.pictureDisplay}`}
+                src={`${ApiLinkImage}/${props.pictureDisplay}`}
                 className="w-100 rounded-circle"
                 alt="avatar_image_profil"
               />
             </div>
           </div>
         ) : (
-          <div className="col-12 m-0 p-0 row d-flex justify-content-between">
-            <div
-              className="col-4 col-sm-2 p-2 mx-auto"
-              key={props.pictureDisplay}
-            >
-              <img
-                src={`http://localhost:5000/uploads/img/default-avatar.png`}
-                className="w-100 rounded-circle"
-                alt="avatar_image_profil"
-              />
+            <div className="col-12 m-0 p-0 row d-flex justify-content-between">
+              <div
+                className="col-4 col-sm-2 p-2 mx-auto"
+                key={props.pictureDisplay}
+              >
+                <img
+                  src={`${ApiLinkImage}/default-avatar.png`}
+                  className="w-100 rounded-circle"
+                  alt="avatar_image_profil"
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       <InputFileForm
         errorPicture={props.errorPicture}
         isSubmit={props.isSubmit}

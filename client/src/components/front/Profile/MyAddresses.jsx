@@ -3,6 +3,7 @@ import TitleSection from "./TitleSection";
 import { useParams, Link } from "react-router-dom";
 import TableProfil from "./TableProfil";
 import AdressFormLogic from "../../general/Form/AddressFormLogic";
+import Api from "../../../Classes/Api/Api";
 
 function MyAddresses(props) {
   // Initialize the id passed in parameter and the addresses of the user
@@ -12,11 +13,12 @@ function MyAddresses(props) {
     isFetched: false,
     id: idParams,
   });
+  const ApiLink = Api.endPoint;
 
   useEffect(() => {
     // fetch all the addresses of the user, then store them in the adresses state
     if (!addresses.isFetched) {
-      fetch("http://localhost:5000/louons/api/v1/address/allself", {
+      fetch(`${ApiLink}/address/allself`, {
         credentials: "include",
       })
         .then((res) => res.json())
@@ -34,7 +36,7 @@ function MyAddresses(props) {
     if (idParams !== addresses.id) {
       setAddresses((prevState) => ({ ...prevState, id: idParams }));
     }
-  }, [addresses, idParams]);
+  }, [addresses, idParams, ApiLink]);
 
   // Simple function to change the addresses.id
   const handleIdParams = (id) => {
@@ -54,7 +56,7 @@ function MyAddresses(props) {
               data={addresses.data}
               linkdetail="/my_account/addresses"
               handleIdParams={handleIdParams}
-              linkapi="http://localhost:5000/louons/api/v1/address"
+              linkapi={`${ApiLink}/address`}
               setAddresses={setAddresses}
               datatodisplay={{
                 title: "Titre",
@@ -67,8 +69,8 @@ function MyAddresses(props) {
               }}
             />
           ) : (
-            <p>Vous n'avez pas encore d'adresses publiés</p>
-          )}
+              <p>Vous n'avez pas encore d'adresses publiés</p>
+            )}
           <Link to={`addresses/add`}>
             <button className="btn text-white bgcolor3c8ce4">
               Ajouter une adresse
@@ -76,8 +78,8 @@ function MyAddresses(props) {
           </Link>
         </>
       ) : (
-        <AdressFormLogic setAddresses={setAddresses} history={props.history} />
-      )}
+          <AdressFormLogic setAddresses={setAddresses} history={props.history} />
+        )}
     </>
   );
 }

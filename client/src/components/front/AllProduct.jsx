@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import ListProduct from "./ListProduct";
+import Api from '../../Classes/Api/Api';
 
 function AllProduct() {
   // initialize the state listArticle
-
+  const ApiLink = Api.endPoint;
   const [listArticle, setListarticle] = useState({
     isFetched: false,
     title: "Toutes les annonces",
@@ -16,7 +17,7 @@ function AllProduct() {
 
     if (!listArticle.isFetched) {
       fetch(
-        `http://localhost:5000/louons/api/v1/article`,
+        `${ApiLink}/article`,
         {
           credentials: "include",
         }
@@ -32,7 +33,7 @@ function AllProduct() {
           }
         });
     }
-  }, [listArticle]);
+  }, [listArticle, ApiLink]);
 
   return (
     <>

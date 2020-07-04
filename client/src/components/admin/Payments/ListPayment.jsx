@@ -1,14 +1,16 @@
 import React from "react";
 import PageTableList from "../PageTableList";
+import Api from "../../../Classes/Api/Api";
 
 function ListPayment() {
+  const ApiLink = Api.endPoint;
   // give the all informations (api etc...) to the PageTableList component in order to display a table of the content
 
   return (
     <PageTableList
       titlepage="Liste des paiements"
-      linkapi="http://localhost:5000/louons/api/v1/payment/all"
-      linkputapi="http://localhost:5000/louons/api/v1/payment"
+      linkapi={`${ApiLink}/payment/all`}
+      linkputapi={`${ApiLink}/payment`}
       th={[
         { paymentId: "ID" },
         { title: "Titre" },

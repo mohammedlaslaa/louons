@@ -5,9 +5,11 @@ import BootstrapSwitchButton from "bootstrap-switch-button-react";
 import DivInputForm from "../../general/Form/DivInputForm";
 import LiForm from "../../general/Form/LiForm";
 import moment from "moment";
+import Api from "../../../Classes/Api/Api";
 
 function RentalForm(props) {
   const [currLi, setCurrLi] = useState("");
+  const ApiLink = Api.endPoint;
 
   useEffect(() => {
     if (!props.idArticle) {
@@ -51,7 +53,7 @@ function RentalForm(props) {
           setId={props.setIdArticle}
           setErrorGrasp={props.setErrorGraspArticle}
           setSpec={props.reset}
-          link="http://localhost:5000/louons/api/v1/article"
+          link={`${ApiLink}/article`}
         />
         <div className="row m-0 col-6 col-lg-3 mx-auto p-0">
           <label className="col-9 col-sm-6 mx-auto p-0">Prix /jr :</label>
@@ -80,23 +82,23 @@ function RentalForm(props) {
           </div>
         </div>
       ) : (
-        <DivInputForm
-          label={"Nombre de jour de location :"}
-          name="numberday"
-          type="number"
-          value={props.numberListDate}
-          change={(e) => {
-            props.setNumberListDate(e.target.value);
-            if (parseInt(e.target.value) === 0 || e.target.value === "") {
-              props.reset();
-            }
-          }}
-          errorcondition={props.errorNumberListDate && props.isSubmit}
-          errormessage="Le nombre de jour doit être supérieur à 0"
-          inputClass="form-control col-9 col-sm-3 col-md-1"
-          labelClass="col-9 col-sm-7"
-        />
-      )}
+          <DivInputForm
+            label={"Nombre de jour de location :"}
+            name="numberday"
+            type="number"
+            value={props.numberListDate}
+            change={(e) => {
+              props.setNumberListDate(e.target.value);
+              if (parseInt(e.target.value) === 0 || e.target.value === "") {
+                props.reset();
+              }
+            }}
+            errorcondition={props.errorNumberListDate && props.isSubmit}
+            errormessage="Le nombre de jour doit être supérieur à 0"
+            inputClass="form-control col-9 col-sm-3 col-md-1"
+            labelClass="col-9 col-sm-7"
+          />
+        )}
 
       {!props.errorNumberListDate &&
         !props.errorGraspArticle &&
@@ -150,7 +152,7 @@ function RentalForm(props) {
           setGrasp={props.setGraspTenant}
           setId={props.setIdTenant}
           setErrorGrasp={props.setErrorGraspTenant}
-          link="http://localhost:5000/louons/api/v1/user/all"
+          link={`${ApiLink}/user/all`}
         />
       </div>
       {props.errorDelivery && props.isSubmit && (

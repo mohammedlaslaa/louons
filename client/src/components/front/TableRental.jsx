@@ -1,6 +1,9 @@
 import React from "react";
+import Api from "../../Classes/Api/Api";
 
 function TableRental(props) {
+  const ApiLinkImage = Api.endPointImage;
+
   return (
     <div className="table-responsive mt-5">
       <table className="text-center table-rental w-100 border border-black">
@@ -36,7 +39,7 @@ function TableRental(props) {
                 {e.title}
                 <img
                   className="img-fluid thumbnail-delivery-payment"
-                  src={`http://localhost:5000/uploads/img/${e.path_picture}`}
+                  src={`${ApiLinkImage}/${e.path_picture}`}
                   alt="picture_delivery"
                 />
               </td>

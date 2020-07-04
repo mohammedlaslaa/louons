@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import PaymentForm from "./PaymentForm";
+import Api from "../../../Classes/Api/Api";
 
 function PaymentFormLogic(props) {
   const [statusMessageForm, setStatusMessageForm] = useState("enregistré");
@@ -22,6 +23,7 @@ function PaymentFormLogic(props) {
   const dataform = new FormData();
   const [idParams] = useState(useParams().id);
   const regexp = new RegExp(/^[\w\d\séùàüäîçïèêôö]*$/);
+  const ApiLink = Api.endPoint;
 
   useEffect(() => {
     // initialize the number of error form
@@ -33,7 +35,7 @@ function PaymentFormLogic(props) {
     if (idParams && !isFetched) {
       setMethod("PUT");
       setStatusMessageForm("modifié");
-      fetch(`http://localhost:5000/louons/api/v1/payment/detail/${idParams}`, {
+      fetch(`${ApiLink}/payment/detail/${idParams}`, {
         credentials: "include",
       })
         .then((res) => res.json())
@@ -109,7 +111,8 @@ function PaymentFormLogic(props) {
     dataform,
     method,
     picture,
-    props.history
+    props.history,
+    ApiLink
   ]);
 
   const handleSubmit = (e) => {
@@ -127,8 +130,8 @@ function PaymentFormLogic(props) {
 
     const url =
       method === "POST"
-        ? "http://localhost:5000/louons/api/v1/payment"
-        : `http://localhost:5000/louons/api/v1/payment/${idParams}`;
+        ? `${ApiLink}/payment`
+        : `${ApiLink}/payment/${idParams}`;
 
     if (!errorForm) {
       fetch(url, {

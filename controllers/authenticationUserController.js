@@ -3,7 +3,7 @@ const { User } = require("../models/userModel");
 const bcrypt = require("bcrypt");
 
 exports.getIsAuthUser = async (req, res) => {
-  if(res.locals.owner.adminLevel){
+  if (res.locals.owner.adminLevel) {
     return res.status(400).send({ error: true, message: "Authentication failed" });
   }
   res.send({
@@ -45,11 +45,11 @@ exports.postAuthUser = async (req, res) => {
 
     // If all the checks is passing, send back a token to the res.header("x-auth-token").
 
-      res
+    res
       .clearCookie("x-auth-token")
       .cookie("x-auth-token", user.generateToken(), {
         path: "/",
-        expires: new Date(Date.now() + 3000000),
+        expires: new Date(Date.now() + 7 * 24 * 3600 * 1000),
       })
       .send({ error: false, message: "Authentication success" });
   } catch (e) {

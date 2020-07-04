@@ -6,9 +6,12 @@ import TextAreaInputForm from "./TextAreaInputForm";
 import InputFileForm from "./InputFileForm";
 import Form from "./Form";
 import { AuthContext } from "../../../context/AuthContext";
+import Api from "../../../Classes/Api/Api";
 
 function ArticleForm(props) {
   const { dataUser } = useContext(AuthContext);
+  const ApiLink = Api.endPoint;
+  const ApiLinkImage = Api.endPointImage;
 
   useEffect(() => {
     if (!dataUser.adminLevel) {
@@ -46,7 +49,7 @@ function ArticleForm(props) {
           {props.pictureDisplay.map((e) => (
             <div className="col-4 col-sm-4 p-2 col-md-3 mx-auto" key={e.title}>
               <img
-                src={`http://localhost:5000/uploads/img/${e.path_picture}`}
+                src={`${ApiLinkImage}/${e.path_picture}`}
                 className="w-100"
                 alt=""
               />
@@ -86,7 +89,7 @@ function ArticleForm(props) {
           setGrasp={props.setGrasp}
           setId={props.setOwner}
           setErrorGrasp={props.setErrorGrasp}
-          link="http://localhost:5000/louons/api/v1/user/all"
+          link={`${ApiLink}/user/all`}
         />
       )}
       <DivInputForm

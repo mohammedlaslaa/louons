@@ -4,8 +4,10 @@ import DivInputForm from "../../general/Form/DivInputForm";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
 import TextAreaInputForm from "../../general/Form/TextAreaInputForm";
 import InputFileForm from "../../general/Form/InputFileForm";
+import Api from '../../../Classes/Api/Api.js';
 
 function DeliveryForm(props) {
+  const ApiLinkImage = Api.endPointImage;
   return (
     <Form
       handleSubmit={props.handleSubmit}
@@ -35,7 +37,7 @@ function DeliveryForm(props) {
             key={props.pictureDisplay}
           >
             <img
-              src={`http://localhost:5000/uploads/img/${props.pictureDisplay}`}
+              src={`${ApiLinkImage}/${props.pictureDisplay}`}
               className="w-100"
               alt=""
             />

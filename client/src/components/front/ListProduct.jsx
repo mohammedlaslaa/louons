@@ -1,15 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Api from '../../Classes/Api/Api.js';
+
 
 function ListProduct(props) {
-// Component that simply return a list of product depending the props that it receives
+  const ApiLinkImage = Api.endPointImage;
+
+  // Component that simply return a list of product depending the props that it receives
   return (
     <div className={props.divClass}>
       {props.data.map((elt, index) => {
         return (
           <div key={index} className={props.productClass}>
             <img
-              src={`http://localhost:5000/uploads/img/${elt.pictures[0].path_picture}`}
+              src={`${ApiLinkImage}/${elt.pictures[0].path_picture}`}
               alt=""
               className="w-100 img-fluid thumbnail-img mx-auto"
             />

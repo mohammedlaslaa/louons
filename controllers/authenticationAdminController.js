@@ -46,7 +46,7 @@ exports.postAuthAdmin = async (req, res) => {
       .clearCookie("x-auth-token")
       .cookie("x-auth-token", admin.generateToken(), {
         path: "/",
-        expires: new Date(Date.now() + 3000000),
+        expires: new Date(Date.now() + 7 * 24 * 3600 * 1000),
       })
       .send({ error: false, message: "Authentication success" });
   } catch (e) {

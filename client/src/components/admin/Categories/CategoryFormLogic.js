@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import CategoryForm from "./CategoryForm";
 import { useParams } from "react-router-dom";
 import { PopupAddContext } from "../../../context/PopupAddContext";
+import Api from "../../../Classes/Api/Api";
 
 function CategoryFormLogic(props) {
   const [method, setMethod] = useState("GET");
@@ -24,6 +25,7 @@ function CategoryFormLogic(props) {
   const stringRegex = new RegExp(/[a-zA-Z\séùàüäîçïèêôö-]+$/);
   const linkRegex = new RegExp(/^[a-zA-Z-]+$/);
   const PopupContext = useContext(PopupAddContext);
+  const ApiLink = Api.endPoint;
 
   // fetch the data to the api at the first loading
 
@@ -37,7 +39,7 @@ function CategoryFormLogic(props) {
 
     if (method === "GET" && idParams) {
       setStatusMessageForm("modifié")
-      fetch(`http://localhost:5000/louons/api/v1/category/detail/${idParams}`, {
+      fetch(`${ApiLink}/category/detail/${idParams}`, {
         method: method,
         credentials: "include",
         headers: {
@@ -98,7 +100,8 @@ function CategoryFormLogic(props) {
     stringRegex,
     linkRegex,
     numberErrorForm,
-    props.history
+    props.history,
+    ApiLink
   ]);
 
   // if the form is submitted call the handleFetchPut function
@@ -115,15 +118,15 @@ function CategoryFormLogic(props) {
     const dataForm =
       arg === "isActive"
         ? JSON.stringify({
-            isActive: !isActive,
-          })
+          isActive: !isActive,
+        })
         : JSON.stringify({
-            title,
-            description,
-            link,
-          });
+          title,
+          description,
+          link,
+        });
     if (!errorForm || (arg === "isActive" && idParams)) {
-      fetch(`http://localhost:5000/louons/api/v1/category/${idParams}`, {
+      fetch(`${ApiLink}/category/${idParams}`, {
         method: "PUT",
         credentials: "include",
         headers: {
@@ -169,7 +172,7 @@ function CategoryFormLogic(props) {
     // if there are not error post the data to the api
 
     if (!errorForm) {
-      fetch(`http://localhost:5000/louons/api/v1/category`, {
+      fetch(`${ApiLink}/category`, {
         method: "POST",
         credentials: "include",
         headers: {

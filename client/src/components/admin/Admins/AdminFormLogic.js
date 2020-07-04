@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import AdminForm from "./AdminForm";
 import { AuthContext } from "../../../context/AuthContext";
+import Api from '../../../Classes/Api/Api.js';
 
 function AdminFormLogic(props) {
   const [method, setMethod] = useState("POST");
@@ -30,6 +31,7 @@ function AdminFormLogic(props) {
   const { dataUser } = useContext(AuthContext);
   const idParams = useParams().id || dataUser._id;
   const dataform = new FormData();
+  const ApiLink = Api.endPoint;
 
   useEffect(() => {
     setErrorForm(false);
@@ -38,8 +40,8 @@ function AdminFormLogic(props) {
     if (idParams && method !== "PUT") {
       const url =
         props.location.pathname === "/admin/my_profil"
-          ? `http://localhost:5000/louons/api/v1/admin/me`
-          : `http://localhost:5000/louons/api/v1/admin/${idParams}`;
+          ? `${ApiLink}/admin/me`
+          : `${ApiLink}/admin/${idParams}`;
       setMethod("PUT");
       fetch(url, {
         credentials: "include",
@@ -163,6 +165,7 @@ function AdminFormLogic(props) {
     picture,
     pictureDisplay,
     props,
+    ApiLink
   ]);
 
   const handleSubmit = (e) => {
@@ -182,8 +185,8 @@ function AdminFormLogic(props) {
     // adapt the link according to the method
     const getLink =
       method === "POST"
-        ? "http://localhost:5000/louons/api/v1/admin"
-        : `http://localhost:5000/louons/api/v1/admin/${idParams}`;
+        ? `${ApiLink}/admin`
+        : `${ApiLink}/admin/${idParams}`;
 
     // fetch only if there are not errorform
 

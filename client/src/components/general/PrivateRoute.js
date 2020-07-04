@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { Redirect, Route } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import Api from '../../Classes/Api/Api.js';
 
 function PrivateRoute({ linkAuth, component: Component, ...rest }) {
   // This route will render a component specify in props with the header and footer of the admin panel
@@ -40,16 +41,18 @@ function PrivateRoute({ linkAuth, component: Component, ...rest }) {
           return isAuth ? (
             <Component {...props} {...rest} />
           ) : (
-            <Redirect to={pageifnotauth} />
-          );
+              <Redirect to={pageifnotauth} />
+            );
         }}
       />
     );
   }
 }
 
+const ApiLink = Api.endPoint;
+
 PrivateRoute.defaultProps = {
-  linkAuth: "http://localhost:5000/louons/api/v1/authenticationadmin",
+  linkAuth: `${ApiLink}/authenticationadmin`,
 };
 
 export default PrivateRoute;

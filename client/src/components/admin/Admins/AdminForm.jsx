@@ -3,8 +3,11 @@ import moment from "moment";
 import Form from "../../general/Form/Form";
 import DivInputForm from "../../general/Form/DivInputForm";
 import InputFileForm from "../../general/Form/InputFileForm";
+import Api from '../../../Classes/Api/Api.js';
 
 function AdminForm(props) {
+  const ApiLinkImage = Api.endPointImage;
+
   return (
     <Form
       handleSubmit={props.handleSubmit}
@@ -21,7 +24,7 @@ function AdminForm(props) {
             key={props.pictureDisplay}
           >
             <img
-              src={`https://louonsapptest.herokuapp.com/uploads/img/${props.pictureDisplay}`}
+              src={`${ApiLinkImage}/${props.pictureDisplay}`}
               className="w-100 rounded-circle"
               alt="avatar_image_profil"
             />
@@ -34,7 +37,7 @@ function AdminForm(props) {
             key={props.pictureDisplay}
           >
             <img
-              src={`http://localhost:5000/uploads/img/default-avatar.png`}
+              src={`${ApiLinkImage}/default-avatar.png`}
               className="w-100 rounded-circle"
               alt="avatar_image_profil"
             />

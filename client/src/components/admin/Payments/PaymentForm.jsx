@@ -4,11 +4,13 @@ import DivInputForm from "../../general/Form/DivInputForm";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
 import TextAreaInputForm from "../../general/Form/TextAreaInputForm";
 import InputFileForm from "../../general/Form/InputFileForm";
+import Api from '../../../Classes/Api/Api.js';
 
 function PaymentForm(props) {
+  const ApiLinkImage = Api.endPointImage;
   return (
     <Form
-    successMessage={`Paiement ${props.statusMessageForm} avec succés`}
+      successMessage={`Paiement ${props.statusMessageForm} avec succés`}
       handleSubmit={props.handleSubmit}
       titlepage={`${props.titlepage} une paiement`}
       isFailed={props.isFailed}
@@ -35,7 +37,7 @@ function PaymentForm(props) {
             key={props.pictureDisplay}
           >
             <img
-              src={`http://localhost:5000/uploads/img/${props.pictureDisplay}`}
+              src={`${ApiLinkImage}/${props.pictureDisplay}`}
               className="w-100"
               alt=""
             />

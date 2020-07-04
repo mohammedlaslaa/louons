@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import DeliveryForm from "./DeliveryForm";
+import Api from "../../../Classes/Api/Api";
 
 function DeliveryFormLogic(props) {
   const [statusMessageForm, setStatusMessageForm] = useState("enregistré");
@@ -26,6 +27,7 @@ function DeliveryFormLogic(props) {
   const dataform = new FormData();
   const [idParams] = useState(useParams().id);
   const regexp = new RegExp(/^[\w\d\séùàüäîçïèêôö/-_]*$/);
+  const ApiLink = Api.endPoint;
 
   useEffect(() => {
     // initialize the number of error form
@@ -37,7 +39,7 @@ function DeliveryFormLogic(props) {
     if (idParams && !isFetched) {
       setMethod("PUT");
       setStatusMessageForm("modifié");
-      fetch(`http://localhost:5000/louons/api/v1/carrier/detail/${idParams}`, {
+      fetch(`${ApiLink}/carrier/detail/${idParams}`, {
         credentials: "include",
       })
         .then((res) => res.json())
@@ -141,6 +143,7 @@ function DeliveryFormLogic(props) {
     delay,
     price,
     props.history,
+    ApiLink
   ]);
 
   const handleSubmit = (e) => {
@@ -160,8 +163,8 @@ function DeliveryFormLogic(props) {
 
     const url =
       method === "POST"
-        ? "http://localhost:5000/louons/api/v1/carrier"
-        : `http://localhost:5000/louons/api/v1/carrier/${idParams}`;
+        ? `${ApiLink}/carrier`
+        : `${ApiLink}/carrier/${idParams}`;
 
     if (!errorForm) {
       fetch(url, {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ListProduct from "./ListProduct";
 import NotFound from "../general/NotFound";
+import Api from '../../Classes/Api/Api';
 
 function Category(props) {
   // initialize the state listArticle (get the id provided by the link)
@@ -15,6 +16,8 @@ function Category(props) {
     idLocationUndefined: true,
     isNotFound: false,
   });
+
+  const ApiLink = Api.endPoint;
 
   // get the title of the category
 
@@ -41,7 +44,7 @@ function Category(props) {
       !listArticle.isNotFound
     ) {
       fetch(
-        `http://localhost:5000/louons/api/v1/category/detail?title=${linkCat}`,
+        `${ApiLink}/category/detail?title=${linkCat}`,
         {
           credentials: "include",
         }
@@ -69,7 +72,7 @@ function Category(props) {
 
     if (!listArticle.isFetched && listArticle.id && !listArticle.isNotFound) {
       fetch(
-        `http://localhost:5000/louons/api/v1/article/searcharticle/${listArticle.id}`,
+        `${ApiLink}/article/searcharticle/${listArticle.id}`,
         {
           credentials: "include",
         }
@@ -85,7 +88,7 @@ function Category(props) {
           }
         });
     }
-  }, [listArticle, props.location, linkCat]);
+  }, [listArticle, props.location, linkCat, ApiLink]);
 
   return listArticle.isNotFound ? (
     <NotFound />

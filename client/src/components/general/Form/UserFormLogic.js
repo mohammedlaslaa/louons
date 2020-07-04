@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import UserForm from "./UserForm";
+import Api from "../../../Classes/Api/Api";
 
 function UserFormLogic(props) {
   const [method, setMethod] = useState("POST");
@@ -28,13 +29,14 @@ function UserFormLogic(props) {
   const [isFailed, setIsFailed] = useState(false);
   const [idParams] = useState(useParams().id);
   const dataform = new FormData();
+  const ApiLink = Api.endPoint;
 
   useEffect(() => {
     setErrorForm(false);
     // if the method is not equal to true and there are an idparams, fetch the data to the api and set the state
     if (idParams && method !== "PUT") {
       setMethod("PUT");
-      fetch(`http://localhost:5000/louons/api/v1/user/${idParams}`, {
+      fetch(`${ApiLink}/user/${idParams}`, {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
@@ -101,8 +103,8 @@ function UserFormLogic(props) {
     } else {
       setErrorFirstName(false);
     }
-    
-    if (!dateBirth  && method === "POST") {
+
+    if (!dateBirth && method === "POST") {
       setErrorDateBirth(true);
       setNumberErrorForm((prev) => prev + 1);
     } else {
@@ -154,6 +156,7 @@ function UserFormLogic(props) {
     dateBirth,
     picture,
     props.history,
+    ApiLink
   ]);
 
   const handleSubmit = (e) => {
@@ -174,8 +177,8 @@ function UserFormLogic(props) {
 
     const getLink =
       method === "POST"
-        ? "http://localhost:5000/louons/api/v1/user"
-        : `http://localhost:5000/louons/api/v1/user/${idParams}`;
+        ? `${ApiLink}/user`
+        : `${ApiLink}/user/${idParams}`;
 
     // fetch only if there are not errorform
 

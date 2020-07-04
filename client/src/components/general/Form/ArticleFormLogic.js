@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ArticleForm from "./ArticleForm";
+import Api from "../../../Classes/Api/Api";
 
 function ArticleFormLogic(props) {
+  const ApiLink = Api.endPoint;
   const [method, setMethod] = useState("POST");
   const [isFetchedCategory, setIsFetchedCategory] = useState(false);
   const [isFetchedArticle, setIsFetchedArticle] = useState(false);
@@ -40,7 +42,7 @@ function ArticleFormLogic(props) {
     if (idParams && !isFetchedArticle) {
       setMethod("PUT");
       setStatusMessageForm("modifié");
-      fetch(`http://localhost:5000/louons/api/v1/article/detail/${idParams}`, {
+      fetch(`${ApiLink}/article/detail/${idParams}`, {
         credentials: "include",
       })
         .then((res) => res.json())
@@ -164,6 +166,7 @@ function ArticleFormLogic(props) {
     errorFile,
     method,
     props.history,
+    ApiLink
   ]);
 
   const handleSubmit = (e) => {
@@ -171,8 +174,8 @@ function ArticleFormLogic(props) {
 
     const url =
       method === "POST"
-        ? "http://localhost:5000/louons/api/v1/article"
-        : `http://localhost:5000/louons/api/v1/article/${idParams}`;
+        ? `${ApiLink}/article`
+        : `${ApiLink}/article/${idParams}`;
 
     // set the state isSubmit to true in order to display some error in the form
 

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import RentalForm from "./RentalForm";
 import { useParams } from "react-router-dom";
+import Api from "../../../Classes/Api/Api";
 
 function RentalFormLogic(props) {
+  const ApiLink = Api.endPoint;
   const [method, setMethod] = useState("POST");
   const [isActive, setIsActive] = useState(false);
   const [isSuccess, setIssuccess] = useState(false);
@@ -59,7 +61,7 @@ function RentalFormLogic(props) {
     // get the owner of the article when the article is settled
 
     if (idArticle && isIdValid) {
-      fetch(`http://localhost:5000/louons/api/v1/article/detail/${idArticle}`, {
+      fetch(`${ApiLink}/article/detail/${idArticle}`, {
         credentials: "include",
       })
         .then((res) => res.json())
@@ -76,7 +78,7 @@ function RentalFormLogic(props) {
 
     if (idArticle && numberListDate > 0 && method === "POST" && isIdValid) {
       fetch(
-        `http://localhost:5000/louons/api/v1/rental/date/${idArticle}/${numberListDate}`,
+        `${ApiLink}/rental/date/${idArticle}/${numberListDate}`,
         {
           credentials: "include",
         }
@@ -94,7 +96,7 @@ function RentalFormLogic(props) {
     // if there are not error set the category state with the result.data value
 
     if (!isFetchedDeliveries && isIdValid) {
-      fetch("http://localhost:5000/louons/api/v1/carrier/all/activecarrier", {
+      fetch(`${ApiLink}/carrier/all/activecarrier`, {
         credentials: "include",
       })
         .then((res) => res.json())
@@ -107,7 +109,7 @@ function RentalFormLogic(props) {
     }
 
     if (!isFetchedPayments && isIdValid) {
-      fetch("http://localhost:5000/louons/api/v1/payment/all/activepayment", {
+      fetch(`${ApiLink}/payment/all/activepayment`, {
         credentials: "include",
       })
         .then((res) => res.json())
@@ -123,7 +125,7 @@ function RentalFormLogic(props) {
 
     if (idParams && !isFetchedRental) {
       setMethod("PUT");
-      fetch(`http://localhost:5000/louons/api/v1/rental/detail/${idParams}`, {
+      fetch(`${ApiLink}/rental/detail/${idParams}`, {
         credentials: "include",
       })
         .then((res) => res.json())
@@ -241,6 +243,7 @@ function RentalFormLogic(props) {
     isFetchedRental,
     pricePerDay,
     props.history,
+    ApiLink
   ]);
 
   // reset the date start, date end and the list data when this function is called
@@ -260,26 +263,26 @@ function RentalFormLogic(props) {
 
     const url =
       method === "POST"
-        ? "http://localhost:5000/louons/api/v1/rental"
-        : `http://localhost:5000/louons/api/v1/rental/${idParams}`;
+        ? `${ApiLink}/rental`
+        : `${ApiLink}/rental/${idParams}`;
 
     const data =
       method === "PUT"
         ? JSON.stringify({
-            id_payment: idPayment,
-            id_carrier: idDelivery,
-            total_price: totalPrice,
-            isActive,
-          })
+          id_payment: idPayment,
+          id_carrier: idDelivery,
+          total_price: totalPrice,
+          isActive,
+        })
         : JSON.stringify({
-            id_payment: idPayment,
-            id_carrier: idDelivery,
-            id_article: idArticle,
-            id_user: idTenant,
-            total_price: totalPrice,
-            start_date: dateStart,
-            end_date: dateEnd,
-          });
+          id_payment: idPayment,
+          id_carrier: idDelivery,
+          id_article: idArticle,
+          id_user: idTenant,
+          total_price: totalPrice,
+          start_date: dateStart,
+          end_date: dateEnd,
+        });
 
     if (!errorForm) {
       fetch(url, {

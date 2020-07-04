@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import AddressForm from "./AddressForm";
+import Api from "../../../Classes/Api/Api";
+
 
 function AddressFormLogic(props) {
   // change of states in progress
-
+  const ApiLink = Api.endPoint;
   const [statusMessageForm, setStatusMessageForm] = useState("enregistrée");
   const [errorForm, setErrorForm] = useState(false);
   const [numberErrorForm, setNumberErrorForm] = useState(0);
@@ -58,8 +60,8 @@ function AddressFormLogic(props) {
 
       const url =
         method === "POST"
-          ? `http://localhost:5000/louons/api/v1/address`
-          : `http://localhost:5000/louons/api/v1/address/${idParams}`;
+          ? `${ApiLink}/address`
+          : `${ApiLink}/address/${idParams}`;
       fetch(url, {
         method,
         headers: {
@@ -107,7 +109,7 @@ function AddressFormLogic(props) {
     if (idParams && !isFetched && idParams !== "add") {
       setMethod("PUT");
       setStatusMessageForm("modifiée");
-      fetch(`http://localhost:5000/louons/api/v1/address/detail/${idParams}`, {
+      fetch(`${ApiLink}/address/detail/${idParams}`, {
         credentials: "include",
       })
         .then((res) => res.json())
@@ -237,6 +239,7 @@ function AddressFormLogic(props) {
     isSubmit,
     method,
     props,
+    ApiLink
   ]);
 
   const handleSubmit = (e) => {

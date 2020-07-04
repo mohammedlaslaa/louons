@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import ListProduct from "../ListProduct";
 import "../../../styles/front/home.css";
+import Api from "../../../Classes/Api/Api";
 
 function Home() {
+  const ApiLink = Api.endPoint;
   const [article, setArticle] = useState({
     data: [],
   });
@@ -20,7 +22,7 @@ function Home() {
   ]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/louons/api/v1/article/lastactive", {
+    fetch(`${ApiLink}/article/lastactive`, {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -29,7 +31,7 @@ function Home() {
           setArticle((prevState) => ({ ...prevState, data: result.data }));
         }
       });
-  }, []);
+  }, [ApiLink]);
 
   return (
     <>
@@ -47,8 +49,8 @@ function Home() {
             ) : index === 1 ? (
               <i className="ri-service-line ri-3x"></i>
             ) : (
-              <i className="ri-time-line ri-3x"></i>
-            )}
+                  <i className="ri-time-line ri-3x"></i>
+                )}
             <p className="text-center m-0 mx-auto">{e.message}</p>
           </div>
         ))}
