@@ -68,7 +68,7 @@ function ArticleFormLogic(props) {
       (method === "POST" && !isFetchedCategory && !idParams) ||
       (method === "PUT" && isFetchedArticle && !isFetchedCategory)
     ) {
-      fetch("category/all/activecategory", {
+      fetch("/api/category/all/activecategory", {
         credentials: "include",
       })
         .then((res) => res.json())

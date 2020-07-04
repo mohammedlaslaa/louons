@@ -12,7 +12,7 @@ class ListCategoryProvider extends React.Component {
   // Fetch the list of category
 
   componentDidMount = () => {
-    fetch("category/all", {
+    fetch("/api/category/all", {
       credentials: "include",
     })
       .then((res) => res.json())
