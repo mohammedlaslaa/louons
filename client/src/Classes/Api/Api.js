@@ -4,6 +4,6 @@ export default class Api {
   }
 
   static get endPointImage() {
-    return 'https://louonsapptest.herokuapp.com/uploads/img';
+    return 'https://louonsapptest.herokuapp.com/public/uploads/img';
   }
 }
