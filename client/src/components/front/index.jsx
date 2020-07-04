@@ -17,15 +17,17 @@ import ArticleFormLogic from "../general/Form/ArticleFormLogic";
 import { Switch, Route } from "react-router-dom";
 import "../../styles/front/main.css";
 import { AuthContext } from "../../context/AuthContext";
+import Api from '../../Classes/Api/Api.js';
 
 function Front() {
   const { setLinkAuth } = useContext(AuthContext);
+  const ApiLink = Api.endPoint;
 
   // set the path authentication
 
   useEffect(() => {
-    setLinkAuth("http://localhost:5000/louons/api/v1/authenticationuser");
-  }, [setLinkAuth]);
+    setLinkAuth(`${ApiLink}/authenticationuser`);
+  }, [setLinkAuth, ApiLink]);
 
   return (
     // Provide the category list to the app or to the component that need it
@@ -47,14 +49,14 @@ function Front() {
               <PrivateRoute
                 component={Profile}
                 pageifnotauth="/login"
-                linkAuth="http://localhost:5000/louons/api/v1/authenticationuser"
+                linkAuth={`${ApiLink}/authenticationuser`}
               />
             </Route>
             <Route exact path="/post_announce">
               <PrivateRoute
                 component={ArticleFormLogic}
                 pageifnotauth="/login"
-                linkAuth="http://localhost:5000/louons/api/v1/authenticationuser"
+                linkAuth={`${ApiLink}/authenticationuser`}
               />
             </Route>
             <Route
@@ -69,7 +71,7 @@ function Front() {
               <PrivateRoute
                 component={Rental}
                 pageifnotauth="/login"
-                linkAuth="http://localhost:5000/louons/api/v1/authenticationuser"
+                linkAuth={`${ApiLink}/authenticationuser`}
               />
             </Route>
             <Route
@@ -82,7 +84,7 @@ function Front() {
               path="/login"
               render={(props) => (
                 <Login
-                  linkapi="http://localhost:5000/louons/api/v1/authenticationuser"
+                  linkapi={`${ApiLink}/authenticationuser`}
                   redirect="/my_account"
                   {...props}
                 />

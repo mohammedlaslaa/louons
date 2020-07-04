@@ -2,8 +2,11 @@ import React from "react";
 import moment from "moment";
 import DivInputForm from "../../general/Form/DivInputForm";
 import TitleSection from "./TitleSection";
+import Api from '../../../Classes/Api/Api.js';
 
 function Informations(props) {
+  const ApiLinkImage = Api.endPointImage;
+  
   const { data, isDisabledForm, isLoading } = props.dataCurrentUser;
 
   const isDisabled = isDisabledForm ? "disabled" : "";
@@ -43,8 +46,8 @@ function Informations(props) {
             <img
               src={
                 data.path_picture
-                  ? `http://localhost:5000/uploads/img/${data.path_picture}`
-                  : `http://localhost:5000/uploads/img/default-avatar.png`
+                  ? `${ApiLinkImage}/uploads/img/${data.path_picture}`
+                  : `${ApiLinkImage}/uploads/img/default-avatar.png`
               }
               className="w-100 rounded-circle"
               alt="avatar_image_profil"

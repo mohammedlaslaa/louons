@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Informations from "./Informations";
+import Api from '../../../Classes/Api/Api.js';
 
 function InformationsLogic(props) {
   // Initialize the state with the data of the current user
-
+  const ApiLink = Api.endPoint;
   const [dataCurrentUser, setDataCurrentUser] = useState({
     method: "GET",
     data: {
@@ -77,7 +78,7 @@ function InformationsLogic(props) {
     // fetch the users information from the api
 
     if (!isFetched) {
-      fetch("http://localhost:5000/louons/api/v1/user/me", {
+      fetch(`${ApiLink}/user/me`, {
         method: method,
         credentials: "include",
         headers: {
@@ -324,6 +325,7 @@ function InformationsLogic(props) {
     confirmationNewPassword,
     errorNewPassword,
     errorConfirmationNewPassword,
+    ApiLink
   ]);
 
   const handleChangeForm = (e, arg = "") => {

@@ -9,8 +9,10 @@ import Logout from "../components/general/Logout";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import AuthProvider from "../context/AuthContext";
 import PrivateRoute from "../components/general/PrivateRoute";
+import Api from '../Classes/Api/Api.js';
 
 function App() {
+  const ApiLink = Api.endPoint;
   return (
     // Provide context authentication to the entire app and configure the main route admin and / (public)
 
@@ -22,7 +24,7 @@ function App() {
             path="/adminlogin"
             render={(props) => (
               <Login
-                linkapi="http://localhost:5000/louons/api/v1/authenticationadmin"
+                linkapi={`${ApiLink}/authenticationadmin`}
                 redirect="/admin"
                 {...props}
               />

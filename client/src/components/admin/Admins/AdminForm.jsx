@@ -21,7 +21,7 @@ function AdminForm(props) {
             key={props.pictureDisplay}
           >
             <img
-              src={`http://localhost:5000/uploads/img/${props.pictureDisplay}`}
+              src={`https://louonsapptest.herokuapp.com/uploads/img/${props.pictureDisplay}`}
               className="w-100 rounded-circle"
               alt="avatar_image_profil"
             />

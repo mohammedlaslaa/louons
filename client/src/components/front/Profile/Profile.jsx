@@ -5,12 +5,14 @@ import InformationsLogic from "./InformationsLogic";
 import MyAnnounces from "./MyAnnounces";
 import MyAddresses from "./MyAddresses";
 import MyRentals from "./MyRentals";
+import Api from '../../../Classes/Api/Api.js';
 
 function Profile() {
   const [isMediumWindow, setIsMediumWindow] = useState();
   const [valueSelect, setValueSelect] = useState();
   let history = useHistory();
   let isCancelled = useRef(null);
+  const ApiLink = Api.endPoint;
 
   // set the isMediumWindow depending the width of the window
   const handleIsMedium = () => {
@@ -119,7 +121,7 @@ function Profile() {
                 isMediumWindow={isMediumWindow}
                 component={InformationsLogic}
                 pageifnotauth="/login"
-                linkAuth="http://localhost:5000/louons/api/v1/authenticationuser"
+                linkAuth={`${ApiLink}/authenticationuser`}
               />
             </Route>
             <Route exact path="/my_account/announces">
@@ -127,7 +129,7 @@ function Profile() {
                 isMediumWindow={isMediumWindow}
                 component={MyAnnounces}
                 pageifnotauth="/login"
-                linkAuth="http://localhost:5000/louons/api/v1/authenticationuser"
+                linkAuth={`${ApiLink}/authenticationuser`}
               />
             </Route>
             <Route exact path="/my_account/addresses/:id?">
@@ -135,7 +137,7 @@ function Profile() {
                 isMediumWindow={isMediumWindow}
                 component={MyAddresses}
                 pageifnotauth="/login"
-                linkAuth="http://localhost:5000/louons/api/v1/authenticationuser"
+                linkAuth={`${ApiLink}/authenticationuser`}
               />
             </Route>
             <Route exact path="/my_account/rentals/:id?">
@@ -143,7 +145,7 @@ function Profile() {
                 isMediumWindow={isMediumWindow}
                 component={MyRentals}
                 pageifnotauth="/login"
-                linkAuth="http://localhost:5000/louons/api/v1/authenticationuser"
+                linkAuth={`${ApiLink}/authenticationuser`}
               />
             </Route>
           </Switch>
