@@ -46,8 +46,8 @@ function Informations(props) {
             <img
               src={
                 data.path_picture
-                  ? `${ApiLinkImage}/uploads/img/${data.path_picture}`
-                  : `${ApiLinkImage}/uploads/img/default-avatar.png`
+                  ? `${ApiLinkImage}/${data.path_picture}`
+                  : `${ApiLinkImage}/default-avatar.png`
               }
               className="w-100 rounded-circle"
               alt="avatar_image_profil"
