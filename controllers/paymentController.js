@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const formidable = require("formidable");
 const fs = require("fs");
 const crypto = require("crypto");
+const mv = require('mv');
 
 exports.getAllPayment = async function (req, res) {
   try {
@@ -108,7 +109,7 @@ exports.postPayment = async function (req, res) {
             .digest("hex")}.${ext[1]}`;
           objdata["path_picture"] = path;
 
-          fs.rename(
+          mv(
             file[1].path,
             `${process.env.UPLOAD_IMG_PATH}/${path}`,
             (err) => {
@@ -225,7 +226,7 @@ exports.putPaymentById = async function (req, res) {
               .digest("hex")}.${ext[1]}`;
             objdata["path_picture"] = path;
 
-            fs.rename(
+            mv(
               file[1].path,
               `${process.env.UPLOAD_IMG_PATH}/${path}`,
               (err) => {
