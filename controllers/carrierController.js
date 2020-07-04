@@ -6,6 +6,7 @@ const {
 const jwt = require("jsonwebtoken");
 const formidable = require("formidable");
 const fs = require("fs");
+const mv = require("mv");
 const crypto = require("crypto");
 
 exports.getAllCarrier = async function (req, res) {
@@ -22,11 +23,11 @@ exports.getAllCarrier = async function (req, res) {
     const allCarrier =
       req.params.isactive === "activecarrier"
         ? await Carrier.find({ isActive: true }).select(
-            "carrierId isActive delay_delivery title price link"
-          )
+          "carrierId isActive delay_delivery title price link"
+        )
         : verify.adminLevel == "admin" || verify.adminLevel == "superadmin"
-        ? await Carrier.find().select("carrierId description delay_delivery isActive title price link")
-        : await Carrier.find({ isActive: true }).select(
+          ? await Carrier.find().select("carrierId description delay_delivery isActive title price link")
+          : await Carrier.find({ isActive: true }).select(
             "carrierId isActive delay_delivery description title price link path_picture"
           );
 
@@ -110,7 +111,7 @@ exports.postCarrier = async function (req, res) {
             .digest("hex")}.${ext[1]}`;
           objdata["path_picture"] = path;
 
-          fs.rename(
+          mv(
             file[1].path,
             `${process.env.UPLOAD_IMG_PATH}/${path}`,
             (err) => {
@@ -227,7 +228,7 @@ exports.putCarrierById = async function (req, res) {
               .digest("hex")}.${ext[1]}`;
             objdata["path_picture"] = path;
 
-            fs.rename(
+            mv(
               file[1].path,
               `${process.env.UPLOAD_IMG_PATH}/${path}`,
               (err) => {

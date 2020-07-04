@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const formidable = require("formidable");
 const fs = require("fs");
+const mv = require("mv");
 const crypto = require("crypto");
 
 exports.getSelf = async (req, res) => {
@@ -132,7 +133,7 @@ exports.postNewAdmin = async (req, res) => {
               .digest("hex")}.${ext[1]}`;
             objdata["path_picture"] = path;
 
-            fs.rename(
+            mv(
               file[1].path,
               `${process.env.UPLOAD_IMG_PATH}/${path}`,
               (err) => {
@@ -285,7 +286,7 @@ exports.putAdminById = async (req, res) => {
               .digest("hex")}.${ext[1]}`;
             objdata["path_picture"] = path;
 
-            fs.rename(
+            mv(
               file[1].path,
               `${process.env.UPLOAD_IMG_PATH}/${path}`,
               (err) => {

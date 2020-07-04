@@ -6,6 +6,7 @@ const {
 const jwt = require("jsonwebtoken");
 const formidable = require("formidable");
 const fs = require("fs");
+const mv = require("mv");
 const crypto = require("crypto");
 
 exports.getAllArticle = async function (req, res) {
@@ -24,33 +25,33 @@ exports.getAllArticle = async function (req, res) {
     const allArticle =
       req.params.searcharticle === "owner"
         ? await Article.find({
-            id_user: verify.id,
-          }).select("-date_update -date_delete -isTop -id_user -articleId")
+          id_user: verify.id,
+        }).select("-date_update -date_delete -isTop -id_user -articleId")
         : req.params.searcharticle === "lastactive"
-        ? await Article.find({
+          ? await Article.find({
             isActive: true,
           })
             .limit(4)
             .sort({ date_register: -1 })
             .select("price title pictures")
-        : req.params.idcategory && req.params.searcharticle === "searcharticle"
-        ? await Article.find({
-            isActive: true,
-            id_category: req.params.idcategory,
-          })
-            .limit(4)
-            .sort({ date_register: -1 })
-            .select("price title pictures")
-        : req.params.searcharticle
-        ? await Article.find({
-            isActive: true,
-            title: { $regex: req.params.searcharticle, $options: "i" },
-          }).select("_id articleId title")
-        : verify.adminLevel
-        ? await Article.find().populate("id_category", "title -_id")
-        : await Article.find({ isActive: true })
-            .sort({ date_register: -1 })
-            .populate("id_category", "title -_id");
+          : req.params.idcategory && req.params.searcharticle === "searcharticle"
+            ? await Article.find({
+              isActive: true,
+              id_category: req.params.idcategory,
+            })
+              .limit(4)
+              .sort({ date_register: -1 })
+              .select("price title pictures")
+            : req.params.searcharticle
+              ? await Article.find({
+                isActive: true,
+                title: { $regex: req.params.searcharticle, $options: "i" },
+              }).select("_id articleId title")
+              : verify.adminLevel
+                ? await Article.find().populate("id_category", "title -_id")
+                : await Article.find({ isActive: true })
+                  .sort({ date_register: -1 })
+                  .populate("id_category", "title -_id");
 
     return res.status(200).send({
       adminLevel: verify.adminLevel,
@@ -137,7 +138,7 @@ exports.postArticle = async function (req, res) {
             },
           ];
 
-          fs.rename(
+          mv(
             file[1].path,
             `${process.env.UPLOAD_IMG_PATH}/${path}`,
             (err) => {
@@ -265,7 +266,7 @@ exports.putArticleById = async function (req, res) {
               },
             ];
 
-            fs.rename(
+            mv(
               file[1].path,
               `${process.env.UPLOAD_IMG_PATH}/${path}`,
               (err) => {

@@ -7,6 +7,7 @@ const {
 const bcrypt = require("bcrypt");
 const formidable = require("formidable");
 const fs = require("fs");
+const mv = require("mv");
 const crypto = require("crypto");
 
 exports.getSelf = async (req, res) => {
@@ -68,7 +69,7 @@ exports.putSelf = async (req, res) => {
           reject(err);
           return;
         }
-        
+
         // Compare the user password with the password provided in a req.body.password.
 
         let decrypt = bcrypt.compareSync(fields.testPassword, user.password);
@@ -101,7 +102,7 @@ exports.putSelf = async (req, res) => {
               .digest("hex")}.${ext[1]}`;
             objdata["path_picture"] = path;
 
-            fs.rename(
+            mv(
               file[1].path,
               `${process.env.UPLOAD_IMG_PATH}/${path}`,
               (err) => {
@@ -186,7 +187,7 @@ exports.postInscription = async (req, res) => {
               .digest("hex")}.${ext[1]}`;
             objdata["path_picture"] = path;
 
-            fs.rename(
+            mv(
               file[1].path,
               `${process.env.UPLOAD_IMG_PATH}/${path}`,
               (err) => {
@@ -261,15 +262,15 @@ exports.getAllUsers = async (req, res) => {
 
     const allUsers = req.params.searchuser
       ? await User.find({
-          isActive: true,
-          $or: [
-            { firstName: { $regex: req.params.searchuser, $options: "i" } },
-            { lastName: { $regex: req.params.searchuser, $options: "i" } },
-          ],
-        }).select("_id clientId firstName lastName")
+        isActive: true,
+        $or: [
+          { firstName: { $regex: req.params.searchuser, $options: "i" } },
+          { lastName: { $regex: req.params.searchuser, $options: "i" } },
+        ],
+      }).select("_id clientId firstName lastName")
       : await User.find().select(
-          "-password -email -date_delete -dateBirth -date_update"
-        );
+        "-password -email -date_delete -dateBirth -date_update"
+      );
 
     // If the request fail, return a 400 response status code with a message.
 
@@ -374,7 +375,7 @@ exports.putUserById = async (req, res) => {
               .digest("hex")}.${ext[1]}`;
             objdata["path_picture"] = path;
 
-            fs.rename(
+            mv(
               file[1].path,
               `${process.env.UPLOAD_IMG_PATH}/${path}`,
               (err) => {
