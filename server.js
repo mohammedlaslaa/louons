@@ -5,7 +5,7 @@ const app = express();
 // Get the port registered or set this to 5000 by default.
 const port = process.env.PORT || 8080;
 
-if(process.env.NODE_ENV === 'prod') {
+if(process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
 
   app.get('*', (req, res) => {
