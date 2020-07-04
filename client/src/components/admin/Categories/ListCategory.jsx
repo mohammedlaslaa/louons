@@ -13,8 +13,8 @@ function ListCategory() {
       <PopupAdmin isToggle={popupcontext.isToggle} render={<CategoryFormLogic title="Ajouter"/>}/>
       <PageTableList
         titlepage="Liste des catégories"
-        linkapi="/api/category/all"
-        linkputapi="category"
+        linkapi="https://louonsapptest.herokuapp.com/louons/api/v1/category/all"
+        linkputapi="https://louonsapptest.herokuapp.com/louons/api/v1/category"
         th={[
           { categoryId: "ID" },
           { title: "Titre" },

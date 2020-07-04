@@ -68,7 +68,7 @@ function ArticleFormLogic(props) {
       (method === "POST" && !isFetchedCategory && !idParams) ||
       (method === "PUT" && isFetchedArticle && !isFetchedCategory)
     ) {
-      fetch("/api/category/all/activecategory", {
+      fetch("https://louonsapptest.herokuapp.com/louons/api/v1/category/all/activecategory", {
         credentials: "include",
       })
         .then((res) => res.json())
