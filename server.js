@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 
 // Get the port registered or set this to 5000 by default.
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 5000;
 
 // Charging all routes of the app.
 require("./startup/route")(app);
