@@ -3,7 +3,15 @@ const express = require("express");
 const app = express();
 
 // Get the port registered or set this to 5000 by default.
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8080;
+
+if(process.env.NODE_ENV === 'prod') {
+  app.use(express.static('client/build'));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
 
 // Charging all routes of the app.
 require("./startup/route")(app);
