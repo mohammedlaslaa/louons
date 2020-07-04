@@ -13,7 +13,7 @@ app.use(express.static(__dirname + '/public'));
 if(process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
   const path = require('path');
-  app.get(/^\/(?!louons\/api|uploads).*/, (req, res) => {
+  app.get(/^\/(?!louons\/api).*/, (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
 }
