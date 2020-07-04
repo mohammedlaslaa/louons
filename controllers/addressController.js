@@ -101,7 +101,6 @@ exports.postAddress = async (req, res) => {
     });
 
     // If the address title is already existing send a 400 response status code with a message
-    console.log(req.body)
     if (isTitleExist)
       return res
         .status(400)
