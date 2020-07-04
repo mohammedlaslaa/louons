@@ -8,7 +8,7 @@ const port = process.env.PORT || 8080;
 // Charging all routes of the app.
 require("./startup/route")(app);
 
-app.use(express.static('./public'));
+app.use(express.static(__dirname + '/public'));
 
 if(process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
