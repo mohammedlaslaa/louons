@@ -52,7 +52,7 @@ function MyRentals(props) {
 
     // if there are an idParams and it is not equal to the rentals.id, refresh the rentals.id state
     if (idParams !== rentals.id) {
-      setRentals((prevState) => ({ ...prevState, id: idParams }));
+      setRentals((prevState) => ({ ...prevState, id: idParams, dataRental: {}}));
     }
   }, [rentals, idParams, ApiLink]);
 
