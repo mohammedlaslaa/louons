@@ -10,7 +10,7 @@ function Logout(props) {
 
   useEffect(() => {
     Cookies.remove("x-auth-token");
-    setCookieToken("")
+    setCookieToken("");
     setIsAuth(false);
   });
 

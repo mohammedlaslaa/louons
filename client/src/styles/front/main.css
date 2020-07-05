@@ -22,6 +22,7 @@ h2 {
 .product-container,
 .listproduct-btn {
   font-size: 0.75rem;
+  margin: 0 auto;
 }
 
 .titleannounce {
