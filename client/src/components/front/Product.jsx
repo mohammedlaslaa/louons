@@ -149,6 +149,7 @@ function Product() {
                         <i
                           className="ri-indeterminate-circle-line ri-2x"
                           onClick={() =>
+                            article.numberDay > 1 &&
                             setArticle((prevState) => ({
                               ...prevState,
                               prevNumberDay: prevState.numberDay,
