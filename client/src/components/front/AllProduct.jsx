@@ -44,7 +44,7 @@ function AllProduct() {
         {listArticle.description}
       </p>
       <ListProduct
-        divClass="row col-12 col-lg-10 mx-auto m-0 p-0 d-md-flex flex-column justify-content-center justify-content-md-start"
+        divClass="row col-12 col-lg-10 mx-auto m-0 p-0 d-md-flex justify-content-center justify-content-md-start"
         productClass="col-6 col-sm-4 col-lg-3 p-2 my-2 my-lg-4 product-container d-flex flex-column justify-content-end"
         data={listArticle.data}
       />
