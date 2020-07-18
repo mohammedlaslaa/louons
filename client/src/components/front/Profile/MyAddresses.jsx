@@ -11,7 +11,7 @@ function MyAddresses(props) {
   const [addresses, setAddresses] = useState({
     data: [],
     isFetched: false,
-    isLoading: false,
+    isLoading: true,
     id: idParams,
   });
   const ApiLink = Api.endPoint;
