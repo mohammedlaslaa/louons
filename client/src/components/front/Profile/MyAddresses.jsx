@@ -11,7 +11,6 @@ function MyAddresses(props) {
   const [addresses, setAddresses] = useState({
     data: [],
     isFetched: false,
-    isLoading: true,
     id: idParams,
   });
   const ApiLink = Api.endPoint;
@@ -29,7 +28,6 @@ function MyAddresses(props) {
               ...prevState,
               data: result.data,
               isFetched: true,
-              isLoading: false,
             }));
           }
         });
@@ -51,39 +49,37 @@ function MyAddresses(props) {
         isMediumWindow={props.isMediumWindow}
         title="Mes Adresses"
       />
-      {isLoading ?
-        (<p className="p-2 text-white bg-success">Chargement...</p>)
-        : !addresses.id ? (
-          <>
-            {addresses.data.length > 0 ? (
-              <TableProfil
-                data={addresses.data}
-                linkdetail="/my_account/addresses"
-                handleIdParams={handleIdParams}
-                linkapi={`${ApiLink}/address`}
-                setAddresses={setAddresses}
-                datatodisplay={{
-                  title: "Titre",
-                  address: "Adresse",
-                  zipcode: "Code postal",
-                  city: "Ville",
-                  date_register: "Date d'enregistrement",
-                  seemore: "Voir",
-                  delete: "Supprimer",
-                }}
-              />
-            ) : (
-                <p>Vous n'avez pas encore d'adresses publiés</p>
-              )}
-            <Link to={`addresses/add`}>
-              <button className="btn text-white bgcolor3c8ce4">
-                Ajouter une adresse
+      {!addresses.id ? (
+        <>
+          {addresses.data.length > 0 ? (
+            <TableProfil
+              data={addresses.data}
+              linkdetail="/my_account/addresses"
+              handleIdParams={handleIdParams}
+              linkapi={`${ApiLink}/address`}
+              setAddresses={setAddresses}
+              datatodisplay={{
+                title: "Titre",
+                address: "Adresse",
+                zipcode: "Code postal",
+                city: "Ville",
+                date_register: "Date d'enregistrement",
+                seemore: "Voir",
+                delete: "Supprimer",
+              }}
+            />
+          ) : (
+              <p>Vous n'avez pas encore d'adresses publiés</p>
+            )}
+          <Link to={`addresses/add`}>
+            <button className="btn text-white bgcolor3c8ce4">
+              Ajouter une adresse
             </button>
-            </Link>
-          </>
-        ) : (
-            <AdressFormLogic setAddresses={setAddresses} history={props.history} />
-          )}
+          </Link>
+        </>
+      ) : (
+          <AdressFormLogic setAddresses={setAddresses} history={props.history} />
+        )}
     </>
   );
 }
