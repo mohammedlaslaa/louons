@@ -214,8 +214,7 @@ function UserFormLogic(props) {
               setIsSubscribe(false);
               //redirect to login when the user subscribe
             } else {
-              console.log(result)
-              setPictureDisplay(result.path_picture);
+              setPictureDisplay(result.picture);
               setPassword("");
               setConfirmationPassword("");
             }

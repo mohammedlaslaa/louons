@@ -410,17 +410,17 @@ exports.putUserById = async (req, res) => {
         );
       }
 
-      await User.findByIdAndUpdate(req.params.id, {
+      let user = await User.findByIdAndUpdate(req.params.id, {
         $set: objdata,
         date_update: Date.now(),
       });
 
       // If all the checks is passing, return a 200 response status code with a succesfull message.
-
+      console.log(user.path_picture)
       return res.send({
         error: false,
         message: "User modified with success",
-        picture: objdata.path_picture,
+        picture: objdata.path_picture || user.path_picture,
       });
     }
   } catch (e) {
