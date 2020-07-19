@@ -7,7 +7,7 @@ import Api from "../../../Classes/Api/Api";
 
 function UserForm(props) {
   const ApiLinkImage = Api.endPointImage;
-
+  // console.log(props
   return (
     <Form
       handleSubmit={props.handleSubmit}
