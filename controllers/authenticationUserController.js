@@ -29,7 +29,7 @@ exports.postAuthUser = async (req, res) => {
 
     if (!user)
       return res
-        .status(400)
+        .status(401)
         .send({ error: true, message: "Email or password error" });
 
     // Compare the user password with the password provided in a req.body.password.
@@ -40,7 +40,7 @@ exports.postAuthUser = async (req, res) => {
 
     if (!decrypt)
       return res
-        .status(400)
+        .status(401)
         .send({ error: true, message: "Email or password error" });
 
     // If all the checks is passing, send back a token to the res.header("x-auth-token").
