@@ -44,13 +44,14 @@ function Informations(props) {
         <div className="col-12 m-0 p-0 row d-flex justify-content-between">
           <div className="col-4 col-sm-2 p-2 mx-auto d-flex align-items-center">
             <img
-              src={
-                data.path_picture && `${ApiLinkImage}/${data.path_picture}`
-                  ? `${ApiLinkImage}/${data.path_picture}`
-                  : `${ApiLinkImage}/default-avatar.png`
-              }
-              className="w-100 rounded-circle"
-              alt="avatar_image_profil"
+              src={`${ApiLinkImage}/default-avatar.png`}
+              // src={
+              //   data.path_picture
+              //     ? `${ApiLinkImage}/${data.path_picture}`
+              //     : `${ApiLinkImage}/default-avatar.png`
+              // }
+              className="w-100 rounded-circle avatarprofil"
+              alt="Avatar profil"
             />
             {!isDisabled && (
               <div className="file-picture-profil">

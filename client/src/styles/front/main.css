@@ -83,6 +83,11 @@ h2 {
 
 /* my informations */
 
+.avatarprofil {
+  max-height: 100px;
+  max-width: 100px;
+}
+
 .file-picture-profil {
   position: absolute;
   left: 0;
@@ -197,9 +202,7 @@ td {
   }
 }
 
-@media screen and (max-width: 992px) {
-
-}
+@media screen and (max-width: 992px) {}
 
 @media screen and (min-width: 1200px) {
   .imgnotfound {
