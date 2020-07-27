@@ -45,7 +45,7 @@ function Informations(props) {
           <div className="col-4 col-sm-2 p-2 mx-auto d-flex align-items-center">
             <img
               src={
-                data.path_picture
+                data.path_picture && `${ApiLinkImage}/${data.path_picture}`
                   ? `${ApiLinkImage}/${data.path_picture}`
                   : `${ApiLinkImage}/default-avatar.png`
               }
